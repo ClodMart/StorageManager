@@ -21,6 +21,8 @@ namespace DBManagerTester.ViewModel
         private readonly MenuPreparationsRepository MenuPreparationsRepository = new MenuPreparationsRepository(dbContext);
         private readonly SuppliersRepository SuppliersRepository = new SuppliersRepository(dbContext);
         private readonly UseMaterialsRepository UseMaterialsRepository = new UseMaterialsRepository(dbContext);
+        private readonly IsUsedValuesRepository IsUsedValuesRepository = new IsUsedValuesRepository(dbContext);
+        private readonly UnitOfMesuresRepository UnitOfMesuresRepository = new UnitOfMesuresRepository(dbContext);
 
         private ObservableCollection<string> displayData { get; set; }
         public ObservableCollection<string> DisplayData
@@ -61,6 +63,12 @@ namespace DBManagerTester.ViewModel
                     break;
                 case TypeOfData.UseMaterial:
                     result = UseMaterialsRepository.InsertFromCSV(uri);
+                    break;
+                case TypeOfData.IsUsedValue:
+                    result = IsUsedValuesRepository.InsertFromCSV(uri);
+                    break;
+                case TypeOfData.UnitsOfMesure:
+                    result= UnitOfMesuresRepository.InsertFromCSV(uri);
                     break;
             }
             
@@ -111,6 +119,18 @@ namespace DBManagerTester.ViewModel
                     break;
                 case TypeOfData.UseMaterial:
                     foreach (UseMaterial x in UseMaterialsRepository.GetAll())
+                    {
+                        data.Add(x.ToString());
+                    }
+                    break;
+                case TypeOfData.IsUsedValue:
+                    foreach (IsUsedValue x in IsUsedValuesRepository.GetAll())
+                    {
+                        data.Add(x.ToString());
+                    }
+                    break;
+                case TypeOfData.UnitsOfMesure:
+                    foreach (UnitsOfMesure x in UnitOfMesuresRepository.GetAll())
                     {
                         data.Add(x.ToString());
                     }

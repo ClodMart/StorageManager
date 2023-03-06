@@ -3,6 +3,7 @@ using DBManagerTester.ViewModel;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,8 +37,15 @@ namespace DBManagerTester
 
         private void SelectFile_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog(); 
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (Directory.Exists(Directory.GetParent(FileUri.Text).FullName))
+            {
+                openFileDialog.InitialDirectory = Directory.GetParent(FileUri.Text).FullName;
+            }
+            else
+            {
                 openFileDialog.InitialDirectory = "C:\\";
+            }
                 openFileDialog.Filter = "csv files (*.csv)|*.csv|All files (*.*)|*.*";
                 openFileDialog.FilterIndex = 0;
 

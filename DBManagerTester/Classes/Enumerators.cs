@@ -14,5 +14,7 @@ namespace DBManagerTester.Classes
         MenuPreparation,
         Supplier,
         UseMaterial,
+        IsUsedValue,
+        UnitsOfMesure,
     }
 }

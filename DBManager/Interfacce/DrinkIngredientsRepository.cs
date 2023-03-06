@@ -35,6 +35,36 @@ namespace DBManager.Interfacce
             _dbContext.SaveChanges();
         }
 
+        public string AddAll(List<DrinkIngredient> entities)
+        {
+            using (var dbContextTrans = _dbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    foreach (var entity in entities)
+                    {
+                        _dbContext.DrinkIngredients.Add(entity);
+                    }
+                    _dbContext.SaveChanges();
+                    dbContextTrans.Commit();
+                    return "Succeded";
+                }
+                catch (DbUpdateException e)
+                {
+                    string inner = e.InnerException.Message;
+                    if (inner != null)
+                    {
+                        return e.Message + "\nInner Exeption: " + inner;
+                    }
+                    else
+                    {
+                        return e.Message;
+                    }
+                    dbContextTrans.Rollback();
+                }
+            }
+        }
+
         public void Update(DrinkIngredient entity)
         {
             _dbContext.Entry(entity).State = EntityState.Modified;
@@ -53,6 +83,7 @@ namespace DBManager.Interfacce
             {
                 try
                 {
+                    List<DrinkIngredient> Out = new List<DrinkIngredient>();
                     reader.ReadLine();
                     while (!reader.EndOfStream)
                     {
@@ -80,9 +111,10 @@ namespace DBManager.Interfacce
                         myObject.QuantityNeeded = int.Parse(values[7]);
                         myObject.Notes = values[8];
 
-                        this.Add(myObject);
+                        Out.Add(myObject);
                     }
-                    return "Succeded";
+                    string result = AddAll(Out);
+                    return result;
                 }
                 catch(DbUpdateException e)
                 {

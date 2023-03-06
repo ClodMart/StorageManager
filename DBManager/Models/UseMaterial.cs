@@ -10,12 +10,13 @@ namespace DBManager.Models
         public string Category { get; set; } = null!;
         public int SupplierId { get; set; }
         public int IsUsed { get; set; }
-        public int? SizeUnits { get; set; }
+        public decimal? SizeUnits { get; set; }
         public decimal Cost { get; set; }
         public decimal? CostUnit { get; set; }
         public int QuantityNeeded { get; set; }
         public string? Notes { get; set; }
 
+        public virtual IsUsedValue IsUsedNavigation { get; set; } = null!;
         public virtual Supplier Supplier { get; set; } = null!;
     }
 }

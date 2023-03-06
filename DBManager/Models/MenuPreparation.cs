@@ -9,7 +9,9 @@ namespace DBManager.Models
         public int MenuProductId { get; set; }
         public int IngedientId { get; set; }
         public decimal? IngredientQuantity { get; set; }
+        public int UnitOfMesure { get; set; }
 
         public virtual Menu MenuProduct { get; set; } = null!;
+        public virtual UnitsOfMesure UnitOfMesureNavigation { get; set; } = null!;
     }
 }

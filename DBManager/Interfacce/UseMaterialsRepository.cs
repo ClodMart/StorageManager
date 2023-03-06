@@ -33,6 +33,26 @@ namespace DBManager.Interfacce
             _dbContext.SaveChanges();
         }
 
+        public void AddAll(List<UseMaterial> entities)
+        {
+            using (var dbContextTrans = _dbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    foreach (var entity in entities)
+                    {
+                        _dbContext.UseMaterials.Add(entity);
+                    }
+                    _dbContext.SaveChanges();
+                    dbContextTrans.Commit();
+                }
+                catch (Exception ex)
+                {
+                    dbContextTrans.Rollback();
+                }
+            }
+        }
+
         public void Update(UseMaterial entity)
         {
             _dbContext.Entry(entity).State = EntityState.Modified;
@@ -51,6 +71,7 @@ namespace DBManager.Interfacce
             {
                 try
                 {
+                    List<UseMaterial> Out = new List<UseMaterial>();
                     reader.ReadLine();
                     while (!reader.EndOfStream)
                     {
@@ -60,20 +81,22 @@ namespace DBManager.Interfacce
 
                         myObject.MaterialName = values[0];
                         myObject.Category = values[1];
-                        myObject.IsUsed = int.Parse(values[2]);
+                        int Used = _dbContext.IsUsedValues.FirstOrDefault(x => x.Description == values[2]).Id;
+                        myObject.IsUsed = Used;
                         int SupID = _dbContext.Suppliers.FirstOrDefault(x => x.SupplierName == values[3]).Id;
                         myObject.SupplierId = SupID;
                         string Price = values[4].Replace("€ ", "");
                         myObject.Cost = decimal.Parse(Price);
                         if (values[5] != "")
                         {
-                            myObject.SizeUnits = int.Parse(values[5]);
+                            myObject.SizeUnits = decimal.Parse(values[5]);
                         }
                         myObject.QuantityNeeded = int.Parse(values[6]);
                         myObject.Notes = values[7];
 
-                        this.Add(myObject);
+                        Out.Add(myObject);
                     }
+                    AddAll(Out);
                     return "Succeded";
                 }
                 catch (DbUpdateException e)

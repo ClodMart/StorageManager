@@ -18,6 +18,7 @@ namespace DBManager.Models
         public int QuantityNeeded { get; set; }
         public string? Notes { get; set; }
 
+        public virtual IsUsedValue IsUsedNavigation { get; set; } = null!;
         public virtual Supplier? Supplier { get; set; }
     }
 }

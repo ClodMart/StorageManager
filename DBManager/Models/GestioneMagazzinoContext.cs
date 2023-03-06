@@ -22,6 +22,7 @@ namespace DBManager.Models
         public virtual DbSet<Menu> Menus { get; set; } = null!;
         public virtual DbSet<MenuPreparation> MenuPreparations { get; set; } = null!;
         public virtual DbSet<Supplier> Suppliers { get; set; } = null!;
+        public virtual DbSet<UnitsOfMesure> UnitsOfMesures { get; set; } = null!;
         public virtual DbSet<UseMaterial> UseMaterials { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -77,6 +78,12 @@ namespace DBManager.Models
 
                 entity.Property(e => e.SupplierId).HasColumnName("Supplier_Id");
 
+                entity.HasOne(d => d.IsUsedNavigation)
+                    .WithMany(p => p.DrinkIngredients)
+                    .HasForeignKey(d => d.IsUsed)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Drink_Ingredients_IsUsed_Values");
+
                 entity.HasOne(d => d.Supplier)
                     .WithMany(p => p.DrinkIngredients)
                     .HasForeignKey(d => d.SupplierId)
@@ -119,6 +126,11 @@ namespace DBManager.Models
                 entity.Property(e => e.SizeUnits).HasColumnName("Size_Units");
 
                 entity.Property(e => e.SupplierId).HasColumnName("Supplier_Id");
+
+                entity.HasOne(d => d.IsUsedNavigation)
+                    .WithMany(p => p.Ingredients)
+                    .HasForeignKey(d => d.IsUsed)
+                    .HasConstraintName("FK_Ingredients_IsUsed_Values");
 
                 entity.HasOne(d => d.Supplier)
                     .WithMany(p => p.Ingredients)
@@ -164,6 +176,12 @@ namespace DBManager.Models
                     .HasForeignKey(d => d.MenuProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_MenuPreparations_Menu");
+
+                entity.HasOne(d => d.UnitOfMesureNavigation)
+                    .WithMany(p => p.MenuPreparations)
+                    .HasForeignKey(d => d.UnitOfMesure)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_MenuPreparations_UnitsOfMesure");
             });
 
             modelBuilder.Entity<Supplier>(entity =>
@@ -183,6 +201,13 @@ namespace DBManager.Models
                 entity.Property(e => e.Telefono).HasMaxLength(50);
             });
 
+            modelBuilder.Entity<UnitsOfMesure>(entity =>
+            {
+                entity.ToTable("UnitsOfMesure");
+
+                entity.Property(e => e.Description).HasMaxLength(50);
+            });
+
             modelBuilder.Entity<UseMaterial>(entity =>
             {
                 entity.ToTable("Use_Materials");
@@ -194,7 +219,7 @@ namespace DBManager.Models
                     .HasColumnName("Cost_€");
 
                 entity.Property(e => e.CostUnit)
-                    .HasColumnType("numeric(29, 13)")
+                    .HasColumnType("numeric(38, 20)")
                     .HasColumnName("Cost_€/Unit")
                     .HasComputedColumnSql("([Cost_€]/[Size_Units])", false);
 
@@ -207,10 +232,17 @@ namespace DBManager.Models
                 entity.Property(e => e.QuantityNeeded).HasColumnName("Quantity_Needed");
 
                 entity.Property(e => e.SizeUnits)
+                    .HasColumnType("numeric(18, 2)")
                     .HasColumnName("Size_Units")
                     .HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.SupplierId).HasColumnName("Supplier_Id");
+
+                entity.HasOne(d => d.IsUsedNavigation)
+                    .WithMany(p => p.UseMaterials)
+                    .HasForeignKey(d => d.IsUsed)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Use_Materials_IsUsed_Values");
 
                 entity.HasOne(d => d.Supplier)
                     .WithMany(p => p.UseMaterials)

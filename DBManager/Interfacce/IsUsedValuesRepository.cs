@@ -33,6 +33,26 @@ namespace DBManager.Interfacce
             _dbContext.SaveChanges();
         }
 
+        public void AddAll(List<IsUsedValue> entities)
+        {
+            using (var dbContextTrans = _dbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    foreach (var entity in entities)
+                    {
+                        _dbContext.IsUsedValues.Add(entity);
+                    }
+                    _dbContext.SaveChanges();
+                    dbContextTrans.Commit();
+                }
+                catch (Exception ex)
+                {
+                    dbContextTrans.Rollback();
+                }
+            }
+        }
+
         public void Update(IsUsedValue entity)
         {
             _dbContext.Entry(entity).State = EntityState.Modified;
@@ -47,10 +67,12 @@ namespace DBManager.Interfacce
 
         public string InsertFromCSV(string fileUri)
         {
+            
             using (var reader = new StreamReader(fileUri))
             {
                 try
                 {
+                    List<IsUsedValue> Out = new List<IsUsedValue>();
                     reader.ReadLine();
                     while (!reader.EndOfStream)
                     {
@@ -58,8 +80,9 @@ namespace DBManager.Interfacce
                         var values = line.Split(';');
                         IsUsedValue myObject = new IsUsedValue();
                         myObject.Description = values[0];
-                        this.Add(myObject);
+                        Out.Add(myObject);
                     }
+                    AddAll(Out);
                     return "Succeded";
                 }
                 catch (DbUpdateException e)

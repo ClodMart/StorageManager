@@ -33,6 +33,26 @@ namespace DBManager.Interfacce
             _dbContext.SaveChanges();
         }
 
+        public void AddAll(List<MenuPreparation> entities)
+        {
+            using (var dbContextTrans = _dbContext.Database.BeginTransaction())
+            {
+                try
+                {                
+                    foreach (var entity in entities)
+                    {
+                        _dbContext.MenuPreparations.Add(entity);
+                    }
+                    _dbContext.SaveChanges();
+                    dbContextTrans.Commit();
+                }
+                catch (Exception ex)
+                {
+                        dbContextTrans.Rollback();
+                }
+            }
+        }
+
         public void Update(MenuPreparation entity)
         {
             _dbContext.Entry(entity).State = EntityState.Modified;
@@ -51,6 +71,7 @@ namespace DBManager.Interfacce
             {
                 try
                 {
+                    List<MenuPreparation> Out = new List<MenuPreparation>();
                     reader.ReadLine();
                     while (!reader.EndOfStream)
                     {
@@ -61,10 +82,12 @@ namespace DBManager.Interfacce
                         myObject.MenuProductId = int.Parse(values[0]);
                         myObject.IngedientId = int.Parse(values[1]);
                         myObject.IngredientQuantity = decimal.Parse(values[2]);
-                        myObject.UnitOfMesure= int.Parse(values[3]);
+                        int Ut = _dbContext.UnitsOfMesures.FirstOrDefault(x => x.Description == values[3]).Id;
+                        myObject.UnitOfMesure= Ut;
 
-                        this.Add(myObject);
+                        Out.Add(myObject);
                     }
+                    AddAll(Out);
                     return "Succeded";
                 }
                 catch (DbUpdateException e)

@@ -33,6 +33,26 @@ namespace DBManager.Interfacce
             _dbContext.SaveChanges();
         }
 
+        public void AddAll(List<Menu> entities)
+        {
+            using (var dbContextTrans = _dbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    foreach (var entity in entities)
+                    {
+                        _dbContext.Menus.Add(entity);
+                    }
+                    _dbContext.SaveChanges();
+                    dbContextTrans.Commit();
+                }
+                catch (Exception ex)
+                {
+                    dbContextTrans.Rollback();
+                }
+            }
+        }
+
         public void Update(Menu entity)
         {
             _dbContext.Entry(entity).State = EntityState.Modified;
@@ -51,6 +71,7 @@ namespace DBManager.Interfacce
             {
                 try
                 {
+                    List<Menu> Out = new List<Menu>();
                     reader.ReadLine();
                     while (!reader.EndOfStream)
                     {
@@ -62,8 +83,9 @@ namespace DBManager.Interfacce
                         myObject.Category = values[1];
                         myObject.SellingPrice = decimal.Parse(values[2]);
 
-                        this.Add(myObject);
+                        Out.Add(myObject);
                     }
+                    AddAll(Out);
                     return "Succeded";
                 }
                 catch (DbUpdateException e)

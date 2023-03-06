@@ -33,6 +33,26 @@ namespace DBManager.Interfacce
             _dbContext.SaveChanges();
         }
 
+        public void AddAll(List<Ingredient> entities)
+        {
+            using (var dbContextTrans = _dbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    foreach (var entity in entities)
+                    {
+                        _dbContext.Ingredients.Add(entity);
+                    }
+                    _dbContext.SaveChanges();
+                    dbContextTrans.Commit();
+                }
+                catch (Exception ex)
+                {
+                    dbContextTrans.Rollback();
+                }
+            }
+        }
+
         public void Update(Ingredient entity)
         {
             _dbContext.Entry(entity).State = EntityState.Modified;
@@ -51,6 +71,7 @@ namespace DBManager.Interfacce
             {
                 try
                 {
+                    List<Ingredient> Out = new List<Ingredient>();
                     reader.ReadLine();
                     while (!reader.EndOfStream)
                     {
@@ -60,7 +81,8 @@ namespace DBManager.Interfacce
 
                         myObject.Ingredient1 = values[0];
                         myObject.Category = values[1];
-                        myObject.IsUsed = int.Parse(values[2]);
+                        int Used = _dbContext.IsUsedValues.FirstOrDefault(x => x.Description == values[2]).Id;
+                        myObject.IsUsed = Used;
                         int SupID = _dbContext.Suppliers.FirstOrDefault(x => x.SupplierName == values[3]).Id;
                         myObject.SupplierId = SupID;
                         string Price = values[4].Replace("€ ", "");
@@ -76,8 +98,9 @@ namespace DBManager.Interfacce
                         myObject.QuantityNeeded = int.Parse(values[7]);
                         myObject.Notes = values[8];
 
-                        this.Add(myObject);
+                        Out.Add(myObject);
                     }
+                    AddAll(Out);
                     return "Succeded";
                 }
                 catch (DbUpdateException e)
