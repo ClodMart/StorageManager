@@ -3,10 +3,53 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:DBManagerTester"
+        xmlns:viewmodels ="clr-namespace:DBManagerTester.ViewModel"
+        xmlns:datamodel="clr-namespace:DBManager.Models;assembly=DBManager"
+        xmlns:local="clr-namespace:DBManagerTester" xmlns:converter="clr-namespace:DBManagerTester.Converter"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowViewModel}"
+        Title="MainWindow"
+        Loaded="Window_Loaded">
+    <Window.Resources>
+        <converter:SupplierIdToNameConverter x:Key="SupplierIdConverter"/>
+    </Window.Resources>
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0" BorderBrush="Black" BorderThickness="5" Padding="3">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                    <Label Content="Type of import" Margin="0,0,32,0"/>
+                    <ComboBox x:Name="DataTypeSelector" Width="400" SelectedItem="{Binding ImportType, Mode=TwoWay}"/>
+                </StackPanel>
 
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                    <TextBox x:Name="FileUri" Text="ImportFileUri"  Width="300" Margin="0,0,10,0"/>
+                    <Button x:Name="SelectFile" Content="Find File" Width="100"  Margin="0,0,10,0" Click="SelectFile_Click"/>
+                    <Button x:Name="Import" Content="Import data" Width="100" Click="Import_Click"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                        <Label Content="Type of output" Margin="0,0,32,0"/>
+                        <ComboBox x:Name="DataTypeOutput" Width="400" SelectedItem="{Binding ShowType, Mode=TwoWay}"/>
+                    </StackPanel>
+                    <Button Content="ScanDB" Click="Button_Click"/>
+            </StackPanel>
+
+        </Border>
+        <Border Grid.Row="1" BorderBrush="Black" BorderThickness="5" Padding="3">
+            <ScrollViewer Height="600" CanContentScroll="True" VerticalScrollBarVisibility="Auto" Background="Transparent" PreviewMouseWheel="dbList_PreviewMouseWheel">
+                <ListView x:Name="dbList" ItemsSource="{Binding DisplayData}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Label Content="{Binding}"/>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </ScrollViewer>           
+        </Border>
+
+        
     </Grid>
 </Window>

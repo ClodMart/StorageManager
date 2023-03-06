@@ -8,40 +8,40 @@ using System.Threading.Tasks;
 
 namespace DBManager.Interfacce
 {
-    public class MenuPreparationsRepository : IRepository<MenuPreparation>
+    public class IsUsedValuesRepository : IRepository<IsUsedValue>
     {
         private readonly GestioneMagazzinoContext _dbContext;
 
-        public MenuPreparationsRepository(GestioneMagazzinoContext dbContext)
+        public IsUsedValuesRepository(GestioneMagazzinoContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public IEnumerable<MenuPreparation> GetAll()
+        public IEnumerable<IsUsedValue> GetAll()
         {
-            return _dbContext.MenuPreparations.ToList();
+            return _dbContext.IsUsedValues.ToList();
         }
 
-        public MenuPreparation GetById(int id)
+        public IsUsedValue GetById(int id)
         {
-            return _dbContext.MenuPreparations.Find(id);
+            return _dbContext.IsUsedValues.Find(id);
         }
 
-        public void Add(MenuPreparation entity)
+        public void Add(IsUsedValue entity)
         {
-            _dbContext.MenuPreparations.Add(entity);
+            _dbContext.IsUsedValues.Add(entity);
             _dbContext.SaveChanges();
         }
 
-        public void Update(MenuPreparation entity)
+        public void Update(IsUsedValue entity)
         {
             _dbContext.Entry(entity).State = EntityState.Modified;
             _dbContext.SaveChanges();
         }
 
-        public void Delete(MenuPreparation entity)
+        public void Delete(IsUsedValue entity)
         {
-            _dbContext.MenuPreparations.Remove(entity);
+            _dbContext.IsUsedValues.Remove(entity);
             _dbContext.SaveChanges();
         }
 
@@ -56,13 +56,8 @@ namespace DBManager.Interfacce
                     {
                         var line = reader.ReadLine();
                         var values = line.Split(';');
-                        MenuPreparation myObject = new MenuPreparation();
-
-                        myObject.MenuProductId = int.Parse(values[0]);
-                        myObject.IngedientId = int.Parse(values[1]);
-                        myObject.IngredientQuantity = decimal.Parse(values[2]);
-                        myObject.UnitOfMesure= int.Parse(values[3]);
-
+                        IsUsedValue myObject = new IsUsedValue();
+                        myObject.Description = values[0];
                         this.Add(myObject);
                     }
                     return "Succeded";

@@ -44,6 +44,53 @@ namespace DBManager.Interfacce
             _dbContext.UseMaterials.Remove(entity);
             _dbContext.SaveChanges();
         }
+
+        public string InsertFromCSV(string fileUri)
+        {
+            using (var reader = new StreamReader(fileUri))
+            {
+                try
+                {
+                    reader.ReadLine();
+                    while (!reader.EndOfStream)
+                    {
+                        var line = reader.ReadLine();
+                        var values = line.Split(';');
+                        UseMaterial myObject = new UseMaterial();
+
+                        myObject.MaterialName = values[0];
+                        myObject.Category = values[1];
+                        myObject.IsUsed = int.Parse(values[2]);
+                        int SupID = _dbContext.Suppliers.FirstOrDefault(x => x.SupplierName == values[3]).Id;
+                        myObject.SupplierId = SupID;
+                        string Price = values[4].Replace("€ ", "");
+                        myObject.Cost = decimal.Parse(Price);
+                        if (values[5] != "")
+                        {
+                            myObject.SizeUnits = int.Parse(values[5]);
+                        }
+                        myObject.QuantityNeeded = int.Parse(values[6]);
+                        myObject.Notes = values[7];
+
+                        this.Add(myObject);
+                    }
+                    return "Succeded";
+                }
+                catch (DbUpdateException e)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    string inner = e.InnerException.Message;
+                    if (inner != null)
+                    {
+                        return e.Message + "\nInner Exeption: " + inner;
+                    }
+                    else
+                    {
+                        return e.Message;
+                    }
+                }
+            }
+        }
     }
 }
  

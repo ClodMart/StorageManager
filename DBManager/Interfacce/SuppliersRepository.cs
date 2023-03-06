@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DBManager.Interfacce
 {
-    internal class SuppliersRepository : IRepository<Supplier>
+    public class SuppliersRepository : IRepository<Supplier>
     {
         private readonly GestioneMagazzinoContext _dbContext;
 
@@ -43,6 +43,45 @@ namespace DBManager.Interfacce
         {
             _dbContext.Suppliers.Remove(entity);
             _dbContext.SaveChanges();
+        }
+
+        public string InsertFromCSV(string fileUri)
+        {
+            using (var reader = new StreamReader(fileUri))
+            {
+                try
+                {
+                    reader.ReadLine();
+                    while (!reader.EndOfStream)
+                    {
+                        var line = reader.ReadLine();
+                        var values = line.Split(';');
+                        Supplier myObject = new Supplier();
+
+                        myObject.SupplierName = values[0];
+                        myObject.PtIva = values[1];
+                        myObject.Telefono = values[2];
+                        myObject.Email = values[3];
+                        myObject.Note = values[4];
+
+                        this.Add(myObject);
+                    }
+                    return "Succeded";
+                }
+                catch (DbUpdateException e)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    string inner = e.InnerException.Message;
+                    if (inner != null)
+                    {
+                        return e.Message + "\nInner Exeption: " + inner;
+                    }
+                    else
+                    {
+                        return e.Message;
+                    }
+                }
+            }
         }
     }
 }

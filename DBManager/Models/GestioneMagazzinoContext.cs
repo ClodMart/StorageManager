@@ -18,6 +18,7 @@ namespace DBManager.Models
 
         public virtual DbSet<DrinkIngredient> DrinkIngredients { get; set; } = null!;
         public virtual DbSet<Ingredient> Ingredients { get; set; } = null!;
+        public virtual DbSet<IsUsedValue> IsUsedValues { get; set; } = null!;
         public virtual DbSet<Menu> Menus { get; set; } = null!;
         public virtual DbSet<MenuPreparation> MenuPreparations { get; set; } = null!;
         public virtual DbSet<Supplier> Suppliers { get; set; } = null!;
@@ -124,6 +125,13 @@ namespace DBManager.Models
                     .HasForeignKey(d => d.SupplierId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Ingredients_Suppliers");
+            });
+
+            modelBuilder.Entity<IsUsedValue>(entity =>
+            {
+                entity.ToTable("IsUsed_Values");
+
+                entity.Property(e => e.Description).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Menu>(entity =>

@@ -1,4 +1,5 @@
 ﻿using DBManager.Models;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -46,32 +47,55 @@ namespace DBManager.Interfacce
             _dbContext.SaveChanges();
         }
 
-        public void InsertFromCSV(string fileUri)
+        public string InsertFromCSV(string fileUri)
         {
             using (var reader = new StreamReader(fileUri))
             {
-                reader.ReadLine();
-                while (!reader.EndOfStream)
+                try
                 {
-                    var line = reader.ReadLine();
-                    var values = line.Split(',');
-                    DrinkIngredient myObject = new DrinkIngredient();
+                    reader.ReadLine();
+                    while (!reader.EndOfStream)
+                    {
+                        var line = reader.ReadLine();
+                        var values = line.Split(';');
+                        DrinkIngredient myObject = new DrinkIngredient();
 
-                    myObject.DrinkName = values[0];
-                    myObject.Category = values[1];
-                    myObject.IsUsed = int.Parse(values[2]);
-                    myObject.SupplierId = int.Parse(values[3]);
-                    myObject.Cost = decimal.Parse(values[4]);
-                    myObject.SizeLiters = decimal.Parse(values[5]);
-                    myObject.SizeUnits = decimal.Parse(values[6]);
-                    //myObject.CostLiter= decimal.Parse(values[7]);
-                    //myObject.CostUnit= decimal.Parse(values[8]);
-                    myObject.QuantityNeeded = int.Parse(values[7]);
-                    myObject.Notes = values[8];
+                        myObject.DrinkName = values[0];
+                        myObject.Category = values[1];
+                        int Used = _dbContext.IsUsedValues.FirstOrDefault(x => x.Description == values[2]).Id;
+                        myObject.IsUsed = Used;
+                        int SupID = _dbContext.Suppliers.FirstOrDefault(x => x.SupplierName == values[3]).Id;
+                        myObject.SupplierId = SupID;
+                        //myObject.SupplierId = int.Parse(values[3]);
+                        string Price = values[4].Replace("€ ", "");
+                        myObject.Cost = decimal.Parse(Price);
+                        if (values[5] != "")
+                        {
+                            myObject.SizeLiters = decimal.Parse(values[5]);
+                        }
+                        if (values[6] != "")
+                        {
+                            myObject.SizeUnits = decimal.Parse(values[6]);
+                        }
+                        myObject.QuantityNeeded = int.Parse(values[7]);
+                        myObject.Notes = values[8];
 
-                    this.Add(myObject);
+                        this.Add(myObject);
+                    }
+                    return "Succeded";
                 }
-
+                catch(DbUpdateException e)
+                {
+                    string inner = e.InnerException.Message;
+                    if (inner != null)
+                    {
+                        return e.Message + "\nInner Exeption: " + inner;
+                    }
+                    else
+                    {
+                        return e.Message;
+                    }
+                }             
             }
         }
     }

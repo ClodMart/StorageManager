@@ -45,5 +45,42 @@ namespace DBManager.Interfacce
             _dbContext.SaveChanges();
         }
 
+        public string InsertFromCSV(string fileUri)
+        {
+            using (var reader = new StreamReader(fileUri))
+            {
+                try
+                {
+                    reader.ReadLine();
+                    while (!reader.EndOfStream)
+                    {
+                        var line = reader.ReadLine();
+                        var values = line.Split(';');
+                        Menu myObject = new Menu();
+
+                        myObject.MenuEntry = values[0];
+                        myObject.Category = values[1];
+                        myObject.SellingPrice = decimal.Parse(values[2]);
+
+                        this.Add(myObject);
+                    }
+                    return "Succeded";
+                }
+                catch (DbUpdateException e)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    string inner = e.InnerException.Message;
+                    if (inner != null)
+                    {
+                        return e.Message + "\nInner Exeption: " + inner;
+                    }
+                    else
+                    {
+                        return e.Message;
+                    }
+                }
+            }
+        }
+
     }
 }
