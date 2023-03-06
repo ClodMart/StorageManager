@@ -33,7 +33,7 @@ namespace DBManager.Interfacce
             _dbContext.SaveChanges();
         }
 
-        public void AddAll(List<Ingredient> entities)
+        public string AddAll(List<Ingredient> entities)
         {
             using (var dbContextTrans = _dbContext.Database.BeginTransaction())
             {
@@ -45,10 +45,20 @@ namespace DBManager.Interfacce
                     }
                     _dbContext.SaveChanges();
                     dbContextTrans.Commit();
+                    return "Succesful";
                 }
-                catch (Exception ex)
+                catch (Exception e)
                 {
                     dbContextTrans.Rollback();
+                    string inner = e.InnerException.Message;
+                    if (inner != null)
+                    {
+                        return e.Message + "\nInner Exeption: " + inner;
+                    }
+                    else
+                    {
+                        return e.Message;
+                    }
                 }
             }
         }
@@ -100,8 +110,8 @@ namespace DBManager.Interfacce
 
                         Out.Add(myObject);
                     }
-                    AddAll(Out);
-                    return "Succeded";
+                    string result = AddAll(Out);
+                    return result;
                 }
                 catch (DbUpdateException e)
                 {

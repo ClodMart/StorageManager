@@ -51,6 +51,7 @@ namespace DBManager.Interfacce
                 }
                 catch (DbUpdateException e)
                 {
+                    dbContextTrans.Rollback();
                     string inner = e.InnerException.Message;
                     if (inner != null)
                     {
@@ -59,8 +60,7 @@ namespace DBManager.Interfacce
                     else
                     {
                         return e.Message;
-                    }
-                    dbContextTrans.Rollback();
+                    }                    
                 }
             }
         }
