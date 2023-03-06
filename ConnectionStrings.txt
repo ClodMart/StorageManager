@@ -1,0 +1,2 @@
+                //optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=GestioneMagazzino;Integrated Security=True");  //Casa
+                optionsBuilder.UseSqlServer("Data Source=(localhost)\\SQLEXPRESS;Initial Catalog=GestioneMagazzino;Integrated Security=True"); //Lavoro
