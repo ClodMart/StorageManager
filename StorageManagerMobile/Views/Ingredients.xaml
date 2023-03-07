@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:res="clr-namespace:StorageManagerMobile.Resources"
+             xmlns:db="clr-namespace:DBManager.Models;assembly=DBManager"
+             xmlns:viewmodels="clr-namespace:StorageManagerMobile.ViewModels"
+             x:DataType="viewmodels:IngredientsViewModel"
+             x:Class="StorageManagerMobile.Views.Ingredients"
+             Title="Ingredients">
+    <ContentPage.Resources>
+        <res:BoolToColorConverter x:Key="BoolToColor"/>
+        <res:DoubleToColorConverter x:Key="DoubleToColor"/>
+    </ContentPage.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <SearchBar x:Name="searchBar" Grid.Row="0" Placeholder="Cerca Materiale..."
+                   SearchCommand="{Binding PerformSearch}"
+                   SearchCommandParameter="{Binding Text, Source={x:Reference searchBar}}"
+                   TextChanged="searchBar_TextChanged"/>
+        <StackLayout Grid.Row="1">
+            <StackLayout  Orientation="Horizontal">
+                <ImageButton x:Name="Filters" Source="filters_button.png" Clicked="Filters_Clicked" HeightRequest="40" Margin="0,0,10,0"/>
+                <Label Text="Filters" VerticalOptions="Center"/>
+            </StackLayout>
+
+            <StackLayout Orientation="Vertical" Grid.Row="1" IsVisible="{Binding ShowFilters}" Padding="40,0,0,0">
+                <RadioButton x:Name="FilterAll" Content="Tutti" IsChecked="True" CheckedChanged="Filter_CheckedChanged"/>
+                <RadioButton x:Name="FilterEnough" Content="Abbastanza" CheckedChanged="Filter_CheckedChanged"/>
+                <RadioButton x:Name="NotEnough" Content="Non Abbastanza" CheckedChanged="Filter_CheckedChanged"/>
+                <RadioButton x:Name="FilterPriceRising" Content="Prezzo Aumentato" CheckedChanged="Filter_CheckedChanged"/>
+                <RadioButton x:Name="FilterPriceLowering" Content="Prezzo Diminuito" CheckedChanged="Filter_CheckedChanged"/>
+            </StackLayout>
+        </StackLayout>
+
+        <ListView x:Name="ListaMateriali" Grid.Row="2" ItemsSource="{Binding IngredientList}" RowHeight="70" Refreshing="ListView_Refreshing" ItemSelected="ListView_ItemSelected">
+            <ListView.Header>
+                <Border StrokeThickness="3">
+                    <Grid Padding="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Label Text="Nome" FontSize="Medium" FontAttributes="Bold" Grid.Column="0" Grid.Row="0" VerticalOptions="Start" HorizontalOptions="StartAndExpand"/>
+                        <Label Text="Categoria" FontSize="Small" FontAttributes="Italic" TextColor="LightGray" Grid.Column="0" Grid.Row="1" VerticalOptions="Start" HorizontalOptions="StartAndExpand" />
+                        <Label Text="Qt." FontSize="Medium" FontAttributes="Italic" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="CenterAndExpand"/>
+                        <Label Text="€" FontSize="Medium" FontAttributes="Italic" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="CenterAndExpand"/>
+                        <Button x:Name="AddMaterial"  Text="+" FontSize="Large" FontAttributes="Bold" Grid.Column="3"  Grid.Row="0" Grid.RowSpan="2" Clicked="AddMaterial_Clicked" Margin="5" Padding="5"/>
+                    </Grid>
+                </Border>
+            </ListView.Header>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell x:DataType="db:Ingredient" BindingContext="{Binding}">
+                        <Border StrokeThickness="3">
+                            <Grid Padding="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="4*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+
+                                <Label x:Name="IdLabel" Text="{Binding Id}" IsVisible="false"/>
+                                <Label x:Name="NameLabel" Text="{Binding Ingredient1}" FontSize="Medium" FontAttributes="Bold" Grid.Column="0" Grid.Row="0" VerticalOptions="Start" HorizontalOptions="StartAndExpand" BackgroundColor="Transparent" />
+                                <Label Text="{Binding Category}" FontSize="Small" FontAttributes="Italic" TextColor="LightGray" Grid.Column="0" Grid.Row="1" VerticalOptions="Start" HorizontalOptions="StartAndExpand" BackgroundColor="Transparent" />
+                                <Button x:Name="EditQuantity" Text="{Binding QuantityNeeded, Mode=TwoWay}" FontSize="Small" FontAttributes="Italic" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" BackgroundColor="{Binding IsEnough, Converter={StaticResource BoolToColor}}" Clicked="EditQuantity_Clicked" Margin="5" Padding="-5"/>
+                                <Button x:Name="EditPrice" Text="{Binding Cost, Mode=TwoWay}" FontSize="Small" FontAttributes="Italic" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" BackgroundColor="{Binding PriceDifference, Converter={StaticResource DoubleToColor}}" Clicked="EditPrice_Clicked" Margin="5" Padding="-5"/>
+                                <ImageButton x:Name="Delete_Material" Source="icona_cestino.png" Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" HeightRequest="50" 
+                                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PaginaMagazzinoViewModel}}, Path=PerformDeletion}"
+                                             CommandParameter="{Binding Text, Source={x:Reference NameLabel}}"/>
+                            </Grid>
+                        </Border>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</ContentPage>
