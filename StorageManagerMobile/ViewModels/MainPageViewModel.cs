@@ -4,6 +4,7 @@ using StorageManagerMobile.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,7 +12,7 @@ namespace StorageManagerMobile.ViewModels
 {
     public class MainPageViewModel : BaseViewModel
     {
-        private readonly GestioneMagazzinoContext context;
+        private readonly GestioneMagazzinoContext context = new GestioneMagazzinoContext();
 
         private List<Page> pages = new List<Page>();
         public List<Page> Pages
@@ -20,8 +21,19 @@ namespace StorageManagerMobile.ViewModels
             set { pages = value; NotifyPropertyChanged(); }
         }
 
-        public FlyoutMenuViewModel MenuViewModel;
-        public IngredientsViewModel IngredientsViewModel;
+        private FlyoutMenuViewModel menuViewModel;
+        public FlyoutMenuViewModel MenuViewModel
+        {
+            get { return menuViewModel; }
+            set { menuViewModel = value; NotifyPropertyChanged();}
+        }
+
+        private IngredientsViewModel ingredientsViewModel;
+        public IngredientsViewModel IngredientsViewModel
+        {
+            get { return ingredientsViewModel; }
+            set { ingredientsViewModel = value; NotifyPropertyChanged(); }
+        }
 
         private List<PageLink> menuList;
         public List<PageLink> MenuList { get { return menuList; } set { menuList = value; NotifyPropertyChanged(); } }
@@ -56,7 +68,7 @@ namespace StorageManagerMobile.ViewModels
             foreach (PageLink x in MenuList)
             {
                 string PageName = x.Page;
-                Type PageType = Type.GetType("MauiApp1.Views." + PageName);
+                Type PageType = Type.GetType(Assembly.GetCallingAssembly().GetName().Name +".Views." + PageName);
                 Page newPage;
                 try
                 {

@@ -14,6 +14,6 @@ public partial class FlyoutMenu : ContentPage
         {
             Parent = Parent.Parent;
         }
-    ((MainPage)Parent).ChangePage(label);
+        ((MainPage)Parent).ChangePage(label);
     }
 }

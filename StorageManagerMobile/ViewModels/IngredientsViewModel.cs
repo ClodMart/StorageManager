@@ -1,4 +1,6 @@
 ﻿using DBManager.Models;
+using Microsoft.Toolkit.Collections;
+using StorageManagerMobile.Grouping;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,8 +16,8 @@ namespace StorageManagerMobile.ViewModels
         public List<Ingredient> AllIngredients { get; set; }
         private List<Ingredient> FilteredIngredients { get; set; }
 
-        private ObservableCollection<Ingredient> ingredientList;
-        public ObservableCollection<Ingredient> IngredientList
+        private ObservableCollection<IngredientsView> ingredientList;
+        public ObservableCollection<IngredientsView> IngredientList
         {
             get { return ingredientList; }
             set { ingredientList = value; NotifyPropertyChanged(); }
@@ -32,8 +34,21 @@ namespace StorageManagerMobile.ViewModels
         {
             AllIngredients = List;
             FilteredIngredients = List;
-            IngredientList = new ObservableCollection<Ingredient>(FilteredIngredients);
+            List<Ingredient> Ingredients = FilteredIngredients;
+            List<IngredientsView> L = new List<IngredientsView>();  
+            while(Ingredients.Count>0)
+            {
+                Ingredient GroupTitle = Ingredients.ElementAt(0);
+                ObservableCollection<Ingredient> Input = new ObservableCollection<Ingredient>(Ingredients.FindAll(x => (x.Ingredient1 == GroupTitle.Ingredient1) && (x.Category == GroupTitle.Category)));
 
+                L.Add(new IngredientsView(GroupTitle, Input));
+
+                foreach(Ingredient y in Input)
+                {
+                    Ingredients.RemoveAll(x => x.Id == y.Id);
+                }              
+            }
+            IngredientList = new ObservableCollection<IngredientsView>(L);
         }
 
         private string LastSearch = "";
@@ -43,39 +58,42 @@ namespace StorageManagerMobile.ViewModels
 
         public ICommand PerformSearch => new Command<string>((string query) =>
         {
-            Search(query);
+            //Search(query);
         });
 
         public ICommand PerformDeletion => new Command<string>((string MatName) =>
         {
-            DeleteIngredienti(MatName);
+            //DeleteIngredienti(MatName);
         });
 
-        public void Search(string query)
-        {
-            LastSearch = query;
-            List<Ingredient> results = new List<Ingredient>();
-            foreach (Ingredient Ingredient in FilteredIngredients)
-            {
-                if (Ingredient.Ingredient1.Contains(query, StringComparison.OrdinalIgnoreCase) || Ingredient.Category.Contains(query, StringComparison.OrdinalIgnoreCase))
-                {
-                    results.Add(Ingredient);
-                }
-            }
-            IngredientList = new ObservableCollection<Ingredient>(results);
-        }
+        //public void Search(string query)
+        //{
+        //    LastSearch = query;
+        //    List<Ingredient> results = new List<Ingredient>();
+        //    foreach (Ingredient Ingredient in FilteredIngredients)
+        //    {
+        //        if (Ingredient.Ingredient1.Contains(query, StringComparison.OrdinalIgnoreCase) || Ingredient.Category.Contains(query, StringComparison.OrdinalIgnoreCase))
+        //        {
+        //            results.Add(Ingredient);
+        //        }
+        //    }
+        //    IngredientList = new ObservableGroupedCollection<string, Ingredient>(results.GroupBy(x => x.Ingredient1.ToUpperInvariant().ToString())
+        //        .OrderBy(y => y.Key));
+        //}
 
-        public void DeleteIngredienti(string IngredientName)
-        {
-            Ingredient Ingredient = IngredientList.FirstOrDefault(x => x.Ingredient1 == IngredientName);
-            if (Ingredient != null)
-            {
-                AllIngredients.Remove(Ingredient);
-                FilteredIngredients.Remove(Ingredient);
-                IngredientList.Remove(Ingredient);
-                Search(LastSearch);
-            }
-        }
+        //public void DeleteIngredienti(string IngredientName)
+        //{
+        //    Ingredient Ingredient = AllIngredients.FirstOrDefault(x => x.Ingredient1 == IngredientName);
+        //    if (Ingredient != null)
+        //    {
+        //        AllIngredients.Remove(Ingredient);
+        //        FilteredIngredients.Remove(Ingredient);
+        //        IngredientList = new ObservableGroupedCollection<string, Ingredient>(
+        //                        FilteredIngredients.GroupBy(x => x.Ingredient1.ToUpperInvariant().ToString())
+        //                        .OrderBy(y => y.Key));
+        //        Search(LastSearch);
+        //    }
+        //}
         #endregion
         //public void FilterList(string Filter)
         //{

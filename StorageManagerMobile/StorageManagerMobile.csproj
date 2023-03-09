@@ -49,6 +49,29 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\aggiungi_DarkMode.png" />
+	  <None Remove="Resources\Images\aggiungi_LightMode.png" />
+	  <None Remove="Resources\Images\arrowdown_darkmode.png" />
+	  <None Remove="Resources\Images\arrowdown_lightmode.png" />
+	  <None Remove="Resources\Images\arrowup_darkmode.png" />
+	  <None Remove="Resources\Images\arrowup_lightmode.png" />
+	  <None Remove="Resources\Images\cestino_DarkMode.png" />
+	  <None Remove="Resources\Images\cestino_LightMode.png" />
+	  <None Remove="Resources\Images\filters_button.png" />
+	  <None Remove="Resources\Images\Filtri_DarkMode.png" />
+	  <None Remove="Resources\Images\Filtri_LightMode.png" />
+	  <None Remove="Resources\Images\flyout_logo.png" />
+	  <None Remove="Resources\Images\icona_cestino.png" />
+	  <None Remove="Resources\Images\Modifica_DarkMode.png" />
+	  <None Remove="Resources\Images\Modifica_LightMode.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="DevExpress.Data" Version="22.2.4" />
+	  <PackageReference Include="Microsoft.Toolkit" Version="7.1.2" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <ProjectReference Include="..\DBManager\DBManager.csproj" />
 	</ItemGroup>
 

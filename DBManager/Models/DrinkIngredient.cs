@@ -11,12 +11,16 @@ namespace DBManager.Models
         public int IsUsed { get; set; }
         public int? SupplierId { get; set; }
         public decimal? Cost { get; set; }
+        public decimal OldCost { get; set; }
         public decimal? SizeLiters { get; set; }
         public decimal? SizeUnits { get; set; }
         public decimal? CostLiter { get; set; }
         public decimal? CostUnit { get; set; }
         public int QuantityNeeded { get; set; }
+        public int ActualQuantity { get; set; }
         public string? Notes { get; set; }
+        public int? IsEnough { get; set; }
+        public decimal? CostDifference { get; set; }
 
         public virtual IsUsedValue IsUsedNavigation { get; set; } = null!;
         public virtual Supplier? Supplier { get; set; }

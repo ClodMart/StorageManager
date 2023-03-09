@@ -97,11 +97,13 @@ namespace DBManager.Interfacce
                         myObject.SupplierId = SupID;
                         string Price = values[4].Replace("€ ", "");
                         myObject.Cost = decimal.Parse(Price);
+                        myObject.OldCost= decimal.Parse(Price);
                         if (values[5] != "")
                         {
                             myObject.SizeUnits = decimal.Parse(values[5]);
                         }
                         myObject.QuantityNeeded = int.Parse(values[6]);
+                        myObject.ActualQuantity = int.Parse(values[6]);
                         myObject.Notes = values[7];
 
                         Out.Add(myObject);

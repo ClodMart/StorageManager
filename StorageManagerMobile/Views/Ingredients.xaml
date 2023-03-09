@@ -4,12 +4,14 @@
              xmlns:res="clr-namespace:StorageManagerMobile.Resources"
              xmlns:db="clr-namespace:DBManager.Models;assembly=DBManager"
              xmlns:viewmodels="clr-namespace:StorageManagerMobile.ViewModels"
+             xmlns:groups ="clr-namespace:StorageManagerMobile.Grouping"
              x:DataType="viewmodels:IngredientsViewModel"
              x:Class="StorageManagerMobile.Views.Ingredients"
              Title="Ingredients">
     <ContentPage.Resources>
         <res:BoolToColorConverter x:Key="BoolToColor"/>
         <res:DoubleToColorConverter x:Key="DoubleToColor"/>
+        <res:BoolToHeight x:Key="BoolToHeight"/>
     </ContentPage.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -23,7 +25,7 @@
                    TextChanged="searchBar_TextChanged"/>
         <StackLayout Grid.Row="1">
             <StackLayout  Orientation="Horizontal">
-                <ImageButton x:Name="Filters" Source="filters_button.png" Clicked="Filters_Clicked" HeightRequest="40" Margin="0,0,10,0"/>
+                <ImageButton Style="{StaticResource FilterIcon}" x:Name="Filters" Clicked="Filters_Clicked" HeightRequest="50" Margin="5" Padding="5"/>
                 <Label Text="Filters" VerticalOptions="Center"/>
             </StackLayout>
 
@@ -36,52 +38,58 @@
             </StackLayout>
         </StackLayout>
 
-        <ListView x:Name="ListaMateriali" Grid.Row="2" ItemsSource="{Binding IngredientList}" RowHeight="70" Refreshing="ListView_Refreshing" ItemSelected="ListView_ItemSelected">
-            <ListView.Header>
-                <Border StrokeThickness="3">
-                    <Grid Padding="5">
+        <ListView ItemsSource="{Binding IngredientList}" IsGroupingEnabled="True" Grid.Row="2" RowHeight="70">
+            <ListView.GroupHeaderTemplate>
+                <DataTemplate x:DataType="groups:IngredientsView">
+                    <ViewCell>
+                        <Grid Padding="5">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="3*"/>
                             <ColumnDefinition Width="1*"/>
                             <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="auto"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <Label Text="Nome" FontSize="Medium" FontAttributes="Bold" Grid.Column="0" Grid.Row="0" VerticalOptions="Start" HorizontalOptions="StartAndExpand"/>
-                        <Label Text="Categoria" FontSize="Small" FontAttributes="Italic" TextColor="LightGray" Grid.Column="0" Grid.Row="1" VerticalOptions="Start" HorizontalOptions="StartAndExpand" />
-                        <Label Text="Qt." FontSize="Medium" FontAttributes="Italic" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="CenterAndExpand"/>
-                        <Label Text="€" FontSize="Medium" FontAttributes="Italic" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="CenterAndExpand"/>
-                        <Button x:Name="AddMaterial"  Text="+" FontSize="Large" FontAttributes="Bold" Grid.Column="3"  Grid.Row="0" Grid.RowSpan="2" Clicked="AddMaterial_Clicked" Margin="5" Padding="5"/>
-                    </Grid>
-                </Border>
-            </ListView.Header>
+                            <Label Text="{Binding Title.Ingredient1}" Style="{StaticResource ListMainText}" Grid.Column="0" Grid.Row="0" VerticalOptions="Start" HorizontalOptions="StartAndExpand"/>
+                            <Label Text="{Binding Title.Category}" Style="{StaticResource ListSubText}" Grid.Column="0" Grid.Row="1" VerticalOptions="Start" HorizontalOptions="StartAndExpand" />
+                            <Label Text="{Binding Title.ActualQuantity}" Style="{StaticResource ListMainText}" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="Center"/>
+                            <Label Text="{Binding Title.QuantityNeeded}" Style="{StaticResource ListMainText}" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="Center"/>
+                            <ImageButton BackgroundColor="Transparent" BorderColor="Transparent" Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" Source="{AppThemeBinding Default=arrowdown_lightmode.png, Light=arrowdown_lightmode.png, Dark=arrowdown_darkmode.png}" Command="{Binding ChangeVisibility}">
+                                <ImageButton.Triggers>
+                                    <DataTrigger TargetType="{x:Type ImageButton}" Binding="{Binding ShowList}" Value="true">
+                                        <Setter Property="Source" Value="{AppThemeBinding Default=arrowup_lightmode.png, Light=arrowup_lightmode.png, Dark=arrowup_darkmode.png}"/>
+                                    </DataTrigger>                                            
+                                </ImageButton.Triggers>
+                            </ImageButton>
+                        </Grid> 
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.GroupHeaderTemplate>
             <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell x:DataType="db:Ingredient" BindingContext="{Binding}">
-                        <Border StrokeThickness="3">
-                            <Grid Padding="5">
+                <DataTemplate  x:DataType="db:Ingredient">
+                    <ViewCell>
+                        <Border StrokeThickness="3" >
+                            <Grid Padding="5" HeightRequest="70">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="4*"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="3*"/>
                                     <ColumnDefinition Width="1*"/>
                                     <ColumnDefinition Width="1*"/>
-                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="auto"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
-
-                                <Label x:Name="IdLabel" Text="{Binding Id}" IsVisible="false"/>
-                                <Label x:Name="NameLabel" Text="{Binding Ingredient1}" FontSize="Medium" FontAttributes="Bold" Grid.Column="0" Grid.Row="0" VerticalOptions="Start" HorizontalOptions="StartAndExpand" BackgroundColor="Transparent" />
-                                <Label Text="{Binding Category}" FontSize="Small" FontAttributes="Italic" TextColor="LightGray" Grid.Column="0" Grid.Row="1" VerticalOptions="Start" HorizontalOptions="StartAndExpand" BackgroundColor="Transparent" />
-                                <Button x:Name="EditQuantity" Text="{Binding QuantityNeeded, Mode=TwoWay}" FontSize="Small" FontAttributes="Italic" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" BackgroundColor="{Binding IsEnough, Converter={StaticResource BoolToColor}}" Clicked="EditQuantity_Clicked" Margin="5" Padding="-5"/>
-                                <Button x:Name="EditPrice" Text="{Binding Cost, Mode=TwoWay}" FontSize="Small" FontAttributes="Italic" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" BackgroundColor="{Binding PriceDifference, Converter={StaticResource DoubleToColor}}" Clicked="EditPrice_Clicked" Margin="5" Padding="-5"/>
-                                <ImageButton x:Name="Delete_Material" Source="icona_cestino.png" Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" HeightRequest="50" 
-                                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PaginaMagazzinoViewModel}}, Path=PerformDeletion}"
-                                             CommandParameter="{Binding Text, Source={x:Reference NameLabel}}"/>
+                                <ImageButton Style="{StaticResource EditIcon}" Grid.Column="0" Grid.RowSpan="2" Margin="5" Padding="5"/>
+                                <Label Text="{Binding Ingredient1}" Style="{StaticResource ListMainText}" Grid.Column="1" Grid.Row="0" VerticalOptions="Start" HorizontalOptions="StartAndExpand"/>
+                                <Label Text="{Binding Category}" Style="{StaticResource ListSubText}" Grid.Column="1" Grid.Row="1" VerticalOptions="Start" HorizontalOptions="StartAndExpand" />
+                                <Label Text="{Binding QuantityNeeded}" FontSize="Medium" FontAttributes="Italic" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="CenterAndExpand"/>
+                                <Label Text="{Binding Cost}" FontSize="Medium" FontAttributes="Italic" Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="CenterAndExpand"/>
+                                <ImageButton Style="{StaticResource DeleteIcon}" x:Name="AddMaterial" Grid.Column="4"  Grid.Row="0" Grid.RowSpan="2" Clicked="AddMaterial_Clicked" Margin="5" Padding="5"/>
                             </Grid>
                         </Border>
                     </ViewCell>

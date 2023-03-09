@@ -30,7 +30,7 @@ namespace DBManager.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data Source=localhost\\SQLEXPRESS;Initial Catalog=GestioneMagazzino;Integrated Security=True");
+                optionsBuilder.UseSqlServer("Data Source=.\\SQLEXPRESS;Initial Catalog=GestioneMagazzino;Integrated Security=True");
             }
         }
 
@@ -42,11 +42,19 @@ namespace DBManager.Models
             {
                 entity.ToTable("Drink_Ingredients");
 
+                entity.Property(e => e.ActualQuantity)
+                    .HasColumnName("Actual_Quantity")
+                    .HasDefaultValueSql("((-1))");
+
                 entity.Property(e => e.Category).HasMaxLength(50);
 
                 entity.Property(e => e.Cost)
                     .HasColumnType("numeric(18, 2)")
                     .HasColumnName("Cost_€");
+
+                entity.Property(e => e.CostDifference)
+                    .HasColumnType("numeric(19, 2)")
+                    .HasComputedColumnSql("([OldCost_€]-[Cost_€])", true);
 
                 entity.Property(e => e.CostLiter)
                     .HasColumnType("numeric(38, 20)")
@@ -62,7 +70,13 @@ namespace DBManager.Models
                     .HasMaxLength(255)
                     .HasColumnName("Drink_Name");
 
+                entity.Property(e => e.IsEnough).HasComputedColumnSql("(case when [Quantity_Needed]>[Actual_Quantity] then (0) when [Quantity_Needed]<=[Actual_Quantity] then (1)  end)", true);
+
                 entity.Property(e => e.Notes).HasMaxLength(255);
+
+                entity.Property(e => e.OldCost)
+                    .HasColumnType("numeric(18, 2)")
+                    .HasColumnName("OldCost_€");
 
                 entity.Property(e => e.QuantityNeeded).HasColumnName("Quantity_Needed");
 
@@ -92,11 +106,19 @@ namespace DBManager.Models
 
             modelBuilder.Entity<Ingredient>(entity =>
             {
+                entity.Property(e => e.ActualQuantity)
+                    .HasColumnName("Actual_Quantity")
+                    .HasDefaultValueSql("((-1))");
+
                 entity.Property(e => e.Category).HasMaxLength(50);
 
                 entity.Property(e => e.Cost)
                     .HasColumnType("numeric(18, 2)")
                     .HasColumnName("Cost_€");
+
+                entity.Property(e => e.CostDifference)
+                    .HasColumnType("numeric(19, 2)")
+                    .HasComputedColumnSql("([OldCost_€]-[Cost_€])", true);
 
                 entity.Property(e => e.CostKg)
                     .HasColumnType("numeric(38, 19)")
@@ -112,9 +134,15 @@ namespace DBManager.Models
                     .HasMaxLength(150)
                     .HasColumnName("Ingredient");
 
+                entity.Property(e => e.IsEnough).HasComputedColumnSql("(case when [Quantity_Needed]>[Actual_Quantity] then (0) when [Quantity_Needed]<=[Actual_Quantity] then (1)  end)", true);
+
                 entity.Property(e => e.IsUsed).HasColumnName("Is_Used");
 
                 entity.Property(e => e.Notes).HasMaxLength(255);
+
+                entity.Property(e => e.OldCost)
+                    .HasColumnType("numeric(18, 2)")
+                    .HasColumnName("OldCost_€");
 
                 entity.Property(e => e.QuantityNeeded).HasColumnName("Quantity_Needed");
 
@@ -212,22 +240,36 @@ namespace DBManager.Models
             {
                 entity.ToTable("Use_Materials");
 
+                entity.Property(e => e.ActualQuantity)
+                    .HasColumnName("Actual_Quantity")
+                    .HasDefaultValueSql("((-1))");
+
                 entity.Property(e => e.Category).HasMaxLength(255);
 
                 entity.Property(e => e.Cost)
                     .HasColumnType("numeric(18, 2)")
                     .HasColumnName("Cost_€");
 
+                entity.Property(e => e.CostDifference)
+                    .HasColumnType("numeric(19, 2)")
+                    .HasComputedColumnSql("([OldCost_€]-[Cost_€])", true);
+
                 entity.Property(e => e.CostUnit)
                     .HasColumnType("numeric(38, 20)")
                     .HasColumnName("Cost_€/Unit")
                     .HasComputedColumnSql("([Cost_€]/[Size_Units])", false);
+
+                entity.Property(e => e.IsEnough).HasComputedColumnSql("(case when [Quantity_Needed]>[Actual_Quantity] then (0) when [Quantity_Needed]<=[Actual_Quantity] then (1)  end)", true);
 
                 entity.Property(e => e.MaterialName)
                     .HasMaxLength(255)
                     .HasColumnName("Material_Name");
 
                 entity.Property(e => e.Notes).HasMaxLength(255);
+
+                entity.Property(e => e.OldCost)
+                    .HasColumnType("numeric(18, 2)")
+                    .HasColumnName("OldCost_€");
 
                 entity.Property(e => e.QuantityNeeded).HasColumnName("Quantity_Needed");
 

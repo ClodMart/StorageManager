@@ -100,6 +100,7 @@ namespace DBManager.Interfacce
                         //myObject.SupplierId = int.Parse(values[3]);
                         string Price = values[4].Replace("€ ", "");
                         myObject.Cost = decimal.Parse(Price);
+                        myObject.OldCost= decimal.Parse(Price);
                         if (values[5] != "")
                         {
                             myObject.SizeLiters = decimal.Parse(values[5]);
@@ -109,6 +110,7 @@ namespace DBManager.Interfacce
                             myObject.SizeUnits = decimal.Parse(values[6]);
                         }
                         myObject.QuantityNeeded = int.Parse(values[7]);
+                        myObject.ActualQuantity = int.Parse(values[7]);
                         myObject.Notes = values[8];
 
                         Out.Add(myObject);
