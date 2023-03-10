@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:vievmodels="clr-namespace:StorageManagerMobile.CustomComponents.ViewModels"
+             xmlns:db="clr-namespace:DBManager.Models;assembly=DBManager"
+             x:Class="StorageManagerMobile.CustomComponents.IngredientViewer"
+             x:DataType="vievmodels:IngredientViewerViewModel"
+             Loaded="ContentView_Loaded">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+    <toolkit:Expander x:Name="GroupHeader" IsExpanded="{Binding IsExpanded, Mode=TwoWay}"  >
+        <toolkit:Expander.Header>
+            <Grid Padding="5" x:Name="ExpanderHeader" HeightRequest="80">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Label Text="{Binding Title.Ingredient1}" Style="{StaticResource ListMainText}" Grid.Column="0" Grid.Row="0" VerticalOptions="Start" HorizontalOptions="StartAndExpand"/>
+                <Label Text="{Binding Title.Category}" Style="{StaticResource ListSubText}" Grid.Column="0" Grid.Row="1" VerticalOptions="Start" HorizontalOptions="StartAndExpand" />
+                <Label Text="{Binding Title.ActualQuantity}" Style="{StaticResource ListMainText}" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="Center"/>
+                <Label Text="{Binding Title.QuantityNeeded}" Style="{StaticResource ListMainText}" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="Center"/>
+                <ImageButton Grid.Column="3" Grid.RowSpan="2" Source="{AppThemeBinding Default=arrowdown_lightmode.png, Light=arrowdown_lightmode.png, Dark=arrowdown_darkmode.png}" Command="{Binding Expand}" BackgroundColor="Transparent" BorderColor="Transparent">
+                    <ImageButton.Triggers>
+                        <DataTrigger TargetType="{x:Type ImageButton}" Binding="{Binding Source={x:RelativeSource AncestorType={x:Type toolkit:Expander}}, Path=IsExpanded}" Value="true">
+                            <Setter Property="Source" Value="{AppThemeBinding Default=arrowup_lightmode.png, Light=arrowup_lightmode.png, Dark=arrowup_darkmode.png}"/>
+                        </DataTrigger>
+                    </ImageButton.Triggers>
+                </ImageButton>
+            </Grid>
+        </toolkit:Expander.Header>
+        </toolkit:Expander>
+
+        <CollectionView x:Name="ExpanderContent" ItemsSource="{Binding Ingredients}" Grid.Row="1" IsVisible="{Binding IsExpanded}" BackgroundColor="Black">
+            <CollectionView.ItemTemplate>
+                <DataTemplate  x:DataType="db:Ingredient">
+                    <Border StrokeThickness="3" >
+                        <Grid Padding="5" HeightRequest="70">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <ImageButton Style="{StaticResource EditIcon}" Grid.Column="0" Grid.RowSpan="2" Margin="5" Padding="5"/>
+                            <Label Text="{Binding Ingredient1}" Style="{StaticResource ListMainText}" Grid.Column="1" Grid.Row="0" VerticalOptions="Start" HorizontalOptions="StartAndExpand"/>
+                            <Label Text="{Binding Category}" Style="{StaticResource ListSubText}" Grid.Column="1" Grid.Row="1" VerticalOptions="Start" HorizontalOptions="StartAndExpand" />
+                            <Label Text="{Binding QuantityNeeded}" FontSize="Medium" FontAttributes="Italic" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="CenterAndExpand"/>
+                            <Label Text="{Binding Cost}" FontSize="Medium" FontAttributes="Italic" Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="CenterAndExpand"/>
+                            <ImageButton Style="{StaticResource DeleteIcon}" x:Name="AddMaterial" Grid.Column="4"  Grid.Row="0" Grid.RowSpan="2" Margin="5" Padding="5"/>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+    </Grid>
+</ContentView>

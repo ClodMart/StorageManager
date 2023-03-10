@@ -41,16 +41,16 @@
         <Setter Property="BorderColor" Value="Transparent"/>
     </Style>
 
-    <Style x:Key="ExpandListClosedIcon" TargetType="{x:Type ImageButton}">
+    <!--<Style x:Key="ExpandListClosedIcon" TargetType="{x:Type Image}">
         <Setter Property="Source" Value="{AppThemeBinding Default=arrowdown_lightmode, Light=arrowdown_lightmode, Dark=arrowdown_darkmode}"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderColor" Value="Transparent"/>
     </Style>
 
-    <Style x:Key="ExpandListOpenIcon" TargetType="{x:Type ImageButton}">
+    <Style x:Key="ExpandListOpenIcon" TargetType="{x:Type Image}">
         <Setter Property="Source" Value="{AppThemeBinding Default=arrowup_lightmode, Light=arrowup_lightmode, Dark=arrowup_darkmode}"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderColor" Value="Transparent"/>
-    </Style>
+    </Style>-->
 
 </ResourceDictionary>

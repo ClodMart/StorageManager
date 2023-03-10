@@ -1,5 +1,6 @@
 ﻿using DBManager.Models;
 using Microsoft.Toolkit.Collections;
+using StorageManagerMobile.CustomComponents.ViewModels;
 using StorageManagerMobile.Grouping;
 using System;
 using System.Collections.Generic;
@@ -11,16 +12,18 @@ using System.Windows.Input;
 
 namespace StorageManagerMobile.ViewModels
 {
+
+
     public class IngredientsViewModel : BaseViewModel
     {
         public List<Ingredient> AllIngredients { get; set; }
         private List<Ingredient> FilteredIngredients { get; set; }
 
-        private ObservableCollection<IngredientsView> ingredientList;
-        public ObservableCollection<IngredientsView> IngredientList
+        private ObservableCollection<IngredientViewerViewModel> ingredientList;
+        public ObservableCollection<IngredientViewerViewModel> IngredientList
         {
             get { return ingredientList; }
-            set { ingredientList = value; NotifyPropertyChanged(); }
+            set { ingredientList = value; NotifyPropertyChanged(nameof(IngredientList)); }
         }
 
         private bool showFilters = false;
@@ -35,20 +38,21 @@ namespace StorageManagerMobile.ViewModels
             AllIngredients = List;
             FilteredIngredients = List;
             List<Ingredient> Ingredients = FilteredIngredients;
-            List<IngredientsView> L = new List<IngredientsView>();  
+            List<IngredientViewerViewModel> L = new List<IngredientViewerViewModel>();  
             while(Ingredients.Count>0)
             {
                 Ingredient GroupTitle = Ingredients.ElementAt(0);
-                ObservableCollection<Ingredient> Input = new ObservableCollection<Ingredient>(Ingredients.FindAll(x => (x.Ingredient1 == GroupTitle.Ingredient1) && (x.Category == GroupTitle.Category)));
+                List<Ingredient> Input = new List<Ingredient>(Ingredients.FindAll(x => (x.Ingredient1 == GroupTitle.Ingredient1) && (x.Category == GroupTitle.Category)));
 
-                L.Add(new IngredientsView(GroupTitle, Input));
+                L.Add(new IngredientViewerViewModel(GroupTitle, Input));
 
                 foreach(Ingredient y in Input)
                 {
                     Ingredients.RemoveAll(x => x.Id == y.Id);
                 }              
             }
-            IngredientList = new ObservableCollection<IngredientsView>(L);
+            IngredientList = new ObservableCollection<IngredientViewerViewModel>(L);
+            //IngredientListStatic = new ObservableCollection<IngredientViewerViewModel>(L);
         }
 
         private string LastSearch = "";

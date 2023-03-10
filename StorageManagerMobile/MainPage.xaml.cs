@@ -1,4 +1,5 @@
-﻿using StorageManagerMobile.ViewModels;
+﻿using CommunityToolkit.Maui.Views;
+using StorageManagerMobile.ViewModels;
 using StorageManagerMobile.Views;
 using System.Reflection;
 
@@ -21,6 +22,17 @@ namespace StorageManagerMobile
             Page newPage = ((MainPageViewModel)BindingContext).Pages.Find(x => x.GetType() == PageType);
             this.Detail = new NavigationPage(newPage);
             this.IsPresented = false;
+        }
+
+        public void RefreshPage()
+        {
+            InvalidateMeasure();
+            //ChangePage("Home");
+            ChangePage("Ingredienti");
+            //InvalidateMeasure();
+            //this.Detail.ForceLayout();
+            //this.Detail.SizeChanged += (s, args) => { };
+            //this.ForceLayout();
         }
 
         private void FlyoutPage_Loaded(object sender, EventArgs e)

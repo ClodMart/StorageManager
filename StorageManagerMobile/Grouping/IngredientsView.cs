@@ -32,39 +32,38 @@ namespace StorageManagerMobile.Grouping
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
-        private bool showlist;
-        public bool ShowList
-        {
-            get { return showlist; }
-            set { showlist = value; NotifyPropertyChanged(); }
-        }
+        //private bool showlist;
+        //public bool ShowList
+        //{
+        //    get { return showlist; }
+        //    set { showlist = value; NotifyPropertyChanged(); }
+        //}
 
-        public ICommand ChangeVisibility => new Command(() =>
-        {
-            ChangeVIs();
-        });
+        //public ICommand ChangeVisibility => new Command(() =>
+        //{
+        //    ChangeVIs();
+        //});
 
 
         public IngredientsView(Ingredient title, ObservableCollection<Ingredient> ing)
         {
             items = ing.ToList();
-            ShowList = false;
+            //ShowList = false;
             Title = title;
         }
 
-        private void ChangeVIs()
-        {
-            ShowList = !ShowList;
-            if (showlist)
-            {
-                Ingredients = new ObservableCollection<Ingredient>(items);
-            }
-            else
-            {
-                Ingredients.Clear();
-            }
-            
-
-        }
+        //private void ChangeVIs()
+        //{
+        //    ShowList = !ShowList;
+        //    if (showlist)
+        //    {
+        //        Ingredients = new ObservableCollection<Ingredient>(items);
+        //    }
+        //    else
+        //    {
+        //        Ingredients.Clear();
+        //    }
+        //    NotifyPropertyChanged(nameof(Ingredients));
+        //}
     }
 }
