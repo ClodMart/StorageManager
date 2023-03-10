@@ -55,8 +55,8 @@ public partial class Ingredients : ContentPage
     {
         ((IView)((IngredientViewer)sender)).InvalidateMeasure();
         ((IView)((IngredientViewer)sender)).InvalidateArrange();
-        ((IView)List).InvalidateMeasure();
-        ((IView)List).InvalidateArrange();
+        //((IView)List).InvalidateMeasure();
+        //((IView)List).InvalidateArrange();
         //((IngredientsViewModel)BindingContext).NotifyPropertyChanged("IngredientList");
         //Dispatcher.Dispatch(() =>
         //(this as IView).InvalidateArrange());
