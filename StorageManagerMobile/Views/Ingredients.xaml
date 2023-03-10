@@ -38,7 +38,7 @@
             </StackLayout>
         </StackLayout>
 
-        <CollectionView ItemsSource="{Binding IngredientList}" IsGrouped="True" Grid.Row="2" >
+        <CollectionView ItemsSource="{Binding IngredientList}" IsGrouped="True" Grid.Row="2" C>
             <CollectionView.GroupHeaderTemplate>
                 <DataTemplate x:DataType="groups:IngredientsView">
                     <Grid Padding="5">
