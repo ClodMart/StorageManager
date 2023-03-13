@@ -4,8 +4,10 @@
              xmlns:res="clr-namespace:StorageManagerMobile.Resources"
              xmlns:db="clr-namespace:DBManager.Models;assembly=DBManager"
              xmlns:viewmodels="clr-namespace:StorageManagerMobile.ViewModels"
+             xmlns:customvievmodels="clr-namespace:StorageManagerMobile.CustomComponents.ViewModels"
              xmlns:groups ="clr-namespace:StorageManagerMobile.Grouping"
              xmlns:comp="clr-namespace:StorageManagerMobile.CustomComponents"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:DataType="viewmodels:IngredientsViewModel"
              x:Class="StorageManagerMobile.Views.Ingredients"
              Title="Ingredients">
@@ -20,12 +22,12 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="auto"/>
-            <RowDefinition/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <SearchBar x:Name="searchBar" Grid.Row="0" Placeholder="Cerca Materiale..."
                    SearchCommand="{Binding PerformSearch}"
-                   SearchCommandParameter="{Binding Text, Source={x:Reference searchBar}}"
-                   TextChanged="searchBar_TextChanged"/>
+                   SearchCommandParameter="{Binding Text, Source={x:Reference searchBar}}"/>
+        
         <StackLayout Grid.Row="1">
             <StackLayout  Orientation="Horizontal">
                 <ImageButton Style="{StaticResource FilterIcon}" x:Name="Filters" Clicked="Filters_Clicked" HeightRequest="50" Margin="5" Padding="5"/>
@@ -41,11 +43,71 @@
             </StackLayout>
         </StackLayout>
 
-        <CollectionView x:Name="List" ItemsSource="{Binding IngredientList, Mode=TwoWay}" Grid.Row="2" ItemSizingStrategy="MeasureAllItems" FlowDirection="LeftToRight" SizeChanged="List_SizeChanged">
+        <CollectionView x:Name="List" ItemsSource="{Binding IngredientList, Mode=TwoWay}" Grid.Row="2">
+            <CollectionView.Header>
+                <DataTemplate>
+                    <StackLayout>
+                        <Label Text="TestHeader"/>
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.Header>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <VerticalStackLayout VerticalOptions="StartAndExpand" x:Name="RowCont">
-                        <comp:IngredientViewer x:Name="Row" BindingContext="{Binding}" SizeChanged="Row_SizeChanged" ></comp:IngredientViewer>
+                        <toolkit:Expander x:Name="GroupHeader" BindingContext="{Binding}" x:DataType="customvievmodels:IngredientViewerViewModel" IsExpanded="{Binding IsExpanded, Mode=TwoWay}"  >
+                            <toolkit:Expander.Header>
+                                <Grid Padding="5" x:Name="ExpanderHeader" HeightRequest="80">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="3*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Label Text="{Binding Title.Ingredient1}" Style="{StaticResource ListMainText}" Grid.Column="0" Grid.Row="0" VerticalOptions="Start" HorizontalOptions="StartAndExpand"/>
+                                    <Label Text="{Binding Title.Category}" Style="{StaticResource ListSubText}" Grid.Column="0" Grid.Row="1" VerticalOptions="Start" HorizontalOptions="StartAndExpand" />
+                                    <Label Text="{Binding Title.ActualQuantity}" Style="{StaticResource ListMainText}" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="Center"/>
+                                    <Label Text="{Binding Title.QuantityNeeded}" Style="{StaticResource ListMainText}" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="Center"/>
+                                    <ImageButton Grid.Column="3" Grid.RowSpan="2" Source="{AppThemeBinding Default=arrowdown_lightmode.png, Light=arrowdown_lightmode.png, Dark=arrowdown_darkmode.png}" Command="{Binding Expand}" BackgroundColor="Transparent" BorderColor="Transparent">
+                                        <ImageButton.Triggers>
+                                            <DataTrigger TargetType="{x:Type ImageButton}" Binding="{Binding Source={x:RelativeSource AncestorType={x:Type toolkit:Expander}}, Path=IsExpanded}" Value="true">
+                                                <Setter Property="Source" Value="{AppThemeBinding Default=arrowup_lightmode.png, Light=arrowup_lightmode.png, Dark=arrowup_darkmode.png}"/>
+                                            </DataTrigger>
+                                        </ImageButton.Triggers>
+                                    </ImageButton>
+                                </Grid>
+                            </toolkit:Expander.Header>
+                            <CollectionView x:Name="ExpanderContent" ItemsSource="{Binding Ingredients}" BackgroundColor="Black">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate  x:DataType="db:Ingredient">
+                                        <Border StrokeThickness="3" >
+                                            <Grid Padding="5" HeightRequest="70">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="auto"/>
+                                                    <ColumnDefinition Width="3*"/>
+                                                    <ColumnDefinition Width="1*"/>
+                                                    <ColumnDefinition Width="1*"/>
+                                                    <ColumnDefinition Width="auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition/>
+                                                    <RowDefinition/>
+                                                </Grid.RowDefinitions>
+                                                <ImageButton Style="{StaticResource EditIcon}" Grid.Column="0" Grid.RowSpan="2" Margin="5" Padding="5"/>
+                                                <Label Text="{Binding Ingredient1}" Style="{StaticResource ListMainText}" Grid.Column="1" Grid.Row="0" VerticalOptions="Start" HorizontalOptions="StartAndExpand"/>
+                                                <Label Text="{Binding Category}" Style="{StaticResource ListSubText}" Grid.Column="1" Grid.Row="1" VerticalOptions="Start" HorizontalOptions="StartAndExpand" />
+                                                <Label Text="{Binding QuantityNeeded}" FontSize="Medium" FontAttributes="Italic" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="CenterAndExpand"/>
+                                                <Label Text="{Binding Cost}" FontSize="Medium" FontAttributes="Italic" Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="CenterAndExpand"/>
+                                                <ImageButton Style="{StaticResource DeleteIcon}" x:Name="AddMaterial" Grid.Column="4"  Grid.Row="0" Grid.RowSpan="2" Margin="5" Padding="5"/>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </toolkit:Expander>
                     </VerticalStackLayout>
                 </DataTemplate>
             </CollectionView.ItemTemplate>            
