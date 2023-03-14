@@ -2,3 +2,9 @@
                 optionsBuilder.UseSqlServer("Data Source=(localhost)\\SQLEXPRESS;Initial Catalog=GestioneMagazzino;Integrated Security=True"); //Lavoro
 
 Scaffold-DbContext -f "Data Source=.\SQLEXPRESS;Initial Catalog=GestioneMagazzino;Integrated Security=True"Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models
+
+Data Source=DESKTOP-C5BQHJO,49172;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False
+
+Scaffold-DbContext -f "Data Source=DESKTOP-C5BQHJO,49172;Initial Catalog=GestioneMagazzino;Integrated Security=True"Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models
+
+172.18.144.1
