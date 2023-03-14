@@ -127,7 +127,7 @@
                                     </Image>
                                 </Grid>
                             </toolkit:Expander.Header>
-                            <CollectionView x:Name="ExpanderContent" ItemsSource="{Binding Ingredients}" BackgroundColor="Black">
+                            <CollectionView x:Name="ExpanderContent" ItemsSource="{Binding Ingredients}">
                                 <CollectionView.ItemTemplate>
                                     <DataTemplate  x:DataType="db:Ingredient">
                                         <Grid Padding="5" HeightRequest="70">
