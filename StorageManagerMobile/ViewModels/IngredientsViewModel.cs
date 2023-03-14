@@ -1,6 +1,7 @@
-﻿using DBManager.Models;
+﻿using CommunityToolkit.Maui.Core;
+using DBManager.Models;
 using StorageManagerMobile.CustomComponents.ViewModels;
-using StorageManagerMobile.Grouping;
+using StorageManagerMobile.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,8 +16,17 @@ namespace StorageManagerMobile.ViewModels
 
     public class IngredientsViewModel : BaseViewModel
     {
-        public List<Ingredient> AllIngredients { get; set; }
-        private List<Ingredient> FilteredIngredients { get; set; }
+        private readonly GestioneMagazzinoContext context = DBService.Instance.DbContext;
+
+        private string LastSearch = "";
+        private string LastFilter = "";
+
+        //public List<Ingredient> AllIngredients { get; set; }
+        //private List<Ingredient> FilteredIngredients { get; set; }
+
+        private readonly List<IngredientViewerViewModel> FullIngredients;
+        private List<IngredientViewerViewModel> FilteredIngredients { get; set; }
+
 
         private ObservableCollection<IngredientViewerViewModel> ingredientList;
         public ObservableCollection<IngredientViewerViewModel> IngredientList
@@ -29,39 +39,41 @@ namespace StorageManagerMobile.ViewModels
         public bool ShowFilters
         {
             get { return showFilters; }
-            set { showFilters = value; NotifyPropertyChanged(); }
+            set { showFilters = value; NotifyPropertyChanged(nameof(ShowFilters)); }
         }
 
         public IngredientsViewModel(List<Ingredient> List)
         {
-            AllIngredients = List;
-            FilteredIngredients = List;
-            List<Ingredient> Ingredients = FilteredIngredients;
-            List<IngredientViewerViewModel> L = new List<IngredientViewerViewModel>();  
+            //AllIngredients = List;
+            List<Ingredient> Ingredients = List;
+            FullIngredients = new List<IngredientViewerViewModel>();  
             while(Ingredients.Count>0)
             {
                 Ingredient GroupTitle = Ingredients.ElementAt(0);
                 List<Ingredient> Input = new List<Ingredient>(Ingredients.FindAll(x => (x.Ingredient1 == GroupTitle.Ingredient1) && (x.Category == GroupTitle.Category)));
 
-                L.Add(new IngredientViewerViewModel(GroupTitle, Input));
+                FullIngredients.Add(new IngredientViewerViewModel(GroupTitle, Input));
 
                 foreach(Ingredient y in Input)
                 {
                     Ingredients.RemoveAll(x => x.Id == y.Id);
                 }              
             }
-            IngredientList = new ObservableCollection<IngredientViewerViewModel>(L);
-            //IngredientListStatic = new ObservableCollection<IngredientViewerViewModel>(L);
+            FullIngredients.Sort((l, r) => l.Title.Ingredient1.CompareTo(r.Title.Ingredient1));
+            FilteredIngredients = FullIngredients;
+            IngredientList = new ObservableCollection<IngredientViewerViewModel>(FullIngredients);
         }
-
-        private string LastSearch = "";
-        private string LastFilter = "";
 
         #region Icommands
 
         public ICommand PerformSearch => new Command<string>((string query) =>
         {
-            //Search(query);
+            Search(query);
+        });
+
+        public ICommand Filters => new Command(() =>
+        {
+            FiltersMethod();
         });
 
         public ICommand PerformDeletion => new Command<string>((string MatName) =>
@@ -69,20 +81,34 @@ namespace StorageManagerMobile.ViewModels
             //DeleteIngredienti(MatName);
         });
 
-        //public void Search(string query)
-        //{
-        //    LastSearch = query;
-        //    List<Ingredient> results = new List<Ingredient>();
-        //    foreach (Ingredient Ingredient in FilteredIngredients)
-        //    {
-        //        if (Ingredient.Ingredient1.Contains(query, StringComparison.OrdinalIgnoreCase) || Ingredient.Category.Contains(query, StringComparison.OrdinalIgnoreCase))
-        //        {
-        //            results.Add(Ingredient);
-        //        }
-        //    }
-        //    IngredientList = new ObservableGroupedCollection<string, Ingredient>(results.GroupBy(x => x.Ingredient1.ToUpperInvariant().ToString())
-        //        .OrderBy(y => y.Key));
-        //}
+        private void FiltersMethod()
+        {
+            ShowFilters = !ShowFilters;
+        }
+
+        public void Search(string query)
+        {
+            LastSearch = query;
+            List<IngredientViewerViewModel> results = new List<IngredientViewerViewModel>();
+            foreach (IngredientViewerViewModel Ingredient in FilteredIngredients)
+            {
+                if (Ingredient.Title.Ingredient1.Contains(query, StringComparison.OrdinalIgnoreCase) || Ingredient.Title.Category.Contains(query, StringComparison.OrdinalIgnoreCase))
+                {
+                    results.Add(Ingredient);
+                }
+            }
+            results.Sort((l, r) => l.Title.Ingredient1.CompareTo(r.Title.Ingredient1));
+            IngredientList = new ObservableCollection<IngredientViewerViewModel>(results);
+            CollapseExpanders();
+        }
+
+        public void CollapseExpanders()
+        {
+            foreach(IngredientViewerViewModel x in IngredientList)
+            {
+                x.IsExpanded = false;
+            }
+        }
 
         //public void DeleteIngredienti(string IngredientName)
         //{
@@ -98,33 +124,34 @@ namespace StorageManagerMobile.ViewModels
         //    }
         //}
         #endregion
-        //public void FilterList(string Filter)
-        //{
-        //    //LastFilter = Filter;
-        //    //switch (Filter)
-        //    //{
-        //        //case "FilterAll":
-        //        //    FilteredIngredients = AllIngredients;
-        //        //    Search(LastSearch);
-        //        //    break;
-        //        //case "FilterEnough":
-        //        //    FilteredIngredients = AllIngredients.FindAll(x => x.IsEnough);
-        //        //    Search(LastSearch);
-        //        //    break;
-        //        //case "NotEnough":
-        //        //    FilteredIngredients = AllIngredients.FindAll(x => !x.IsEnough);
-        //        //    Search(LastSearch);
-        //        //    break;
-        //        //case "FilterPriceRising":
-        //        //    FilteredIngredients = AllIngredients.FindAll(x => x.PriceDifference > 0);
-        //        //    Search(LastSearch);
-        //        //    break;
-        //        //case "FilterPriceLowering":
-        //        //    FilteredIngredients = AllIngredients.FindAll(x => x.PriceDifference < 0);
-        //        //    Search(LastSearch);
-        //        //    break;
-        //    //}
-        //}
+        public void FilterList(string Filter)
+        {
+            LastFilter = Filter;
+            switch (Filter)
+            {
+                case "FilterAll":
+                    FilteredIngredients = FullIngredients;
+                    Search(LastSearch);
+                    break;
+                case "FilterEnough":
+                    FilteredIngredients = FullIngredients.FindAll(x => x.Title.IsEnough == 1);
+                    Search(LastSearch);
+                    break;
+                case "NotEnough":
+                    FilteredIngredients = FullIngredients.FindAll(x => x.Title.IsEnough == 0);
+                    Search(LastSearch);
+                    break;
+                case "FilterPriceRising":
+                    FilteredIngredients = FullIngredients.FindAll(x => x.Title.CostDifference > 0);
+                    Search(LastSearch);
+                    break;
+                case "FilterPriceLowering":
+                    FilteredIngredients = FullIngredients.FindAll(x => x.Title.CostDifference < 0);
+                    Search(LastSearch);
+                    break;
+            }
+            CollapseExpanders();
+        }
         //#endregion
         //public void AddIngredienti(Ingredient Ingredient)
         //{
@@ -150,5 +177,11 @@ namespace StorageManagerMobile.ViewModels
         //{
         //    Search(LastSearch);
         //}
+
+        public void UpdateIngredientList(Ingredient In)
+        {
+            context.Ingredients.Update(In);
+            context.SaveChanges();
+        }
     }
 }

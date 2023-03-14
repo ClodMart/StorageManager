@@ -4,7 +4,8 @@
             xmlns:viewmodels="clr-namespace:StorageManagerMobile.ViewModels"
             xmlns:views="clr-namespace:StorageManagerMobile.Views"
             x:DataType="viewmodels:MainPageViewModel"
-            x:Class="StorageManagerMobile.MainPage">
+            x:Class="StorageManagerMobile.MainPage"
+            FlyoutLayoutBehavior="Popover">
     <FlyoutPage.Flyout>
         <views:FlyoutMenu BindingContext="{Binding MenuViewModel}"/>
     </FlyoutPage.Flyout>

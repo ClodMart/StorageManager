@@ -1,5 +1,6 @@
 ﻿using DBManager.Models;
 using StorageManagerMobile.Resources;
+using StorageManagerMobile.Services;
 using StorageManagerMobile.Views;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace StorageManagerMobile.ViewModels
 {
     public class MainPageViewModel : BaseViewModel
     {
-        private readonly GestioneMagazzinoContext context = new GestioneMagazzinoContext();
+        private readonly GestioneMagazzinoContext context = DBService.Instance.DbContext;
 
         private List<Page> pages = new List<Page>();
         public List<Page> Pages

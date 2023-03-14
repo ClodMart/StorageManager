@@ -16,4 +16,16 @@ namespace StorageManagerMobile.Resources
             Label = label; Page = page;
         }
     }
+
+    public class QuantityObject
+    {
+        public int QuantityNeeded { get; set; }
+        public int ActualQuantity { get; set; }
+
+        public QuantityObject(int quantityNeeded, int actualQuantity) 
+        {
+            QuantityNeeded = quantityNeeded;
+            ActualQuantity = actualQuantity;
+        }
+    }
 }

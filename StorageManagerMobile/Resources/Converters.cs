@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DBManager.Models;
+using StorageManagerMobile.Services;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -7,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace StorageManagerMobile.Resources
 {
-    public class BoolToColorConverter : IValueConverter
+    public class IntToColorConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if ((bool)value)
+            if ((int)value == 1)
             {
                 return Colors.Green;
             }
@@ -89,6 +91,67 @@ namespace StorageManagerMobile.Resources
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return (bool)value ? "arrowdown_darkmode.png" : "arrowup_darkmode.png";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class IntRounder : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return Math.Round((decimal)value,2);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class IdToSupplierConverter : IValueConverter
+    {
+        private readonly GestioneMagazzinoContext dbContext = DBService.Instance.DbContext;
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return dbContext.Suppliers.FirstOrDefault(x=>x.Id.Equals((int)value)).SupplierName;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class IsUsedValueConverter : IValueConverter
+    {
+        private readonly GestioneMagazzinoContext dbContext = DBService.Instance.DbContext;
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return dbContext.IsUsedValues.FirstOrDefault(x => x.Id.Equals((int)value)).Description;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class DatetimeToDate : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if(value != null)
+            {
+                return ((DateTime)value).Date.ToString()[..10];
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

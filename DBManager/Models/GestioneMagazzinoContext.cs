@@ -138,6 +138,8 @@ namespace DBManager.Models
 
                 entity.Property(e => e.IsUsed).HasColumnName("Is_Used");
 
+                entity.Property(e => e.LastOrderDateTime).HasColumnType("date");
+
                 entity.Property(e => e.Notes).HasMaxLength(255);
 
                 entity.Property(e => e.OldCost)

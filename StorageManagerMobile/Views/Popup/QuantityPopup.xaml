@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:viewmodels="clr-namespace:StorageManagerMobile.ViewModels.Popup"
+             x:DataType="viewmodels:QuantityPopupViewModel"
+             x:Class="StorageManagerMobile.Views.Popup.QuantityPopup">
+    <Grid BackgroundColor="{AppThemeBinding Light=White,Dark=Black,Default=White}">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <VerticalStackLayout Grid.Row="0" VerticalOptions="StartAndExpand" Margin="10">
+            <Label Text="Modifica quantità per l'elemento:" Style="{StaticResource ListMainText}" VerticalOptions="Start" VerticalTextAlignment="Center" HorizontalOptions="CenterAndExpand"/>
+            <Label Text="{Binding Name}" Style="{StaticResource ListSubText}" VerticalOptions="Start" VerticalTextAlignment="Center" HorizontalOptions="CenterAndExpand"/>
+            <Label Text="{Binding Category}" Style="{StaticResource ListSubText}" VerticalOptions="Start" VerticalTextAlignment="Center" HorizontalOptions="CenterAndExpand"/>
+        </VerticalStackLayout>
+        <Grid Grid.Row="1" VerticalOptions="CenterAndExpand" Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Label Text="Actual Quantity" Margin="10" Grid.Row="0" Grid.Column="0" HorizontalOptions="EndAndExpand"/>
+            <Entry x:Name="ActualQuantity" Margin="10,0,10,0" Keyboard="Numeric" Placeholder="{Binding ActualQuantity}" Grid.Row="0" Grid.Column="2" HorizontalOptions="StartAndExpand"/>
+            <Label Text="Quantity Needed" Margin="10" Grid.Row="1" Grid.Column="0" HorizontalOptions="EndAndExpand"/>
+            <Entry x:Name="QuantityNeeded" Margin="10,0,10,0" Keyboard="Numeric" Placeholder="{Binding QuantityNeeded}" Grid.Row="1" Grid.Column="2" HorizontalOptions="StartAndExpand"/>
+        </Grid>
+        <Button x:Name="Save" Text="Salva" HorizontalOptions="CenterAndExpand" VerticalOptions="Center" Grid.Row="2" Clicked="Save_Clicked"/>
+    </Grid>
+</toolkit:Popup>

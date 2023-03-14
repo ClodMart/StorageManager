@@ -24,17 +24,6 @@ namespace StorageManagerMobile
             this.IsPresented = false;
         }
 
-        public void RefreshPage()
-        {
-            InvalidateMeasure();
-            //ChangePage("Home");
-            ChangePage("Ingredienti");
-            //InvalidateMeasure();
-            //this.Detail.ForceLayout();
-            //this.Detail.SizeChanged += (s, args) => { };
-            //this.ForceLayout();
-        }
-
         private void FlyoutPage_Loaded(object sender, EventArgs e)
         {
             this.IsPresented = true;
