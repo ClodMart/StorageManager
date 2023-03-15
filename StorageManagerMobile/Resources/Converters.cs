@@ -146,7 +146,7 @@ namespace StorageManagerMobile.Resources
         {
             if(value != null)
             {
-                return ((DateTime)value).Date.ToString()[..10];
+                return ((DateOnly)value);
             }
             else
             {

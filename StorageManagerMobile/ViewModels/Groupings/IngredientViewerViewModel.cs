@@ -46,7 +46,7 @@ namespace StorageManagerMobile.CustomComponents.ViewModels
         {
             Title =title;
             ingredients.Sort((l, r) =>
-            DateTime.Compare(l.LastOrderDateTime ?? DateTime.ParseExact("01/01/1970","dd/MM/yyyy", CultureInfo.InvariantCulture), r.LastOrderDateTime ?? DateTime.ParseExact("01/01/1970", "dd/MM/yyyy", CultureInfo.InvariantCulture)));
+            (l.LastOrderDateTime ?? DateOnly.MinValue).CompareTo(r.LastOrderDateTime ?? DateOnly.MinValue));
             ingredients.Reverse();
             Ingredients = new ObservableCollection<Ingredient>(ingredients);
         }

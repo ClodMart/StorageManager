@@ -21,8 +21,5 @@ namespace DBManager.Models
         public string? Notes { get; set; }
         public int? IsEnough { get; set; }
         public decimal? CostDifference { get; set; }
-
-        public virtual IsUsedValue IsUsedNavigation { get; set; } = null!;
-        public virtual Supplier? Supplier { get; set; }
     }
 }

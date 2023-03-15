@@ -37,14 +37,14 @@
                    SearchCommand="{Binding PerformSearch}"
                    SearchCommandParameter="{Binding Text, Source={x:Reference searchBar}}"
                    TextChanged="searchBar_TextChanged"/>
-        
-        <StackLayout Grid.Row="1">
-            <StackLayout  Orientation="Horizontal">
-                <ImageButton Style="{StaticResource FilterIcon}" x:Name="Filters" HeightRequest="50" Margin="5" Padding="5" Command="{Binding Filters}"/>
+
+        <StackLayout Grid.Row="1" HorizontalOptions="StartAndExpand">
+            <StackLayout  Orientation="Horizontal" >
+                <ImageButton Style="{StaticResource FilterIcon}" x:Name="Filters" HeightRequest="50" Margin="0" Padding="5" Command="{Binding Filters}"/>
                 <Label Text="Filters" VerticalOptions="Center"/>
             </StackLayout>
 
-            <StackLayout Orientation="Vertical" IsVisible="{Binding ShowFilters}" Padding="40,0,0,0">
+            <StackLayout Orientation="Vertical" IsVisible="{Binding ShowFilters}" Padding="0,0,0,0">
                 <RadioButton x:Name="FilterAll" Content="Tutti" IsChecked="True" CheckedChanged="Filter_CheckedChanged"/>
                 <RadioButton x:Name="FilterEnough" Content="Abbastanza" CheckedChanged="Filter_CheckedChanged"/>
                 <RadioButton x:Name="NotEnough" Content="Non Abbastanza" CheckedChanged="Filter_CheckedChanged"/>

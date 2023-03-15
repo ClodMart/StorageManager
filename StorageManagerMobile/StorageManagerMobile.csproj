@@ -78,6 +78,8 @@
 	  <PackageReference Include="CommunityToolkit.Maui" Version="5.0.0" />
 	  <PackageReference Include="CommunityToolkit.Maui.Core" Version="5.0.0" />
 	  <PackageReference Include="DevExpress.Data" Version="22.2.4" />
+	  <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.3" />
+	  <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.Design" Version="1.1.0" />
 	</ItemGroup>
 
 	<ItemGroup>
