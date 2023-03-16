@@ -96,30 +96,36 @@ namespace DBManager.Models
                 entity.Property(e => e.Category).HasMaxLength(50);
 
                 entity.Property(e => e.Cost)
-                    .HasPrecision(20, 2)
-                    .HasColumnName("Cost__");
+                    .HasPrecision(20, 3)
+                    .HasColumnName("Cost_€");
 
-                entity.Property(e => e.CostDifference).HasPrecision(21, 2);
+                entity.Property(e => e.CostDifference)
+                    .HasPrecision(10, 3)
+                    .HasComputedColumnSql("(\"OldCost_€\" - \"Cost_€\")", true);
 
                 entity.Property(e => e.CostKg)
-                    .HasPrecision(40, 19)
-                    .HasColumnName("Cost___Kg");
+                    .HasPrecision(10, 3)
+                    .HasColumnName("Cost_€/Kg")
+                    .HasComputedColumnSql("(\"Cost_€\" / \"Size_Kg\")", true);
 
                 entity.Property(e => e.CostUnit)
-                    .HasPrecision(31, 13)
-                    .HasColumnName("Cost___Unit");
+                    .HasPrecision(10, 3)
+                    .HasColumnName("Cost_€/Unit")
+                    .HasComputedColumnSql("(\"Cost_€\" / (\"Size_Units\")::numeric)", true);
 
                 entity.Property(e => e.Ingredient1)
                     .HasMaxLength(150)
                     .HasColumnName("Ingredient");
+
+                entity.Property(e => e.IsEnough).HasComputedColumnSql("\nCASE\n    WHEN (\"Quantity_Needed\" > \"Actual_Quantity\") THEN false\n    ELSE true\nEND", true);
 
                 entity.Property(e => e.IsUsed).HasColumnName("Is_Used");
 
                 entity.Property(e => e.Notes).HasMaxLength(255);
 
                 entity.Property(e => e.OldCost)
-                    .HasPrecision(20, 2)
-                    .HasColumnName("OldCost__");
+                    .HasPrecision(20, 3)
+                    .HasColumnName("OldCost_€");
 
                 entity.Property(e => e.QuantityNeeded).HasColumnName("Quantity_Needed");
 
@@ -233,6 +239,8 @@ namespace DBManager.Models
 
                 entity.Property(e => e.SupplierId).HasColumnName("Supplier_Id");
             });
+
+            modelBuilder.HasSequence<int>("Ingredients_Id_seq", "dbo");
 
             OnModelCreatingPartial(modelBuilder);
         }

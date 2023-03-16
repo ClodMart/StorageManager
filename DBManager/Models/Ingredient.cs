@@ -19,7 +19,7 @@ namespace DBManager.Models
         public int QuantityNeeded { get; set; }
         public int ActualQuantity { get; set; }
         public string? Notes { get; set; }
-        public int? IsEnough { get; set; }
+        public bool? IsEnough { get; set; }
         public decimal? CostDifference { get; set; }
         public DateOnly? LastOrderDateTime { get; set; }
     }

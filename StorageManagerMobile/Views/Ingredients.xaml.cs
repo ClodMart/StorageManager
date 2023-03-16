@@ -58,7 +58,6 @@ public partial class Ingredients : ContentPage
                 ((IngredientsViewModel)BindingContext).UpdateIngredientList(x);
                 updated.Add(x);
             }
-            //((IngredientsViewModel)BindingContext).UpdateIngredientList(updated);
             Current.Ingredients = new ObservableCollection<Ingredient>(updated);
         }
     }

@@ -1,4 +1,5 @@
-﻿using DBManager.Models;
+﻿using DBManager.Interfacce;
+using DBManager.Models;
 using StorageManagerMobile.ViewModels;
 using StorageManagerMobile.ViewModels.Popup;
 using StorageManagerMobile.Views.Popup;
@@ -64,6 +65,25 @@ namespace StorageManagerMobile.CustomComponents.ViewModels
         private void ExpandMethod()
         {
             IsExpanded = !IsExpanded;
+        }
+
+        public ICommand PerformDeletion => new Command<int>((int Id) =>
+        {
+            DeleteIngredienti(Id);
+        });
+
+        public void DeleteIngredienti(int Id)
+        {
+            Ingredient Ingredient = Ingredients.FirstOrDefault(x => x.Id == Id);
+            //IngredientViewerViewModel Group = FullIngredients.FirstOrDefault(x => x.Title.Ingredient1 == Ingredient.Ingredient1);
+
+            if (Ingredient != null)
+            {
+                Ingredients.Remove(Ingredient);
+                IngredientsRepository.Delete(Ingredient);
+                //FilteredIngredients.Remove(Ingredient);
+                //IngredientList = new ObservableCollection<IngredientViewerViewModel>(FilteredIngredients);
+            }
         }
 
         private void CalcQuantityDisplay()

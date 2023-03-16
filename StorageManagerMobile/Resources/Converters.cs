@@ -13,7 +13,7 @@ namespace StorageManagerMobile.Resources
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if ((int)value == 1)
+            if ((bool)value)
             {
                 return Colors.Green;
             }

@@ -5,11 +5,11 @@
              xmlns:viewmodels="clr-namespace:StorageManagerMobile.ViewModels.Popup"
              x:DataType="viewmodels:QuantityPopupViewModel"
              x:Class="StorageManagerMobile.Views.Popup.QuantityPopup">
-    <Grid BackgroundColor="{AppThemeBinding Light=White,Dark=Black,Default=White}">
+    <Grid BackgroundColor="{AppThemeBinding Default=White, Light=White, Dark=Black}">
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <VerticalStackLayout Grid.Row="0" VerticalOptions="StartAndExpand" Margin="10">
             <Label Text="Modifica quantità per l'elemento:" Style="{StaticResource ListMainText}" VerticalOptions="Start" VerticalTextAlignment="Center" HorizontalOptions="CenterAndExpand"/>
@@ -18,18 +18,18 @@
         </VerticalStackLayout>
         <Grid Grid.Row="1" VerticalOptions="CenterAndExpand" Margin="10">
             <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
-            <Label Text="Actual Quantity" Margin="10" Grid.Row="0" Grid.Column="0" HorizontalOptions="EndAndExpand"/>
-            <Entry x:Name="ActualQuantity" Margin="10,0,10,0" Keyboard="Numeric" Placeholder="{Binding ActualQuantity}" Grid.Row="0" Grid.Column="2" HorizontalOptions="StartAndExpand"/>
-            <Label Text="Quantity Needed" Margin="10" Grid.Row="1" Grid.Column="0" HorizontalOptions="EndAndExpand"/>
-            <Entry x:Name="QuantityNeeded" Margin="10,0,10,0" Keyboard="Numeric" Placeholder="{Binding QuantityNeeded}" Grid.Row="1" Grid.Column="2" HorizontalOptions="StartAndExpand"/>
+            <Label Text="Actual Quantity" Margin="0" Grid.Row="0" Grid.Column="0" HorizontalOptions="EndAndExpand" VerticalOptions="CenterAndExpand"/>
+            <Entry x:Name="ActualQuantity" Margin="5,0,0,0" Style="{StaticResource ListMainText}" Keyboard="Numeric" Placeholder="{Binding ActualQuantity}" PlaceholderColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}" Grid.Row="0" Grid.Column="2" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand"/>
+            <Label Text="Quantity Needed" Margin="0" Grid.Row="1" Grid.Column="0" HorizontalOptions="EndAndExpand" VerticalOptions="CenterAndExpand"/>
+            <Entry x:Name="QuantityNeeded" Margin="5,0,0,0" Keyboard="Numeric" Placeholder="{Binding QuantityNeeded}" PlaceholderColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}" Grid.Row="1" Grid.Column="2" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand"/>
         </Grid>
-        <Button x:Name="Save" Text="Salva" HorizontalOptions="CenterAndExpand" VerticalOptions="Center" Grid.Row="2" Clicked="Save_Clicked"/>
+        <Button x:Name="Save" Margin="5"  Text="Salva" HorizontalOptions="CenterAndExpand" VerticalOptions="Center" Grid.Row="2" Clicked="Save_Clicked"/>
     </Grid>
 </toolkit:Popup>

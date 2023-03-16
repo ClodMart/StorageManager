@@ -91,9 +91,9 @@ namespace DBManager.Interfacce
 
                         myObject.Ingredient1 = values[0];
                         myObject.Category = values[1];
-                        int Used = _dbContext.IsUsedValues.FirstOrDefault(x => x.Description == values[2]).Id;
+                        int Used = _dbContext.IsUsedValues.FirstOrDefault(x => x.Description == values[2].ToUpper()).Id;
                         myObject.IsUsed = Used;
-                        int SupID = _dbContext.Suppliers.FirstOrDefault(x => x.SupplierName == values[3]).Id;
+                        int SupID = _dbContext.Suppliers.FirstOrDefault(x => x.SupplierName == values[3].ToUpper()).Id;
                         myObject.SupplierId = SupID;
                         string Price = values[4].Replace("€ ", "");
                         myObject.Cost = decimal.Parse(Price);

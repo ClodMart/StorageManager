@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Maui.Core;
+using DBManager.Interfacce;
 using DBManager.Models;
+using Microsoft.EntityFrameworkCore;
 using StorageManagerMobile.CustomComponents.ViewModels;
 using StorageManagerMobile.Services;
 using System;
@@ -16,7 +18,8 @@ namespace StorageManagerMobile.ViewModels
 
     public class IngredientsViewModel : BaseViewModel
     {
-        private readonly GestioneMagazzinoContext context = DBService.Instance.DbContext;
+        private static readonly GestioneMagazzinoContext context = DBService.Instance.DbContext;
+        private static readonly IngredientsRepository IngredientsRepository = new IngredientsRepository(context);
 
         private string LastSearch = "";
         private string LastFilter = "";
@@ -76,10 +79,10 @@ namespace StorageManagerMobile.ViewModels
             FiltersMethod();
         });
 
-        public ICommand PerformDeletion => new Command<string>((string MatName) =>
-        {
-            //DeleteIngredienti(MatName);
-        });
+        //public ICommand PerformDeletion => new Command<int>((int Id) =>
+        //{
+        //    DeleteIngredienti(Id);
+        //});
 
         private void FiltersMethod()
         {
@@ -110,16 +113,17 @@ namespace StorageManagerMobile.ViewModels
             }
         }
 
-        //public void DeleteIngredienti(string IngredientName)
+        //public void DeleteIngredienti(int Id)
         //{
-        //    Ingredient Ingredient = AllIngredients.FirstOrDefault(x => x.Ingredient1 == IngredientName);
+        //    Ingredient Ingredient = context.Ingredients.FirstOrDefault(x => x.Id == Id);
+        //    IngredientViewerViewModel Group = FullIngredients.FirstOrDefault(x => x.Title.Ingredient1 == Ingredient.Ingredient1);
+
         //    if (Ingredient != null)
         //    {
-        //        AllIngredients.Remove(Ingredient);
-        //        FilteredIngredients.Remove(Ingredient);
-        //        IngredientList = new ObservableGroupedCollection<string, Ingredient>(
-        //                        FilteredIngredients.GroupBy(x => x.Ingredient1.ToUpperInvariant().ToString())
-        //                        .OrderBy(y => y.Key));
+        //        Group.Ingredients.Remove(Ingredient);
+        //        IngredientsRepository.Delete(Ingredient);
+        //        //FilteredIngredients.Remove(Ingredient);
+        //        //IngredientList = new ObservableCollection<IngredientViewerViewModel>(FilteredIngredients);
         //        Search(LastSearch);
         //    }
         //}
@@ -134,11 +138,11 @@ namespace StorageManagerMobile.ViewModels
                     Search(LastSearch);
                     break;
                 case "FilterEnough":
-                    FilteredIngredients = FullIngredients.FindAll(x => x.Title.IsEnough == 1);
+                    FilteredIngredients = FullIngredients.FindAll(x => x.Title.IsEnough == true);
                     Search(LastSearch);
                     break;
                 case "NotEnough":
-                    FilteredIngredients = FullIngredients.FindAll(x => x.Title.IsEnough == 0);
+                    FilteredIngredients = FullIngredients.FindAll(x => x.Title.IsEnough == false);
                     Search(LastSearch);
                     break;
                 case "FilterPriceRising":
