@@ -1,5 +1,6 @@
 ﻿using DBManager.Interfacce;
 using DBManager.Models;
+using StorageManagerMobile.Services;
 using StorageManagerMobile.ViewModels;
 using StorageManagerMobile.ViewModels.Popup;
 using StorageManagerMobile.Views.Popup;
@@ -14,8 +15,12 @@ using System.Windows.Input;
 
 namespace StorageManagerMobile.CustomComponents.ViewModels
 {
+
     public class IngredientViewerViewModel : BaseViewModel
     {
+        private static readonly GestioneMagazzinoContext context = DBService.Instance.DbContext;
+        private static readonly IngredientsRepository IngredientsRepository = new IngredientsRepository(context);
+
         private bool isExpanded = false;
         public bool IsExpanded
         {
