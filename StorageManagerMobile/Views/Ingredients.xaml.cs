@@ -5,6 +5,7 @@ using StorageManagerMobile.CustomComponents.ViewModels;
 using StorageManagerMobile.Resources;
 using StorageManagerMobile.ViewModels;
 using StorageManagerMobile.ViewModels.Popup;
+using StorageManagerMobile.Views.DetailPage;
 using StorageManagerMobile.Views.Popup;
 using System.Collections.ObjectModel;
 
@@ -12,8 +13,11 @@ namespace StorageManagerMobile.Views;
 
 public partial class Ingredients : ContentPage
 {
+    private System.Diagnostics.Stopwatch Timer= new System.Diagnostics.Stopwatch();
+    private bool ButtonPressed = false;
+    private Thread ButtonTimer;
 
-	public Ingredients()
+    public Ingredients()
 	{
 		InitializeComponent();
     }
@@ -65,5 +69,45 @@ public partial class Ingredients : ContentPage
     private void EditQuantity_Clicked(object sender, EventArgs e)
     {
         EditQuantityAsync(sender, e);
+    }
+
+    private void SwipeGestureRecognizer_Swiped(object sender, SwipedEventArgs e)
+    {
+        Navigation.PushAsync(new IngredientDetail());
+    }
+
+    private void LongPressGestureRecognizer_LongPressed(object sender, EventArgs e)
+    {
+        Navigation.PushAsync(new IngredientDetail());
+    }
+
+    private void Button_Pressed(object sender, EventArgs e)
+    {
+        ButtonTimer = new Thread(new ThreadStart(TimeButton));
+        ButtonPressed =true;
+        Timer.Start();        
+    }
+
+    private void TimeButton()
+    {
+        while (ButtonPressed)
+        {
+            if (Timer.ElapsedMilliseconds > 2000)
+            {
+                Navigation.PushAsync(new IngredientDetail());
+                ButtonPressed = false;
+            }
+            else if (!ButtonPressed)
+            {
+                break;
+            }
+        }
+    }
+
+    private void Button_Released(object sender, EventArgs e)
+    {
+        Timer.Stop();
+        Timer.Reset();
+        ButtonPressed = false;
     }
 }

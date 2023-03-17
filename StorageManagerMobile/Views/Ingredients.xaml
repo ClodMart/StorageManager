@@ -101,8 +101,8 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Border Grid.Row="2" StrokeThickness="2" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="10,5,10,0" StrokeShape="RoundRectangle 20">
-                        <toolkit:Expander x:Name="GroupHeader" BindingContext="{Binding}" x:DataType="customvievmodels:IngredientViewerViewModel" IsExpanded="{Binding IsExpanded, Mode=TwoWay}" ExpandedChanged="Expander_ExpandedChanged" Margin="0,0,0,5">
-                            <toolkit:Expander.Header>
+                            <toolkit:Expander x:Name="GroupHeader" BindingContext="{Binding}" x:DataType="customvievmodels:IngredientViewerViewModel" IsExpanded="{Binding IsExpanded, Mode=TwoWay}" ExpandedChanged="Expander_ExpandedChanged" Margin="0,0,0,5">
+                                <toolkit:Expander.Header>
                                     <Grid Padding="0"  Margin="5" x:Name="ExpanderHeader" HeightRequest="55">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="4*"/>
@@ -114,7 +114,8 @@
                                         <RowDefinition/>
                                         <RowDefinition/>
                                     </Grid.RowDefinitions>
-                                    <Label Text="{Binding Title.Ingredient1}" Style="{StaticResource ListMainText}" Grid.Column="0" Grid.Row="0" VerticalOptions="EndAndExpand" HorizontalOptions="StartAndExpand"/>
+                                        <Button Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="2" BackgroundColor="Transparent" BorderColor="Transparent" ZIndex="4" Pressed="Button_Pressed" Released="Button_Released"/>
+                                        <Label Text="{Binding Title.Ingredient1}" Style="{StaticResource ListMainText}" Grid.Column="0" Grid.Row="0" VerticalOptions="EndAndExpand" HorizontalOptions="StartAndExpand"/>
                                     <Label Text="{Binding Title.Category}" Style="{StaticResource ListSubText}" Grid.Column="0" Grid.Row="1" VerticalOptions="StartAndExpand" HorizontalOptions="StartAndExpand" />
                                     <Label Text="{Binding Title.IsUsed, Converter={StaticResource IsUsedConverter}}" Style="{StaticResource ListMainText}" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="Center"/>
                                         <Button x:Name="EditQuantity" Padding="7" Text="{Binding QuantityDisplay}" Style="{StaticResource ButtonContentText}" BackgroundColor="{Binding Title.IsEnough, Converter={StaticResource IntToColor}}" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="Center" Clicked="EditQuantity_Clicked"/>
@@ -150,7 +151,7 @@
                                                 <Label Text="{Binding LastOrderDateTime, Converter={StaticResource DateTimeToDate}}" Style="{StaticResource ListSubText}" Grid.Column="1" Grid.Row="1" VerticalOptions="StartAndExpand" HorizontalOptions="StartAndExpand" />
                                                 <Label Text="{Binding Cost}" FontSize="Small" FontAttributes="Italic" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="CenterAndExpand"/>
                                                 <Label Text="{Binding CostUnit, Converter={StaticResource Rounder}}" FontSize="Small" FontAttributes="Italic" Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="CenterAndExpand"/>
-                                                <ImageButton Style="{StaticResource DeleteIcon}" x:Name="AddMaterial" Grid.Column="4"  Grid.Row="0" Grid.RowSpan="2" Margin="0" Padding="0"/>
+                                                <ImageButton Style="{StaticResource DeleteIcon}" x:Name="AddMaterial" Grid.Column="4"  Grid.Row="0" Grid.RowSpan="2" Margin="0" Padding="0" />
                                             </Grid>
                                     </DataTemplate>
                                 </CollectionView.ItemTemplate>
