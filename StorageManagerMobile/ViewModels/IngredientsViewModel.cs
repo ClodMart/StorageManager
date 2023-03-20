@@ -2,8 +2,8 @@
 using DBManager.Interfacce;
 using DBManager.Models;
 using Microsoft.EntityFrameworkCore;
-using StorageManagerMobile.CustomComponents.ViewModels;
 using StorageManagerMobile.Services;
+using StorageManagerMobile.ViewModels.Groupings;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -22,12 +22,9 @@ namespace StorageManagerMobile.ViewModels
         private static readonly IngredientsRepository IngredientsRepository = new IngredientsRepository(context);
 
         private string LastSearch = "";
-        private string LastFilter = "";
+        private string LastFilter = "FilterAll";
 
-        //public List<Ingredient> AllIngredients { get; set; }
-        //private List<Ingredient> FilteredIngredients { get; set; }
-
-        private readonly List<IngredientViewerViewModel> FullIngredients;
+        private List<IngredientViewerViewModel> FullIngredients { get; set; }
         private List<IngredientViewerViewModel> FilteredIngredients { get; set; }
 
 
@@ -35,19 +32,18 @@ namespace StorageManagerMobile.ViewModels
         public ObservableCollection<IngredientViewerViewModel> IngredientList
         {
             get { return ingredientList; }
-            set { ingredientList = value; NotifyPropertyChanged(nameof(IngredientList)); }
+            set { ingredientList = value; NotifyPropertyChanged(); }
         }
 
         private bool showFilters = false;
         public bool ShowFilters
         {
             get { return showFilters; }
-            set { showFilters = value; NotifyPropertyChanged(nameof(ShowFilters)); }
+            set { showFilters = value; NotifyPropertyChanged(); }
         }
 
         public IngredientsViewModel(List<Ingredient> List)
         {
-            //AllIngredients = List;
             List<Ingredient> Ingredients = List;
             FullIngredients = new List<IngredientViewerViewModel>();  
             while(Ingredients.Count>0)
@@ -79,11 +75,6 @@ namespace StorageManagerMobile.ViewModels
             FiltersMethod();
         });
 
-        //public ICommand PerformDeletion => new Command<int>((int Id) =>
-        //{
-        //    DeleteIngredienti(Id);
-        //});
-
         private void FiltersMethod()
         {
             ShowFilters = !ShowFilters;
@@ -113,20 +104,6 @@ namespace StorageManagerMobile.ViewModels
             }
         }
 
-        //public void DeleteIngredienti(int Id)
-        //{
-        //    Ingredient Ingredient = context.Ingredients.FirstOrDefault(x => x.Id == Id);
-        //    IngredientViewerViewModel Group = FullIngredients.FirstOrDefault(x => x.Title.Ingredient1 == Ingredient.Ingredient1);
-
-        //    if (Ingredient != null)
-        //    {
-        //        Group.Ingredients.Remove(Ingredient);
-        //        IngredientsRepository.Delete(Ingredient);
-        //        //FilteredIngredients.Remove(Ingredient);
-        //        //IngredientList = new ObservableCollection<IngredientViewerViewModel>(FilteredIngredients);
-        //        Search(LastSearch);
-        //    }
-        //}
         #endregion
         public void FilterList(string Filter)
         {
@@ -156,31 +133,27 @@ namespace StorageManagerMobile.ViewModels
             }
             CollapseExpanders();
         }
-        //#endregion
-        //public void AddIngredienti(Ingredient Ingredient)
-        //{
-        //    AllIngredients.Add(Ingredient);
-        //    FilteredIngredients.Add(Ingredient);
-        //    IngredientList.Add(Ingredient);
-        //    Search(LastSearch);
-        //}
 
-        //public void EditIngredienti(Ingredient Ingredient)
-        //{
-        //    IngredientList.Clear();
-        //    int index = AllIngredients.FindIndex(x => x.Id == Ingredient.Id);
-        //    if (index != -1)
-        //    {
-        //        AllIngredients[index] = Ingredient;
-        //    }
-        //    FilterList(LastFilter);
-        //    Search(LastSearch);
-        //}
+        public void RefreshIngredientList()
+        {
+            IngredientList.Clear();
+            List<Ingredient> List = context.Ingredients.ToList();
+            List<Ingredient> Ingredients = List;
+            FullIngredients.Clear();
+            while (Ingredients.Count > 0)
+            {
+                Ingredient GroupTitle = Ingredients.ElementAt(0);
+                List<Ingredient> Input = Ingredients.FindAll(x => (x.Ingredient1 == GroupTitle.Ingredient1) && (x.Category == GroupTitle.Category));
 
-        //public void RefreshDataset()
-        //{
-        //    Search(LastSearch);
-        //}
+                FullIngredients.Add(new IngredientViewerViewModel(GroupTitle, Input));
+
+                foreach (Ingredient y in Input)
+                {
+                    Ingredients.RemoveAll(x => x.Id == y.Id);
+                }
+            }
+            FilterList(LastFilter);
+        }
 
         public void UpdateIngredientList(Ingredient In)
         {

@@ -77,7 +77,7 @@ namespace StorageManagerMobile.Resources
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return (bool)value ? "arrowdown_lightmode.png" : "arrowup_lightmode.png";
+            return (bool)value ? "arrowdown_lightmode.svg" : "arrowup_lightmode.svg";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -90,7 +90,7 @@ namespace StorageManagerMobile.Resources
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return (bool)value ? "arrowdown_darkmode.png" : "arrowup_darkmode.png";
+            return (bool)value ? "arrowdown_darkmode.svg" : "arrowup_darkmode.svg";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -131,7 +131,16 @@ namespace StorageManagerMobile.Resources
         private readonly GestioneMagazzinoContext dbContext = DBService.Instance.DbContext;
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return dbContext.IsUsedValues.FirstOrDefault(x => x.Id.Equals((int)value)).Description;
+            string Out = dbContext.IsUsedValues.FirstOrDefault(x => x.Id.Equals((int)value)).Description;
+            //if(Out.Contains(" "))
+            //{
+            //    Out = Out.Replace(" ", "\n");
+            //}
+            //else if (Out.Length > 5)
+            //{
+            //    Out = Out.Substring(0, 5);
+            //}
+            return Out;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -150,7 +159,7 @@ namespace StorageManagerMobile.Resources
             }
             else
             {
-                return null;
+                return "NoOrderDoneYet";
             }
         }
 

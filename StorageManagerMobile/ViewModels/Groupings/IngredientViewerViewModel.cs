@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace StorageManagerMobile.CustomComponents.ViewModels
+namespace StorageManagerMobile.ViewModels.Groupings
 {
 
     public class IngredientViewerViewModel : BaseViewModel
@@ -91,9 +91,27 @@ namespace StorageManagerMobile.CustomComponents.ViewModels
             }
         }
 
+        public ICommand OpenUpdateIngredient => new Command(() =>
+        {
+            OpenUpdateIngredientMethod();
+        });
+
+        private void OpenUpdateIngredientMethod()
+        {
+
+        }
+
         private void CalcQuantityDisplay()
         {
             QuantityDisplay= Title.ActualQuantity.ToString() + "/" + Title.QuantityNeeded.ToString();
+        }
+
+        public void SaveIngredients()
+        {
+            foreach(Ingredient x in Ingredients)
+            {
+                IngredientsRepository.Update(x);
+            }
         }
     }
 }

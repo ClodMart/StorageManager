@@ -10,7 +10,7 @@
             <RowDefinition Height="100"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Image Source="flyout_logo.png" Grid.Row="0" HorizontalOptions="Center"/>
+        <Image Source="flyout_logo.svg" Grid.Row="0" HorizontalOptions="Center"/>
         <ListView ItemsSource="{Binding MenuLabels}" RowHeight="60" Grid.Row="1">
             <ListView.ItemTemplate>
                 <DataTemplate>

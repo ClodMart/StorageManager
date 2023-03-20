@@ -10,6 +10,12 @@
         <Setter Property="TextColor" Value="{AppThemeBinding Default=Black, Dark=White,Light=Black}"/>
     </Style>
 
+    <Style x:Key="ListIsUsedText" TargetType="{x:Type Label}">
+        <Setter Property="FontSize" Value="Small"/>
+        <Setter Property="FontAttributes" Value="Bold"/>
+        <Setter Property="TextColor" Value="{AppThemeBinding Default=Black, Dark=White,Light=Black}"/>
+    </Style>
+
     <Style x:Key="ButtonContentText" TargetType="{x:Type Label}">
         <Setter Property="FontSize" Value="Small"/>
         <Setter Property="FontAttributes" Value="Bold"/>
@@ -24,7 +30,7 @@
 
     
     <Style x:Key="DeleteIcon" TargetType="{x:Type ImageButton}">
-        <Setter Property="Source" Value="{AppThemeBinding Default=cestino_lightmode.png, Light=cestino_lightmode.png,Dark=cestino_darkmode.png}"/>
+        <Setter Property="Source" Value="{AppThemeBinding Default=cestino_lightmode.svg, Light=cestino_lightmode.svg,Dark=cestino_darkmode.svg}"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderColor" Value="Transparent"/>
         <Setter Property="WidthRequest" Value="40"/>
@@ -32,7 +38,7 @@
     </Style>
 
     <Style x:Key="EditIcon" TargetType="{x:Type ImageButton}">
-        <Setter Property="Source" Value="{AppThemeBinding Default=modifica_lightmode.png, Light=modifica_lightmode.png,Dark=modifica_darkmode.png}"/>
+        <Setter Property="Source" Value="{AppThemeBinding Default=modifica_lightmode.svg, Light=modifica_lightmode.svg,Dark=modifica_darkmode.svg}"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderColor" Value="Transparent"/>
         <Setter Property="WidthRequest" Value="40"/>
@@ -40,7 +46,7 @@
     </Style>
 
     <Style x:Key="AddIcon" TargetType="{x:Type ImageButton}">
-        <Setter Property="Source" Value="{AppThemeBinding Default=aggiungi_lightmode.png, Light=aggiungi_lightmode.png,Dark=aggiungi_darkmode.png}"/>
+        <Setter Property="Source" Value="{AppThemeBinding Default=aggiungi_lightmode.svg, Light=aggiungi_lightmode.svg,Dark=aggiungi_darkmode.svg}"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderColor" Value="Transparent"/>
         <Setter Property="WidthRequest" Value="40"/>
@@ -48,7 +54,7 @@
     </Style>
 
     <Style x:Key="FilterIcon" TargetType="{x:Type ImageButton}">
-        <Setter Property="Source" Value="{AppThemeBinding Default=filtri_lightmode.png, Light=filtri_lightmode.png,Dark=filtri_darkmode.png}"/>
+        <Setter Property="Source" Value="{AppThemeBinding Default=filtri_lightmode.svg, Light=filtri_lightmode.svg,Dark=filtri_darkmode.svg}"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderColor" Value="Transparent"/>
         <Setter Property="WidthRequest" Value="40"/>

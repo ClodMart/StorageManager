@@ -22,5 +22,6 @@ namespace DBManager.Models
         public bool? IsEnough { get; set; }
         public decimal? CostDifference { get; set; }
         public DateOnly? LastOrderDateTime { get; set; }
+        public bool IsDefault { get; set; }
     }
 }

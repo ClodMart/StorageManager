@@ -1,13 +1,15 @@
 using CommunityToolkit.Maui.Views;
+using DBManager.Interfacce;
 using DBManager.Models;
-using StorageManagerMobile.CustomComponents;
-using StorageManagerMobile.CustomComponents.ViewModels;
 using StorageManagerMobile.Resources;
 using StorageManagerMobile.ViewModels;
+using StorageManagerMobile.ViewModels.Details;
+using StorageManagerMobile.ViewModels.Groupings;
 using StorageManagerMobile.ViewModels.Popup;
 using StorageManagerMobile.Views.DetailPage;
 using StorageManagerMobile.Views.Popup;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace StorageManagerMobile.Views;
 
@@ -81,33 +83,48 @@ public partial class Ingredients : ContentPage
         Navigation.PushAsync(new IngredientDetail());
     }
 
-    private void Button_Pressed(object sender, EventArgs e)
+    private void EditIngredientGroup_Clicked(object sender, EventArgs e)
     {
-        ButtonTimer = new Thread(new ThreadStart(TimeButton));
-        ButtonPressed =true;
-        Timer.Start();        
+        IngredientViewerViewModel Current = (IngredientViewerViewModel)((ImageButton)sender).BindingContext;
+        IngredientDetailViewModel VM = new IngredientDetailViewModel(Current);
+        IngredientDetail Edit = new IngredientDetail();
+        Edit.BindingContext= VM;
+        Navigation.PushAsync(Edit);
+        //((IngredientsViewModel)BindingContext).IngredientList.Clear();
     }
 
-    private void TimeButton()
+    private void Refresher_Refreshing(object sender, EventArgs e)
     {
-        while (ButtonPressed)
+        RefreshList();
+        Refresher.IsRefreshing= false;
+    }
+    public void RefreshList()
+    {
+        ((IngredientsViewModel)BindingContext).RefreshIngredientList();
+    }
+
+    private void ContentPage_NavigatedTo(object sender, NavigatedToEventArgs e)
+    {
+        Refresher.IsRefreshing = true;
+    }
+
+    private void SetDefault_Clicked(object sender, EventArgs e)
+    {
+      Ingredient Selected = (Ingredient)((ImageButton)sender).BindingContext;
+      IngredientViewerViewModel Current = ((IngredientsViewModel)BindingContext).IngredientList.FirstOrDefault(x => x.Title.Ingredient1 == Selected.Ingredient1);
+     
+        foreach (Ingredient x in Current.Ingredients)
         {
-            if (Timer.ElapsedMilliseconds > 2000)
+            if (x.Id == Selected.Id)
             {
-                Navigation.PushAsync(new IngredientDetail());
-                ButtonPressed = false;
+                x.IsDefault = true;
             }
-            else if (!ButtonPressed)
+            else
             {
-                break;
+                x.IsDefault = false;
             }
         }
-    }
-
-    private void Button_Released(object sender, EventArgs e)
-    {
-        Timer.Stop();
-        Timer.Reset();
-        ButtonPressed = false;
+        Current.SaveIngredients();
+        ((IngredientsViewModel)BindingContext).RefreshIngredientList();
     }
 }

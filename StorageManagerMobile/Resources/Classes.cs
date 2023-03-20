@@ -1,5 +1,9 @@
-﻿using System;
+﻿using DBManager.Interfacce;
+using DBManager.Models;
+using StorageManagerMobile.Services;
+using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,5 +31,13 @@ namespace StorageManagerMobile.Resources
             QuantityNeeded = quantityNeeded;
             ActualQuantity = actualQuantity;
         }
+    }
+
+    public static class UsedValues
+    {
+       private static readonly GestioneMagazzinoContext context = DBService.Instance.DbContext;
+       private static readonly IsUsedValuesRepository IsUsedRepository = new IsUsedValuesRepository(context);
+
+       public static readonly ImmutableList<IsUsedValue> IsUsedValues = IsUsedRepository.GetAll().ToImmutableList();
     }
 }

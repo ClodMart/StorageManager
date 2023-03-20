@@ -57,21 +57,25 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="Resources\Images\aggiungi_DarkMode.png" />
-	  <None Remove="Resources\Images\aggiungi_LightMode.png" />
-	  <None Remove="Resources\Images\arrowdown_darkmode.png" />
-	  <None Remove="Resources\Images\arrowdown_lightmode.png" />
-	  <None Remove="Resources\Images\arrowup_darkmode.png" />
-	  <None Remove="Resources\Images\arrowup_lightmode.png" />
-	  <None Remove="Resources\Images\cestino_DarkMode.png" />
-	  <None Remove="Resources\Images\cestino_LightMode.png" />
-	  <None Remove="Resources\Images\filters_button.png" />
-	  <None Remove="Resources\Images\Filtri_DarkMode.png" />
-	  <None Remove="Resources\Images\Filtri_LightMode.png" />
-	  <None Remove="Resources\Images\flyout_logo.png" />
-	  <None Remove="Resources\Images\icona_cestino.png" />
-	  <None Remove="Resources\Images\Modifica_DarkMode.png" />
-	  <None Remove="Resources\Images\Modifica_LightMode.png" />
+	  <None Remove="Resources\Images\aggiungi_darkmode.svg" />
+	  <None Remove="Resources\Images\aggiungi_lightmode.svg" />
+	  <None Remove="Resources\Images\arrowdown_darkmode.svg" />
+	  <None Remove="Resources\Images\arrowdown_lightmode.svg" />
+	  <None Remove="Resources\Images\arrowup_darkmode.svg" />
+	  <None Remove="Resources\Images\arrowup_lightmode.svg" />
+	  <None Remove="Resources\Images\cestino_darkmode.svg" />
+	  <None Remove="Resources\Images\cestino_lightmode.svg" />
+	  <None Remove="Resources\Images\filters_button.svg" />
+	  <None Remove="Resources\Images\filtri_darkmode.svg" />
+	  <None Remove="Resources\Images\filtri_lightmode.svg" />
+	  <None Remove="Resources\Images\flyout_logo.svg" />
+	  <None Remove="Resources\Images\icona_cestino.svg" />
+	  <None Remove="Resources\Images\modifica_darkmode.svg" />
+	  <None Remove="Resources\Images\modifica_lightmode.svg" />
+	  <None Remove="Resources\Images\radiobuttonempty_darkmode.svg" />
+	  <None Remove="Resources\Images\radiobuttonempty_lightmode.svg" />
+	  <None Remove="Resources\Images\radiobuttonfull_darkmode.svg" />
+	  <None Remove="Resources\Images\radiobuttonfull_lightmode.svg" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -87,6 +91,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Views\AddPages\AddIngredient.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\FlyoutMenu.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
