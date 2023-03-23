@@ -56,6 +56,11 @@ namespace StorageManagerMobile.ViewModels.Popup
             Suppliers = SuppliersRepository.GetAll().ToList();
         }
 
+        public SupplierSelectionViewModel()
+        {
+            Suppliers = SuppliersRepository.GetAll().ToList();
+        }
+
 
     }
 }

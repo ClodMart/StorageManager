@@ -9,7 +9,9 @@ namespace StorageManagerMobile.Views.DetailPage;
 
 public partial class IngredientDetail : ContentPage
 {
-	public IngredientDetail()
+    SupplierSelectionViewModel VM;
+
+    public IngredientDetail()
 	{
 		InitializeComponent();
 	}
@@ -22,17 +24,24 @@ public partial class IngredientDetail : ContentPage
     private async Task OpenSupplierSelectionPopupAsync()
     {
         var popup = new SupplierSelection();
-        popup.BindingContext = new SupplierSelectionViewModel(((IngredientDetailViewModel)BindingContext).Title);
+        if(VM == null)
+        {
+            VM = new SupplierSelectionViewModel(((IngredientDetailViewModel)BindingContext).Title);
+        }
+        popup.BindingContext = VM;
         var result = await this.ShowPopupAsync(popup);
-        while(result == null)
+        if(result == null)
         {
             await DisplayAlert("Attenzione", "Valori non validi, Selezionare tutti I valori", "OK");
-            result = await this.ShowPopupAsync(popup);
+            //result = await this.ShowPopupAsync(popup);
         }
-        IngredientsFormat res = (IngredientsFormat)result;
-        res.Ingredient = ((IngredientDetailViewModel)BindingContext).Title;
-        res.IngredientId = ((IngredientDetailViewModel)BindingContext).Title.Id;
-        ((IngredientDetailViewModel)BindingContext).SaveIngredientFormat(res);
+        else
+        {
+            IngredientsFormat res = (IngredientsFormat)result;
+            res.Ingredient = ((IngredientDetailViewModel)BindingContext).Title;
+            res.IngredientId = ((IngredientDetailViewModel)BindingContext).Title.Id;
+            ((IngredientDetailViewModel)BindingContext).SaveIngredientFormat(res);
+        }
     }
 
     private void ImageButton_Clicked(object sender, EventArgs e)

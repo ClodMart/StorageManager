@@ -1,5 +1,6 @@
 using CommunityToolkit.Maui.Views;
 using DBManager.Models;
+using StorageManagerMobile.ViewModels.Add;
 using StorageManagerMobile.ViewModels.Details;
 using StorageManagerMobile.ViewModels.Popup;
 using StorageManagerMobile.Views.Popup;
@@ -8,7 +9,9 @@ namespace StorageManagerMobile.Views.AddPages;
 
 public partial class AddIngredient : ContentPage
 {
-	public AddIngredient()
+    private SupplierSelectionViewModel VM = new SupplierSelectionViewModel();
+
+    public AddIngredient()
 	{
 		InitializeComponent();
 	}
@@ -16,17 +19,18 @@ public partial class AddIngredient : ContentPage
     private async Task OpenSupplierSelectionPopupAsync()
     {
         var popup = new SupplierSelection();
-        popup.BindingContext = new SupplierSelectionViewModel(((AddIngredient)BindingContext).Title);
+        popup.BindingContext = VM;
         var result = await this.ShowPopupAsync(popup);
-        while (result == null)
+        if (result==null)
         {
             await DisplayAlert("Attenzione", "Valori non validi, Selezionare tutti I valori", "OK");
-            result = await this.ShowPopupAsync(popup);
+            //result = await this.ShowPopupAsync(popup);
         }
-        IngredientsFormat res = (IngredientsFormat)result;
-        res.Ingredient = ((IngredientDetailViewModel)BindingContext).Title;
-        res.IngredientId = ((IngredientDetailViewModel)BindingContext).Title.Id;
-        ((IngredientDetailViewModel)BindingContext).SaveIngredientFormat(res);
+        else
+        {
+            IngredientsFormat res = (IngredientsFormat)result;
+            ((AddIngredientViewModel)BindingContext).Formats.Add(res);
+        }
     }
 
     private void ImageButton_Clicked(object sender, EventArgs e)

@@ -2,6 +2,7 @@
 using StorageManagerMobile.Resources;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,8 +49,8 @@ namespace StorageManagerMobile.ViewModels.Add
             {isUsed = value; NotifyPropertyChanged();}
         }
 
-        private List<IngredientsFormat> formats;
-        public List<IngredientsFormat> Formats
+        private ObservableCollection<IngredientsFormat> formats = new ObservableCollection<IngredientsFormat>();
+        public ObservableCollection<IngredientsFormat> Formats
         {
             get { return formats; }
             set { formats = value; NotifyPropertyChanged();}
@@ -72,6 +73,7 @@ namespace StorageManagerMobile.ViewModels.Add
         public AddIngredientViewModel()
         {
             IsUsedValues = UsedValues.IsUsedValues.ToList();
+            //Formats.Add(new IngredientsFormat());
         }
         #endregion
     }

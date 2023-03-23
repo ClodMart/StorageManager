@@ -58,9 +58,9 @@
             <Label Text="Fornitori" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
             <ImageButton Style="{StaticResource AddIcon}" Padding="5" VerticalOptions="CenterAndExpand" Clicked="ImageButton_Clicked"/>
         </HorizontalStackLayout>
-        <CollectionView Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand" VerticalOptions="StartAndExpand" ItemsSource="{Binding Formats}" IsVisible="True">
 
-                <CollectionView.ItemTemplate>
+        <CollectionView Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand" VerticalOptions="StartAndExpand" ItemsSource="{Binding Formats}" IsVisible="True">
+            <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="db:IngredientsFormat">
                         <Border Grid.Row="2" StrokeThickness="2" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="10,5,10,0" StrokeShape="RoundRectangle 20">
                             <Grid Margin="5">

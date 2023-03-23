@@ -13,18 +13,17 @@ public partial class SupplierSelection : Popup
 
     private void Save_Clicked(object sender, EventArgs e)
     {
+        bool Failed = false;
         IngredientsFormat Out = new IngredientsFormat();
 
         if (SupplierPicker.SelectedItem != null)
         {
-            try
-            {
                 Out.SupplierId = ((Supplier)SupplierPicker.SelectedItem).Id;
-                Out.Supplier = (Supplier)SupplierPicker.SelectedItem;
-            }
-            catch
-            {
-            }
+                Out.Supplier = (Supplier)SupplierPicker.SelectedItem;            
+        }
+        else
+        {
+            Failed= true;
         }
         if (SizeKg.Text != null)
         {
@@ -34,7 +33,12 @@ public partial class SupplierSelection : Popup
             }
             catch
             {
+                Failed = true;
             }
+        }
+        else
+        {
+            Failed = true;
         }
         if (SizeUnits.Text != null)
         {
@@ -44,7 +48,12 @@ public partial class SupplierSelection : Popup
             }
             catch
             {
+                Failed = true;
             }
+        }
+        else
+        {
+            Failed = true;
         }
         if (Cost.Text != null)
         {
@@ -54,9 +63,14 @@ public partial class SupplierSelection : Popup
             }
             catch
             {
+                Failed = true;
             }
         }
-        if(Out.Equals(new IngredientsFormat()))
+        else
+        {
+            Failed = true;
+        }
+        if(Failed == true)
         {
             Close(null);
         }
