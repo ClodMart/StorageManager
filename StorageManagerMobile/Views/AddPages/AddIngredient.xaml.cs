@@ -16,7 +16,7 @@ public partial class AddIngredient : ContentPage
     private async Task OpenSupplierSelectionPopupAsync()
     {
         var popup = new SupplierSelection();
-        popup.BindingContext = new SupplierSelectionViewModel(((IngredientDetailViewModel)BindingContext).Title);
+        popup.BindingContext = new SupplierSelectionViewModel(((AddIngredient)BindingContext).Title);
         var result = await this.ShowPopupAsync(popup);
         while (result == null)
         {

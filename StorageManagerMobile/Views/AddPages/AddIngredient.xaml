@@ -54,7 +54,7 @@
                 <Label Text="Notes" Margin="0" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
                 <Entry x:Name="Notes" Margin="5,0,0,0" MaximumWidthRequest="350" FontAutoScalingEnabled="True" Placeholder="{Binding Notes}" PlaceholderColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}" Grid.Row="1" Grid.Column="2" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
             </VerticalStackLayout>
-        <HorizontalStackLayout HorizontalOptions="CenterAndExpand" IsVisible="True" Grid.Row="5" Grid.ColumnSpan="2">
+        <HorizontalStackLayout HorizontalOptions="CenterAndExpand" Grid.Row="5" Grid.ColumnSpan="2">
             <Label Text="Fornitori" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
             <ImageButton Style="{StaticResource AddIcon}" Padding="5" VerticalOptions="CenterAndExpand" Clicked="ImageButton_Clicked"/>
         </HorizontalStackLayout>
