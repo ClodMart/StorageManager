@@ -5,7 +5,14 @@ namespace DBManager.Models
 {
     public partial class IsUsedValue
     {
-        public int Id { get; set; }
+        public IsUsedValue()
+        {
+            Ingredients = new HashSet<Ingredient>();
+        }
+
+        public long Id { get; set; }
         public string Description { get; set; } = null!;
+
+        public virtual ICollection<Ingredient> Ingredients { get; set; }
     }
 }

@@ -8,32 +8,32 @@ using System.Threading.Tasks;
 
 namespace DBManager.Interfacce
 {
-    public class UnitOfMesuresRepository : IRepository<UnitsOfMesure>
+    public class UnitOfMesuresRepository : IRepository<UnitsOfMeasure>
     {
-        private readonly GestioneMagazzinoContext _dbContext;
+        private readonly StorageManagerDBContext _dbContext;
 
-        public UnitOfMesuresRepository(GestioneMagazzinoContext dbContext)
+        public UnitOfMesuresRepository(StorageManagerDBContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public IEnumerable<UnitsOfMesure> GetAll()
+        public IEnumerable<UnitsOfMeasure> GetAll()
         {
-            return _dbContext.UnitsOfMesures.ToList();
+            return _dbContext.UnitsOfMeasures.ToList();
         }
 
-        public UnitsOfMesure GetById(int id)
+        public UnitsOfMeasure GetById(long id)
         {
-            return _dbContext.UnitsOfMesures.Find(id);
+            return _dbContext.UnitsOfMeasures.Find(id);
         }
 
-        public void Add(UnitsOfMesure entity)
+        public void Add(UnitsOfMeasure entity)
         {
-            _dbContext.UnitsOfMesures.Add(entity);
+            _dbContext.UnitsOfMeasures.Add(entity);
             _dbContext.SaveChanges();
         }
 
-        public string AddAll(List<UnitsOfMesure> entities)
+        public string AddAll(List<UnitsOfMeasure> entities)
         {
             using (var dbContextTrans = _dbContext.Database.BeginTransaction())
             {
@@ -41,7 +41,7 @@ namespace DBManager.Interfacce
                 {
                     foreach (var entity in entities)
                     {
-                        _dbContext.UnitsOfMesures.Add(entity);
+                        _dbContext.UnitsOfMeasures.Add(entity);
                     }
                     _dbContext.SaveChanges();
                     dbContextTrans.Commit();
@@ -63,15 +63,15 @@ namespace DBManager.Interfacce
             }
         }
 
-        public void Update(UnitsOfMesure entity)
+        public void Update(UnitsOfMeasure entity)
         {
             _dbContext.Entry(entity).State = EntityState.Modified;
             _dbContext.SaveChanges();
         }
 
-        public void Delete(UnitsOfMesure entity)
+        public void Delete(UnitsOfMeasure entity)
         {
-            _dbContext.UnitsOfMesures.Remove(entity);
+            _dbContext.UnitsOfMeasures.Remove(entity);
             _dbContext.SaveChanges();
         }
 
@@ -81,13 +81,13 @@ namespace DBManager.Interfacce
             {
                 try
                 {
-                    List<UnitsOfMesure> Out = new List<UnitsOfMesure>();
+                    List<UnitsOfMeasure> Out = new List<UnitsOfMeasure>();
                     reader.ReadLine();
                     while (!reader.EndOfStream)
                     {
                         var line = reader.ReadLine();
                         var values = line.Split(';');
-                        UnitsOfMesure myObject = new UnitsOfMesure();
+                        UnitsOfMeasure myObject = new UnitsOfMeasure();
                         myObject.Description = values[0];
                         Out.Add(myObject);
                     }

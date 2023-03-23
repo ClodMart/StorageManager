@@ -27,6 +27,7 @@
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -53,13 +54,11 @@
                 <Label Text="Notes" Margin="0" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
                 <Entry x:Name="Notes" Margin="5,0,0,0" MaximumWidthRequest="350" FontAutoScalingEnabled="True" Placeholder="{Binding Notes}" PlaceholderColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}" Grid.Row="1" Grid.Column="2" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
             </VerticalStackLayout>
+            <HorizontalStackLayout HorizontalOptions="CenterAndExpand" Grid.Row="5" Grid.ColumnSpan="2">
+                <Label Text="Fornitori" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                <ImageButton Style="{StaticResource AddIcon}" Padding="5" VerticalOptions="CenterAndExpand"/>
+            </HorizontalStackLayout>
             <CollectionView Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" ItemsSource="{Binding Supplier}">
-                <CollectionView.Header>
-                    <HorizontalStackLayout HorizontalOptions="CenterAndExpand">
-                        <Label Text="Fornitori" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
-                        <ImageButton Style="{StaticResource AddIcon}" Padding="5" VerticalOptions="CenterAndExpand"/>
-                    </HorizontalStackLayout>
-                </CollectionView.Header>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="viewmodels:SupplierForIngredient">
                         <Border Grid.Row="2" StrokeThickness="2" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="10,5,10,0" StrokeShape="RoundRectangle 20">

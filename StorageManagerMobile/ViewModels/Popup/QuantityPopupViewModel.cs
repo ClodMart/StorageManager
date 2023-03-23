@@ -22,21 +22,21 @@ namespace StorageManagerMobile.ViewModels.Popup
             set { category = value; NotifyPropertyChanged(); }
         }
 
-        private int quantityNeeded;
-        public int QuantityNeeded
+        private decimal quantityNeeded;
+        public decimal QuantityNeeded
         {
             get { return quantityNeeded; }
             set { quantityNeeded = value; NotifyPropertyChanged(); }
         }
 
-        private int actualQuantity;
-        public int ActualQuantity
+        private decimal actualQuantity;
+        public decimal ActualQuantity
         {
             get { return actualQuantity; }
             set { actualQuantity = value; NotifyPropertyChanged();}
         }
 
-        public QuantityPopupViewModel(string name, string category, int quantityNeeded, int actualQuantity)
+        public QuantityPopupViewModel(string name, string category, decimal quantityNeeded, decimal actualQuantity)
         {
             this.Name = name;
             this.Category = category;

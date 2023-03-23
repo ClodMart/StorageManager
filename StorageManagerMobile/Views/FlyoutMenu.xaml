@@ -16,7 +16,7 @@
                 <DataTemplate>
                     <ViewCell>
                         <StackLayout Margin="20,10,20,0">
-                            <Button Text="{Binding}" Clicked="Button_Clicked" VerticalOptions="End"/>
+                            <Button Text="{Binding}" Clicked="ChangePage" VerticalOptions="End"/>
                         </StackLayout>
                     </ViewCell>
                 </DataTemplate>

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace DBManager.Models
 {
-    public partial class UnitsOfMesure
+    public partial class UnitsOfMeasure
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string Description { get; set; } = null!;
     }
 }

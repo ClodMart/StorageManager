@@ -6,7 +6,8 @@ public partial class FlyoutMenu : ContentPage
 	{
 		InitializeComponent();
 	}
-    private void Button_Clicked(object sender, EventArgs e)
+
+    private void ChangePage(object sender, EventArgs e)
     {
         string label = ((Button)sender).Text;
         Element Parent = ((Button)sender).Parent;

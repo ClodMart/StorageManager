@@ -10,9 +10,9 @@ namespace DBManager.Interfacce
 {
     public class IngredientsRepository : IRepository<Ingredient>
     {
-        private readonly GestioneMagazzinoContext _dbContext;
+        private readonly StorageManagerDBContext _dbContext;
 
-        public IngredientsRepository(GestioneMagazzinoContext dbContext)
+        public IngredientsRepository(StorageManagerDBContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -22,7 +22,7 @@ namespace DBManager.Interfacce
             return _dbContext.Ingredients.ToList();
         }
 
-        public Ingredient GetById(int id)
+        public Ingredient GetById(long id)
         {
             return _dbContext.Ingredients.Find(id);
         }
@@ -89,26 +89,26 @@ namespace DBManager.Interfacce
                         var values = line.Split(';');
                         Ingredient myObject = new Ingredient();
 
-                        myObject.Ingredient1 = values[0];
+                        myObject.Name = values[0];
                         myObject.Category = values[1];
-                        int Used = _dbContext.IsUsedValues.FirstOrDefault(x => x.Description == values[2].ToUpper()).Id;
-                        myObject.IsUsed = Used;
-                        int SupID = _dbContext.Suppliers.FirstOrDefault(x => x.SupplierName == values[3].ToUpper()).Id;
-                        myObject.SupplierId = SupID;
-                        string Price = values[4].Replace("€ ", "");
-                        myObject.Cost = decimal.Parse(Price);
-                        myObject.OldCost = decimal.Parse(Price);
-                        if (values[5] != "")
-                        {
-                            myObject.SizeKg = decimal.Parse(values[5]);
-                        }
-                        if (values[6] != "")
-                        {
-                            myObject.SizeUnits = int.Parse(values[6]);
-                        }
-                        myObject.QuantityNeeded = int.Parse(values[7]);
-                        myObject.ActualQuantity = int.Parse(values[7]);
-                        myObject.Notes = values[8];
+                        long Used = _dbContext.IsUsedValues.FirstOrDefault(x => x.Description == values[2].ToUpper()).Id;
+                        myObject.IsUsedValue = Used;
+                        //long SupID = _dbContext.Suppliers.FirstOrDefault(x => x.SupplierName == values[3].ToUpper()).Id;
+                        //myObject.Supplier_Id = SupID;
+                        //string Price = values[4].Replace("€ ", "");
+                        //myObject.Cost = decimal.Parse(Price);
+                        //myObject.OldCost = decimal.Parse(Price);
+                        //if (values[5] != "")
+                        //{
+                        //    myObject.SizeKg = decimal.Parse(values[5]);
+                        //}
+                        //if (values[6] != "")
+                        //{
+                        //    myObject.SizeUnits = int.Parse(values[6]);
+                        //}
+                        myObject.QuantityNeeded = int.Parse(values[3]);
+                        myObject.ActualQuantity = int.Parse(values[4]);
+                        myObject.Notes = values[5];
 
                         Out.Add(myObject);
                     }

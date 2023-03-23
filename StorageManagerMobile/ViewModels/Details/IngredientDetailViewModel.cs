@@ -16,8 +16,10 @@ namespace StorageManagerMobile.ViewModels.Details
 {
     public class IngredientDetailViewModel : BaseViewModel
     {
-        private static readonly GestioneMagazzinoContext context = DBService.Instance.DbContext;
+        #region Parameters
+        private static readonly StorageManagerDBContext context = DBService.Instance.DbContext;
         private static readonly IngredientsRepository IngredientsRepository = new IngredientsRepository(context);
+        private static readonly IngredientsFormatsRepository IngredientsFormatsRepository = new IngredientsFormatsRepository(context);
 
         private List<IsUsedValue> isUsedValues;
         public List<IsUsedValue> IsUsedValues
@@ -46,12 +48,13 @@ namespace StorageManagerMobile.ViewModels.Details
             get { return title; }
             set { title = value; GetIsUsedSelected(); NotifyPropertyChanged(); }
         }
-        private ObservableCollection<Ingredient> ingredients;
-        public ObservableCollection<Ingredient> Ingredients
+        private ObservableCollection<IngredientsFormat> ingredients;
+        public ObservableCollection<IngredientsFormat> Ingredients
         {
             get { return ingredients; }
             set { ingredients = value; NotifyPropertyChanged(); }
         }
+        #endregion
 
         public IngredientDetailViewModel(IngredientViewerViewModel vm)
         {
@@ -61,13 +64,7 @@ namespace StorageManagerMobile.ViewModels.Details
             PickerValues = IsUsedValues.Select(x=>x.Description).ToList();
         }
 
-        private void GetIsUsedSelected()
-        {
-            if (IsUsedValues != null) 
-            {
-                DefaultIsUsed = IsUsedValues.FirstOrDefault(x => x.Id == Title.IsUsed);
-            }            
-        }
+        #region Commands
 
         public ICommand SaveModifications => new Command(() =>
         {
@@ -76,15 +73,8 @@ namespace StorageManagerMobile.ViewModels.Details
 
         private void SaveModificationsMethod()
         {
-           foreach(Ingredient x in Ingredients)
-            {
-                x.Ingredient1 = Title.Ingredient1;
-                x.Category= Title.Category;
-                x.IsUsed = Title.IsUsed;
-                x.QuantityNeeded= Title.QuantityNeeded;
-                IngredientsRepository.Update(x);
-            }  
-           context.SaveChanges();
+            IngredientsRepository.Update(Title);
+            context.SaveChanges();
         }
 
         public ICommand Delete => new Command(() =>
@@ -94,11 +84,31 @@ namespace StorageManagerMobile.ViewModels.Details
 
         private void DeleteMethod()
         {
-            foreach (Ingredient x in Ingredients)
+            foreach (IngredientsFormat x in Ingredients)
             {
-                IngredientsRepository.Delete(x);
+                IngredientsFormatsRepository.Delete(x);
             }
+            IngredientsRepository.Delete(Title);
             context.SaveChanges();
+        }
+
+        #endregion
+
+        #region DataTranslation
+        private void GetIsUsedSelected()
+        {
+            if (IsUsedValues != null) 
+            {
+                DefaultIsUsed = IsUsedValues.FirstOrDefault(x => x.Id == Title.IsUsedValue);
+            }            
+        }
+        #endregion
+
+        public void SaveIngredientFormat(IngredientsFormat Ingredient)
+        {
+            IngredientsFormatsRepository.Add(Ingredient);
+            context.SaveChanges();
+            Ingredients = new ObservableCollection<IngredientsFormat>(IngredientsFormatsRepository.GetFormatsFromIngredientId(Title.Id));
         }
     }
 }

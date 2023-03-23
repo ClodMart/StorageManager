@@ -35,7 +35,7 @@ namespace StorageManagerMobile.Resources
 
     public static class UsedValues
     {
-       private static readonly GestioneMagazzinoContext context = DBService.Instance.DbContext;
+       private static readonly StorageManagerDBContext context = DBService.Instance.DbContext;
        private static readonly IsUsedValuesRepository IsUsedRepository = new IsUsedValuesRepository(context);
 
        public static readonly ImmutableList<IsUsedValue> IsUsedValues = IsUsedRepository.GetAll().ToImmutableList();

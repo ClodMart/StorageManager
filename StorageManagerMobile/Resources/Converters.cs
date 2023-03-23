@@ -33,11 +33,11 @@ namespace StorageManagerMobile.Resources
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if ((double)value == 0)
+            if ((decimal)value == 0)
             {
                 return Colors.Transparent;
             }
-            else if ((double)value > 0)
+            else if ((decimal)value > 0)
             {
                 return Colors.Red;
             }
@@ -114,10 +114,10 @@ namespace StorageManagerMobile.Resources
 
     public class IdToSupplierConverter : IValueConverter
     {
-        private readonly GestioneMagazzinoContext dbContext = DBService.Instance.DbContext;
+        private readonly StorageManagerDBContext dbContext = DBService.Instance.DbContext;
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return dbContext.Suppliers.FirstOrDefault(x=>x.Id.Equals((int)value)).SupplierName;
+            return dbContext.Suppliers.FirstOrDefault(x=>x.Id.Equals((long)value)).SupplierName;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -128,10 +128,10 @@ namespace StorageManagerMobile.Resources
 
     public class IsUsedValueConverter : IValueConverter
     {
-        private readonly GestioneMagazzinoContext dbContext = DBService.Instance.DbContext;
+        private readonly StorageManagerDBContext dbContext = DBService.Instance.DbContext;
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string Out = dbContext.IsUsedValues.FirstOrDefault(x => x.Id.Equals((int)value)).Description;
+            string Out = dbContext.IsUsedValues.FirstOrDefault(x => x.Id.Equals((long)value)).Description;
             //if(Out.Contains(" "))
             //{
             //    Out = Out.Replace(" ", "\n");

@@ -10,9 +10,9 @@ namespace DBManager.Interfacce
 {
     public class SuppliersRepository : IRepository<Supplier>
     {
-        private readonly GestioneMagazzinoContext _dbContext;
+        private readonly StorageManagerDBContext _dbContext;
 
-        public SuppliersRepository(GestioneMagazzinoContext dbContext)
+        public SuppliersRepository(StorageManagerDBContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -22,7 +22,7 @@ namespace DBManager.Interfacce
             return _dbContext.Suppliers.ToList();
         }
 
-        public Supplier GetById(int id)
+        public Supplier GetById(long id)
         {
             return _dbContext.Suppliers.Find(id);
         }
@@ -91,9 +91,9 @@ namespace DBManager.Interfacce
 
                         myObject.SupplierName = values[0];
                         myObject.PtIva = values[1];
-                        myObject.Telefono = values[2];
+                        myObject.Phone = values[2];
                         myObject.Email = values[3];
-                        myObject.Note = values[4];
+                        myObject.Notes = values[4];
 
                         Out.Add(myObject);
                     }

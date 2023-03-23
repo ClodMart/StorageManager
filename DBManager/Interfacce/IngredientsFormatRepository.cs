@@ -8,32 +8,38 @@ using System.Threading.Tasks;
 
 namespace DBManager.Interfacce
 {
-    public class IsUsedValuesRepository : IRepository<IsUsedValue>
+    public class IngredientsFormatsRepository : IRepository<IngredientsFormat>
     {
         private readonly StorageManagerDBContext _dbContext;
 
-        public IsUsedValuesRepository(StorageManagerDBContext dbContext)
+        public IngredientsFormatsRepository(StorageManagerDBContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public IEnumerable<IsUsedValue> GetAll()
+        public IEnumerable<IngredientsFormat> GetAll()
         {
-            return _dbContext.IsUsedValues.ToList();
+            return _dbContext.IngredientsFormats.ToList();
         }
 
-        public IsUsedValue GetById(long id)
+        public IngredientsFormat GetById(long id)
         {
-            return _dbContext.IsUsedValues.Find(id);
+            return _dbContext.IngredientsFormats.Find(id);
         }
 
-        public void Add(IsUsedValue entity)
+        public List<IngredientsFormat> GetFormatsFromIngredientId(long id)
         {
-            _dbContext.IsUsedValues.Add(entity);
+            List<IngredientsFormat> Out = _dbContext.IngredientsFormats.Where(x=>x.IngredientId==id).ToList();
+            return Out;
+        }
+
+        public void Add(IngredientsFormat entity)
+        {
+            _dbContext.IngredientsFormats.Add(entity);
             _dbContext.SaveChanges();
         }
 
-        public string AddAll(List<IsUsedValue> entities)
+        public string AddAll(List<IngredientsFormat> entities)
         {
             using (var dbContextTrans = _dbContext.Database.BeginTransaction())
             {
@@ -41,11 +47,11 @@ namespace DBManager.Interfacce
                 {
                     foreach (var entity in entities)
                     {
-                        _dbContext.IsUsedValues.Add(entity);
+                        _dbContext.IngredientsFormats.Add(entity);
                     }
                     _dbContext.SaveChanges();
                     dbContextTrans.Commit();
-                    return "Succeded";
+                    return "Succesful";
                 }
                 catch (Exception e)
                 {
@@ -63,33 +69,48 @@ namespace DBManager.Interfacce
             }
         }
 
-        public void Update(IsUsedValue entity)
+        public void Update(IngredientsFormat entity)
         {
             _dbContext.Entry(entity).State = EntityState.Modified;
             _dbContext.SaveChanges();
         }
 
-        public void Delete(IsUsedValue entity)
+        public void Delete(IngredientsFormat entity)
         {
-            _dbContext.IsUsedValues.Remove(entity);
+            _dbContext.IngredientsFormats.Remove(entity);
             _dbContext.SaveChanges();
         }
 
         public string InsertFromCSV(string fileUri)
         {
-            
             using (var reader = new StreamReader(fileUri))
             {
                 try
                 {
-                    List<IsUsedValue> Out = new List<IsUsedValue>();
+                    List<IngredientsFormat> Out = new List<IngredientsFormat>();
                     reader.ReadLine();
                     while (!reader.EndOfStream)
                     {
                         var line = reader.ReadLine();
                         var values = line.Split(';');
-                        IsUsedValue myObject = new IsUsedValue();
-                        myObject.Description = values[0];
+                        IngredientsFormat myObject = new IngredientsFormat();
+
+                        long IngredId = _dbContext.Ingredients.FirstOrDefault(x=>x.Name == values[0]).Id;
+                        myObject.IngredientId = IngredId;
+                        long SupId = _dbContext.Suppliers.FirstOrDefault(x => x.SupplierName == values[1]).Id;
+                        myObject.SupplierId = SupId;
+                        string Price = values[2].Replace("€ ", "");
+                        myObject.Cost = decimal.Parse(Price);
+                        myObject.PastCost1 = decimal.Parse(Price);
+                        if (values[3] != "")
+                        {
+                            myObject.SizeKg = decimal.Parse(values[3]);
+                        }
+                        if (values[4] != "")
+                        {
+                            myObject.SizeUnit = int.Parse(values[4]);
+                        }
+
                         Out.Add(myObject);
                     }
                     string result = AddAll(Out);
@@ -97,6 +118,7 @@ namespace DBManager.Interfacce
                 }
                 catch (DbUpdateException e)
                 {
+                    StringBuilder sb = new StringBuilder();
                     string inner = e.InnerException.Message;
                     if (inner != null)
                     {

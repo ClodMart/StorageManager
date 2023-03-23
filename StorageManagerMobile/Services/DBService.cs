@@ -12,11 +12,11 @@ namespace StorageManagerMobile.Services
     {
         private static DBService instance;
         private static readonly object padlock = new object();
-        private readonly GestioneMagazzinoContext dbContext;
+        private readonly StorageManagerDBContext dbContext;
 
         private DBService()
         {
-            dbContext = new GestioneMagazzinoContext();
+            dbContext = new StorageManagerDBContext();
         }
 
         public static DBService Instance
@@ -34,7 +34,7 @@ namespace StorageManagerMobile.Services
             }
         }
 
-        public GestioneMagazzinoContext DbContext
+        public StorageManagerDBContext DbContext
         {
             get
             {

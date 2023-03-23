@@ -7,8 +7,7 @@
              xmlns:viewmodels="clr-namespace:StorageManagerMobile.ViewModels.Details"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:DataType="viewmodels:IngredientDetailViewModel"
-             Title="IngredientDetail"
-             Loaded="ContentPage_Loaded">
+             Title="IngredientDetail">
     <ContentPage.Resources>
         <res:IntToColorConverter x:Key="IntToColor"/>
         <res:DoubleToColorConverter x:Key="DoubleToColor"/>
@@ -36,7 +35,7 @@
             </Grid.ColumnDefinitions>
             <HorizontalStackLayout Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
                 <Label Text="IngredientName" Margin="0" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand"/>
-                <Entry x:Name="IngredientName" Margin="5,0,0,0" Style="{StaticResource ListMainText}" Text="{Binding Title.Ingredient1, Mode=TwoWay}" TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand"/>
+                <Entry x:Name="IngredientName" Margin="5,0,0,0" Style="{StaticResource ListMainText}" Text="{Binding Title.Name, Mode=TwoWay}" TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand"/>
             </HorizontalStackLayout>
             <HorizontalStackLayout Grid.Row="1" Grid.Column="0" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand">
                 <Label Text="Category" Margin="0" Grid.Row="1" Grid.Column="0" HorizontalOptions="EndAndExpand" VerticalOptions="CenterAndExpand"/>
@@ -58,11 +57,11 @@
                 <CollectionView.Header>
                     <HorizontalStackLayout HorizontalOptions="CenterAndExpand">
                         <Label Text="Fornitori" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
-                        <ImageButton Style="{StaticResource AddIcon}" Padding="5" VerticalOptions="CenterAndExpand"/>
+                        <ImageButton Style="{StaticResource AddIcon}" Padding="5" VerticalOptions="CenterAndExpand" Clicked="ImageButton_Clicked"/>
                     </HorizontalStackLayout>                    
                 </CollectionView.Header>
                 <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="db:Ingredient">
+                    <DataTemplate x:DataType="db:IngredientsFormat">
                         <Border Grid.Row="2" StrokeThickness="2" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="10,5,10,0" StrokeShape="RoundRectangle 20">
                             <Grid Margin="5">
                                 <Grid.RowDefinitions>
@@ -82,7 +81,7 @@
                                     </HorizontalStackLayout>
                                     <HorizontalStackLayout Grid.Row="2" Grid.Column="2" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand" Margin="5">
                                         <Label Text="Units" Margin="0" Grid.Row="1" Grid.Column="0" HorizontalOptions="EndAndExpand" VerticalOptions="CenterAndExpand"/>
-                                        <Entry x:Name="SizeUnits" Margin="5,0,0,0" Keyboard="Numeric" Text="{Binding SizeUnits, Mode=TwoWay}" TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}" Grid.Row="1" Grid.Column="2" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand"/>
+                                        <Entry x:Name="SizeUnits" Margin="5,0,0,0" Keyboard="Numeric" Text="{Binding SizeUnit, Mode=TwoWay}" TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}" Grid.Row="1" Grid.Column="2" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand"/>
                                     </HorizontalStackLayout>
                                     <HorizontalStackLayout Grid.Row="3" Grid.Column="2" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand" Margin="5">
                                         <Label Text="Cost" Margin="0" Grid.Row="1" Grid.Column="0" HorizontalOptions="EndAndExpand" VerticalOptions="CenterAndExpand"/>

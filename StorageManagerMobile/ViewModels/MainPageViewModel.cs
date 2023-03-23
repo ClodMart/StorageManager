@@ -13,7 +13,8 @@ namespace StorageManagerMobile.ViewModels
 {
     public class MainPageViewModel : BaseViewModel
     {
-        private readonly GestioneMagazzinoContext context = DBService.Instance.DbContext;
+        #region Properties
+        private readonly StorageManagerDBContext context = DBService.Instance.DbContext;
 
         private List<Page> pages = new List<Page>();
         public List<Page> Pages
@@ -46,6 +47,8 @@ namespace StorageManagerMobile.ViewModels
             set { ingredientList = value; NotifyPropertyChanged(); }
         }
 
+        #endregion
+
         public MainPageViewModel()
         {
             MenuList = new List<PageLink>()
@@ -58,13 +61,14 @@ namespace StorageManagerMobile.ViewModels
             MenuViewModel = new FlyoutMenuViewModel(MenuList.Select(x => x.Label).ToList());
 
             IngredientList = context.Ingredients.ToList();
-            IngredientsViewModel = new IngredientsViewModel(IngredientList);
+            IngredientsViewModel = new IngredientsViewModel();
 
             
             InizializeModel();
 
         }
 
+        //Inizialize the fyoutmenu viewmodel
         private void InizializeModel()
         {
             foreach (PageLink x in MenuList)

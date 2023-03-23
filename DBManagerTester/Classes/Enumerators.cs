@@ -8,13 +8,14 @@ namespace DBManagerTester.Classes
 {
     public enum TypeOfData 
     {
-        DrinkIngredient,
+        //DrinkIngredient,
         Ingredient,
-        Menu,
-        MenuPreparation,
+        IngredientFormat,
+        //Menu,
+        //MenuPreparation,
         Supplier,
-        UseMaterial,
+        //UseMaterial,
         IsUsedValue,
-        UnitsOfMesure,
+        UnitsOfMeasure,
     }
 }

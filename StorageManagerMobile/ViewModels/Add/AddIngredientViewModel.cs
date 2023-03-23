@@ -17,8 +17,8 @@ namespace StorageManagerMobile.ViewModels.Add
     }
 
     public class AddIngredientViewModel : BaseViewModel
-    {       
-
+    {
+        #region Properties
         private List<IsUsedValue> isUsedValues;
         public List<IsUsedValue> IsUsedValues
         {
@@ -73,6 +73,6 @@ namespace StorageManagerMobile.ViewModels.Add
         {
             IsUsedValues = UsedValues.IsUsedValues.ToList();
         }
-
+        #endregion
     }
 }

@@ -18,8 +18,13 @@ namespace StorageManagerMobile.ViewModels.Groupings
 
     public class IngredientViewerViewModel : BaseViewModel
     {
-        private static readonly GestioneMagazzinoContext context = DBService.Instance.DbContext;
+        #region Parameters
+
+        private static readonly StorageManagerDBContext context = DBService.Instance.DbContext;
         private static readonly IngredientsRepository IngredientsRepository = new IngredientsRepository(context);
+        private static readonly IngredientsFormatsRepository IngredientsFormatsRepository = new IngredientsFormatsRepository(context);
+
+        private List<IngredientsFormat> AllFormats = new List<IngredientsFormat>();
 
         private bool isExpanded = false;
         public bool IsExpanded
@@ -34,11 +39,13 @@ namespace StorageManagerMobile.ViewModels.Groupings
             get { return title; }
             set { title = value; NotifyPropertyChanged(); CalcQuantityDisplay(); }
         }
-        private ObservableCollection<Ingredient> ingredients;
-        public ObservableCollection<Ingredient> Ingredients
+        private ObservableCollection<IngredientsFormat> ingredients;
+        public ObservableCollection<IngredientsFormat> Ingredients
         {
             get { return ingredients; }
-            set { ingredients = value; NotifyPropertyChanged(); UpdateIngredientList(); }
+            set { ingredients = value; NotifyPropertyChanged(); 
+            //    UpdateIngredientList();
+            }
         }
 
         private string quantityDisplay;
@@ -48,19 +55,19 @@ namespace StorageManagerMobile.ViewModels.Groupings
             set { quantityDisplay = value; NotifyPropertyChanged();}
         }
 
-        public IngredientViewerViewModel(Ingredient title, List<Ingredient> ingredients)
+        #endregion
+
+        public IngredientViewerViewModel(Ingredient title)
         {
-            Title =title;
-            ingredients.Sort((l, r) =>
-            (l.LastOrderDateTime ?? DateOnly.MinValue).CompareTo(r.LastOrderDateTime ?? DateOnly.MinValue));
-            ingredients.Reverse();
-            Ingredients = new ObservableCollection<Ingredient>(ingredients);
+            Title = title;
+            AllFormats = IngredientsFormatsRepository.GetFormatsFromIngredientId(Title.Id);            
+            AllFormats.Sort((l, r) =>
+            (l.LastOrderDate ?? DateOnly.MinValue).CompareTo(r.LastOrderDate ?? DateOnly.MinValue));
+            AllFormats.Reverse();
+            Ingredients = new ObservableCollection<IngredientsFormat>(AllFormats);
         }
 
-        private void UpdateIngredientList()
-        {
-            Title = Ingredients.FirstOrDefault();
-        }
+        #region Commands
 
         public ICommand Expand => new Command(() =>
         {
@@ -79,39 +86,60 @@ namespace StorageManagerMobile.ViewModels.Groupings
 
         public void DeleteIngredienti(int Id)
         {
-            Ingredient Ingredient = Ingredients.FirstOrDefault(x => x.Id == Id);
-            //IngredientViewerViewModel Group = FullIngredients.FirstOrDefault(x => x.Title.Ingredient1 == Ingredient.Ingredient1);
+            IngredientsFormat Ingredient = Ingredients.FirstOrDefault(x => x.Id == Id);
 
             if (Ingredient != null)
             {
                 Ingredients.Remove(Ingredient);
-                IngredientsRepository.Delete(Ingredient);
-                //FilteredIngredients.Remove(Ingredient);
-                //IngredientList = new ObservableCollection<IngredientViewerViewModel>(FilteredIngredients);
+                IngredientsFormatsRepository.Delete(Ingredient);
             }
         }
 
-        public ICommand OpenUpdateIngredient => new Command(() =>
-        {
-            OpenUpdateIngredientMethod();
-        });
+        #endregion
 
-        private void OpenUpdateIngredientMethod()
-        {
+        #region UImethods
 
+        //private void UpdateIngredientList()
+        //{
+        //    Title = Ingredients.FirstOrDefault();
+        //}
+
+        public void RefreshIngredientList()
+        {
+            AllFormats = IngredientsFormatsRepository.GetFormatsFromIngredientId(Title.Id);
+            AllFormats.Sort((l, r) =>
+            (l.LastOrderDate ?? DateOnly.MinValue).CompareTo(r.LastOrderDate ?? DateOnly.MinValue));
+            AllFormats.Reverse();
+            Ingredients = new ObservableCollection<IngredientsFormat>(AllFormats);
         }
 
         private void CalcQuantityDisplay()
         {
-            QuantityDisplay= Title.ActualQuantity.ToString() + "/" + Title.QuantityNeeded.ToString();
-        }
-
-        public void SaveIngredients()
-        {
-            foreach(Ingredient x in Ingredients)
+            if (Title != null)
             {
-                IngredientsRepository.Update(x);
+                QuantityDisplay = Title.ActualQuantity.ToString() + "/" + Title.QuantityNeeded.ToString();
             }
         }
+
+        #endregion
+
+        #region DataMethods
+        public void SaveIngredients()
+        {
+            foreach(IngredientsFormat x in Ingredients)
+            {
+                IngredientsFormatsRepository.Update(x);
+            }
+            RefreshIngredientList();
+        }       
+
+        public int DeleteIngredient(IngredientsFormat ig)
+        {
+            Ingredients.Remove(ig);
+            IngredientsFormatsRepository.Delete(ig);
+            context.SaveChanges();
+            return Ingredients.Count;
+        }
+        #endregion
     }
 }

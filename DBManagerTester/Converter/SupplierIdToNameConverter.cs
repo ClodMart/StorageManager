@@ -11,7 +11,7 @@ namespace DBManagerTester.Converter
 {
     public class SupplierIdToNameConverter : IValueConverter
     {
-        private GestioneMagazzinoContext context = new GestioneMagazzinoContext(); 
+        private StorageManagerDBContext context = new StorageManagerDBContext(); 
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
