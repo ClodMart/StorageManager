@@ -48,11 +48,11 @@ namespace StorageManagerMobile.ViewModels.Add
             {isUsed = value; NotifyPropertyChanged();}
         }
 
-        private List<SupplierForIngredient> supplier;
-        public List<SupplierForIngredient> Supplier
+        private List<IngredientsFormat> formats;
+        public List<IngredientsFormat> Formats
         {
-            get { return supplier; }
-            set { supplier = value; NotifyPropertyChanged();}
+            get { return formats; }
+            set { formats = value; NotifyPropertyChanged();}
         }
 
         private int qtNeeded;

@@ -2,6 +2,7 @@ using CommunityToolkit.Maui.Views;
 using DBManager.Models;
 using StorageManagerMobile.Resources;
 using StorageManagerMobile.ViewModels;
+using StorageManagerMobile.ViewModels.Add;
 using StorageManagerMobile.ViewModels.Details;
 using StorageManagerMobile.ViewModels.Groupings;
 using StorageManagerMobile.ViewModels.Popup;
@@ -153,6 +154,9 @@ public partial class Ingredients : ContentPage
 
     private void AddButton_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new AddIngredient());
+        AddIngredient NewPage = new AddIngredient();
+        AddIngredientViewModel VM = new AddIngredientViewModel();
+        NewPage.BindingContext= VM;
+        Navigation.PushAsync(NewPage);
     }
 }
