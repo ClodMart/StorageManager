@@ -41,11 +41,19 @@ public partial class IngredientDetail : ContentPage
             res.Ingredient = ((IngredientDetailViewModel)BindingContext).Title;
             res.IngredientId = ((IngredientDetailViewModel)BindingContext).Title.Id;
             ((IngredientDetailViewModel)BindingContext).SaveIngredientFormat(res);
+            VM = new SupplierSelectionViewModel(((IngredientDetailViewModel)BindingContext).Title);
         }
     }
 
     private void ImageButton_Clicked(object sender, EventArgs e)
     {
         OpenSupplierSelectionPopupAsync();
+    }
+
+    private void DeleteFormat_Clicked(object sender, EventArgs e)
+    {
+        IngredientsFormat actual = (IngredientsFormat)((ImageButton)sender).BindingContext;
+        ((IngredientDetailViewModel)BindingContext).RemoveIngredientFormat(actual);
+        ((IngredientDetailViewModel)BindingContext).Ingredients.Remove(actual);
     }
 }

@@ -33,10 +33,11 @@ namespace DBManager.Interfacce
             return Out;
         }
 
-        public void Add(IngredientsFormat entity)
+        public long Add(IngredientsFormat entity)
         {
             _dbContext.IngredientsFormats.Add(entity);
             _dbContext.SaveChanges();
+            return entity.Id;
         }
 
         public string AddAll(List<IngredientsFormat> entities)

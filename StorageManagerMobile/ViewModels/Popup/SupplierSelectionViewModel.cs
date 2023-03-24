@@ -25,8 +25,8 @@ namespace StorageManagerMobile.ViewModels.Popup
         private Supplier selectedSupplier;
         public Supplier SelectedSupplier
         {
-            get { return selectedSupplier; } 
-            set{selectedSupplier = value; NotifyPropertyChanged();}
+            get { return selectedSupplier; }
+            set { selectedSupplier = value; NotifyPropertyChanged(); }
         }
 
         private decimal cost;
@@ -36,21 +36,21 @@ namespace StorageManagerMobile.ViewModels.Popup
             set { cost = value; NotifyPropertyChanged(); }
         }
 
-        private decimal sizeKg;
+        private decimal sizeKg = 1;
         public decimal SizeKg
         {
             get { return sizeKg; }
             set { sizeKg = value; NotifyPropertyChanged(); }
         }
 
-        private decimal sizeUnits;
+        private decimal sizeUnits = 1;
         public decimal SizeUnits
         {
             get { return sizeUnits; }
             set { sizeUnits = value; NotifyPropertyChanged(); }
         }
 
-        public SupplierSelectionViewModel (Ingredient ing)
+        public SupplierSelectionViewModel(Ingredient ing)
         {
             Ingredient = ing;
             Suppliers = SuppliersRepository.GetAll().ToList();
@@ -60,7 +60,5 @@ namespace StorageManagerMobile.ViewModels.Popup
         {
             Suppliers = SuppliersRepository.GetAll().ToList();
         }
-
-
     }
 }

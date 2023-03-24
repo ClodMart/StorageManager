@@ -27,10 +27,11 @@ namespace DBManager.Interfacce
             return _dbContext.UnitsOfMeasures.Find(id);
         }
 
-        public void Add(UnitsOfMeasure entity)
+        public long Add(UnitsOfMeasure entity)
         {
             _dbContext.UnitsOfMeasures.Add(entity);
             _dbContext.SaveChanges();
+            return entity.Id;
         }
 
         public string AddAll(List<UnitsOfMeasure> entities)

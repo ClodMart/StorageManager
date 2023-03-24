@@ -27,10 +27,16 @@ namespace DBManager.Interfacce
             return _dbContext.Ingredients.Find(id);
         }
 
-        public void Add(Ingredient entity)
+        public Ingredient GetByName(string Name)
+        {
+            return _dbContext.Ingredients.FirstOrDefault(x=>x.Name == Name);
+        }
+
+        public long Add(Ingredient entity)
         {
             _dbContext.Ingredients.Add(entity);
             _dbContext.SaveChanges();
+            return entity.Id;
         }
 
         public string AddAll(List<Ingredient> entities)
@@ -75,6 +81,11 @@ namespace DBManager.Interfacce
             _dbContext.SaveChanges();
         }
 
+        public bool Exists(string name)
+        {
+            return _dbContext.Ingredients.Any(x => x.Name == name);
+        }
+
         public string InsertFromCSV(string fileUri)
         {
             using (var reader = new StreamReader(fileUri))
@@ -93,19 +104,6 @@ namespace DBManager.Interfacce
                         myObject.Category = values[1];
                         long Used = _dbContext.IsUsedValues.FirstOrDefault(x => x.Description == values[2].ToUpper()).Id;
                         myObject.IsUsedValue = Used;
-                        //long SupID = _dbContext.Suppliers.FirstOrDefault(x => x.SupplierName == values[3].ToUpper()).Id;
-                        //myObject.Supplier_Id = SupID;
-                        //string Price = values[4].Replace("€ ", "");
-                        //myObject.Cost = decimal.Parse(Price);
-                        //myObject.OldCost = decimal.Parse(Price);
-                        //if (values[5] != "")
-                        //{
-                        //    myObject.SizeKg = decimal.Parse(values[5]);
-                        //}
-                        //if (values[6] != "")
-                        //{
-                        //    myObject.SizeUnits = int.Parse(values[6]);
-                        //}
                         myObject.QuantityNeeded = int.Parse(values[3]);
                         myObject.ActualQuantity = int.Parse(values[4]);
                         myObject.Notes = values[5];

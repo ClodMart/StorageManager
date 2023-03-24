@@ -1,7 +1,6 @@
 ﻿using DBManager.Interfacce;
 using DBManager.Models;
 using StorageManagerMobile.Services;
-using StorageManagerMobile.ViewModels;
 using StorageManagerMobile.ViewModels.Popup;
 using StorageManagerMobile.Views.Popup;
 using System;
@@ -30,11 +29,11 @@ namespace StorageManagerMobile.ViewModels.Groupings
         public bool IsExpanded
         {
             get { return isExpanded; }
-            set { isExpanded = value; NotifyPropertyChanged();}
+            set { isExpanded = value; NotifyPropertyChanged(); }
         }
 
         private Ingredient title;
-        public Ingredient Title 
+        public Ingredient Title
         {
             get { return title; }
             set { title = value; NotifyPropertyChanged(); CalcQuantityDisplay(); }
@@ -43,8 +42,10 @@ namespace StorageManagerMobile.ViewModels.Groupings
         public ObservableCollection<IngredientsFormat> Ingredients
         {
             get { return ingredients; }
-            set { ingredients = value; NotifyPropertyChanged(); 
-            //    UpdateIngredientList();
+            set
+            {
+                ingredients = value; NotifyPropertyChanged();
+                //    UpdateIngredientList();
             }
         }
 
@@ -52,7 +53,7 @@ namespace StorageManagerMobile.ViewModels.Groupings
         public string QuantityDisplay
         {
             get { return quantityDisplay; }
-            set { quantityDisplay = value; NotifyPropertyChanged();}
+            set { quantityDisplay = value; NotifyPropertyChanged(); }
         }
 
         #endregion
@@ -60,7 +61,7 @@ namespace StorageManagerMobile.ViewModels.Groupings
         public IngredientViewerViewModel(Ingredient title)
         {
             Title = title;
-            AllFormats = IngredientsFormatsRepository.GetFormatsFromIngredientId(Title.Id);            
+            AllFormats = IngredientsFormatsRepository.GetFormatsFromIngredientId(Title.Id);
             AllFormats.Sort((l, r) =>
             (l.LastOrderDate ?? DateOnly.MinValue).CompareTo(r.LastOrderDate ?? DateOnly.MinValue));
             AllFormats.Reverse();
@@ -79,7 +80,7 @@ namespace StorageManagerMobile.ViewModels.Groupings
             IsExpanded = !IsExpanded;
         }
 
-        public ICommand PerformDeletion => new Command<int>((int Id) =>
+        public ICommand PerformDeletion => new Command<int>((Id) =>
         {
             DeleteIngredienti(Id);
         });
@@ -126,12 +127,12 @@ namespace StorageManagerMobile.ViewModels.Groupings
         #region DataMethods
         public void SaveIngredients()
         {
-            foreach(IngredientsFormat x in Ingredients)
+            foreach (IngredientsFormat x in Ingredients)
             {
                 IngredientsFormatsRepository.Update(x);
             }
             RefreshIngredientList();
-        }       
+        }
 
         public int DeleteIngredient(IngredientsFormat ig)
         {

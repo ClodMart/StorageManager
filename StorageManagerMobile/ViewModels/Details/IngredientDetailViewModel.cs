@@ -39,7 +39,7 @@ namespace StorageManagerMobile.ViewModels.Details
         public List<string> PickerValues
         {
             get { return pickerValues; }
-            set { pickerValues = value; NotifyPropertyChanged();}
+            set { pickerValues = value; NotifyPropertyChanged(); }
         }
 
         private Ingredient title;
@@ -60,8 +60,8 @@ namespace StorageManagerMobile.ViewModels.Details
         {
             IsUsedValues = UsedValues.IsUsedValues.ToList();
             Title = vm.Title;
-            Ingredients= vm.Ingredients;            
-            PickerValues = IsUsedValues.Select(x=>x.Description).ToList();
+            Ingredients = vm.Ingredients;
+            PickerValues = IsUsedValues.Select(x => x.Description).ToList();
         }
 
         #region Commands
@@ -97,10 +97,10 @@ namespace StorageManagerMobile.ViewModels.Details
         #region DataTranslation
         private void GetIsUsedSelected()
         {
-            if (IsUsedValues != null) 
+            if (IsUsedValues != null)
             {
                 DefaultIsUsed = IsUsedValues.FirstOrDefault(x => x.Id == Title.IsUsedValue);
-            }            
+            }
         }
         #endregion
 
@@ -109,6 +109,13 @@ namespace StorageManagerMobile.ViewModels.Details
             IngredientsFormatsRepository.Add(Ingredient);
             context.SaveChanges();
             Ingredients = new ObservableCollection<IngredientsFormat>(IngredientsFormatsRepository.GetFormatsFromIngredientId(Title.Id));
+        }
+
+        public void RemoveIngredientFormat(IngredientsFormat Ingredient)
+        {
+            IngredientsFormatsRepository.Delete(Ingredient);
+            context.SaveChanges();
+            //Ingredients = new ObservableCollection<IngredientsFormat>(IngredientsFormatsRepository.GetFormatsFromIngredientId(Title.Id));
         }
     }
 }

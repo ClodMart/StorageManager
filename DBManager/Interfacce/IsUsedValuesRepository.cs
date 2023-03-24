@@ -27,10 +27,11 @@ namespace DBManager.Interfacce
             return _dbContext.IsUsedValues.Find(id);
         }
 
-        public void Add(IsUsedValue entity)
+        public long Add(IsUsedValue entity)
         {
             _dbContext.IsUsedValues.Add(entity);
             _dbContext.SaveChanges();
+            return entity.Id;
         }
 
         public string AddAll(List<IsUsedValue> entities)

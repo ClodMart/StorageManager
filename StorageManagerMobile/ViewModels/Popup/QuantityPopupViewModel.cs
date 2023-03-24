@@ -9,9 +9,9 @@ namespace StorageManagerMobile.ViewModels.Popup
     public class QuantityPopupViewModel : BaseViewModel
     {
         private string name;
-        public string Name 
+        public string Name
         {
-            get { return name; } 
+            get { return name; }
             set { name = value; NotifyPropertyChanged(); }
         }
 
@@ -33,15 +33,15 @@ namespace StorageManagerMobile.ViewModels.Popup
         public decimal ActualQuantity
         {
             get { return actualQuantity; }
-            set { actualQuantity = value; NotifyPropertyChanged();}
+            set { actualQuantity = value; NotifyPropertyChanged(); }
         }
 
         public QuantityPopupViewModel(string name, string category, decimal quantityNeeded, decimal actualQuantity)
         {
-            this.Name = name;
-            this.Category = category;
-            this.QuantityNeeded = quantityNeeded;
-            this.ActualQuantity = actualQuantity;
+            Name = name;
+            Category = category;
+            QuantityNeeded = quantityNeeded;
+            ActualQuantity = actualQuantity;
         }
     }
 }

@@ -91,7 +91,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Views\AddPages\AddIngredient.xaml">
+	  <MauiXaml Update="Views\Ingredients\AddPages\AddIngredient.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\FlyoutMenu.xaml">
@@ -103,12 +103,16 @@
 	  <MauiXaml Update="Views\Ingredients.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\Popup\QuantityPopup.xaml">
+	  <MauiXaml Update="Views\Ingredients\Popup\QuantityPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\Popup\SupplierSelection.xaml">
+	  <MauiXaml Update="Views\Ingredients\Popup\SupplierSelection.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="ViewModels\Ingredients\" />
 	</ItemGroup>
 
 </Project>

@@ -25,7 +25,7 @@ namespace StorageManagerMobile.ViewModels
         private string LastSearch = "";
         private string LastFilter = "FilterAll";
 
-        private List<Ingredient> AllIngredients= new List<Ingredient>();
+        private List<Ingredient> AllIngredients = new List<Ingredient>();
         private List<IngredientViewerViewModel> FullIngredients { get; set; }
         private List<IngredientViewerViewModel> FilteredIngredients { get; set; }
 
@@ -47,39 +47,20 @@ namespace StorageManagerMobile.ViewModels
         public IngredientsViewModel()
         {
             AllIngredients = IngredientsRepository.GetAll().ToList();
-            AllIngredients.Sort((l,r) => l.Name.CompareTo(r.Name));
+            AllIngredients.Sort((l, r) => l.Name.CompareTo(r.Name));
             FullIngredients = new List<IngredientViewerViewModel>();
 
             foreach (Ingredient x in AllIngredients)
             {
-                //List<IngredientsFormat> formats = IngredientsFormatsRepository.GetAll().Where(x=>x.IngredientId== x.Id).ToList();
-                //formats.Sort((l,r)=> ((l.LastOrderDate.Value) ?? DateOnly.MinValue).CompareTo(r.LastOrderDate.Value ?? DateOnly.MinValue));
                 FullIngredients.Add(new IngredientViewerViewModel(x));
             }
             FilteredIngredients = FullIngredients;
             IngredientList = new ObservableCollection<IngredientViewerViewModel>(FullIngredients);
-            //List<Ingredient> Ingredients = List;
-            //FullIngredients = new List<IngredientViewerViewModel>();  
-            //while(Ingredients.Count>0)
-            //{
-            //    Ingredient GroupTitle = Ingredients.ElementAt(0);
-            //    List<Ingredient> Input = new List<Ingredient>(Ingredients.FindAll(x => (x.Ingredient1 == GroupTitle.Ingredient1) && (x.Category == GroupTitle.Category)));
-
-            //    FullIngredients.Add(new IngredientViewerViewModel(GroupTitle, Input));
-
-            //    foreach(Ingredient y in Input)
-            //    {
-            //        Ingredients.RemoveAll(x => x.Id == y.Id);
-            //    }              
-            //}
-            //FullIngredients.Sort((l, r) => l.Title.Name.CompareTo(r.Title.Name));
-            //FilteredIngredients = FullIngredients;
-            //IngredientList = new ObservableCollection<IngredientViewerViewModel>(FullIngredients);
         }
 
         #region Icommands
 
-        public ICommand PerformSearch => new Command<string>((string query) =>
+        public ICommand PerformSearch => new Command<string>((query) =>
         {
             Search(query);
         });
@@ -98,7 +79,7 @@ namespace StorageManagerMobile.ViewModels
         {
             LastSearch = query;
             List<IngredientViewerViewModel> results = new List<IngredientViewerViewModel>();
-            if(query == "")
+            if (query == "")
             {
                 results = FilteredIngredients;
             }
@@ -141,7 +122,7 @@ namespace StorageManagerMobile.ViewModels
 
         public void CollapseExpanders()
         {
-            foreach(IngredientViewerViewModel x in IngredientList)
+            foreach (IngredientViewerViewModel x in IngredientList)
             {
                 x.IsExpanded = false;
             }
@@ -172,10 +153,10 @@ namespace StorageManagerMobile.ViewModels
                     {
                         if (x.Ingredients.Any(x => x.IsDefault))
                         {
-                            if(x.Ingredients.FirstOrDefault(x => x.IsDefault).CostDifference > 0)
+                            if (x.Ingredients.FirstOrDefault(x => x.IsDefault).CostDifference > 0)
                             {
                                 FilteredIngredients.Add(x);
-                            }                            
+                            }
                         }
 
                     }
@@ -262,13 +243,11 @@ namespace StorageManagerMobile.ViewModels
 
             foreach (Ingredient x in List)
             {
-                //List<IngredientsFormat> formats = IngredientsFormatsRepository.GetAll().Where(x => x.IngredientId == x.Id).ToList();
-                //formats.Sort((l, r) => l.LastOrderDate.Value.CompareTo(r.LastOrderDate.Value));
                 IngredientViewerViewModel VM = new IngredientViewerViewModel(x);
-                if(VM.Ingredients.Count != 0)
+                if (VM.Ingredients.Count != 0)
                 {
                     FullIngredients.Add(VM);
-                }                               
+                }
                 else
                 {
                     ToDelete.Add(x);

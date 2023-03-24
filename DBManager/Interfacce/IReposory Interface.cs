@@ -10,7 +10,7 @@ namespace DBManager.Interfacce
     {
         IEnumerable<T> GetAll();
         T GetById(long id);
-        void Add(T entity);
+        long Add(T entity);
         void Update(T entity);
         void Delete(T entity);
     }

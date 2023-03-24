@@ -27,10 +27,11 @@ namespace DBManager.Interfacce
             return _dbContext.Suppliers.Find(id);
         }
 
-        public void Add(Supplier entity)
+        public long Add(Supplier entity)
         {
             _dbContext.Suppliers.Add(entity);
             _dbContext.SaveChanges();
+            return entity.Id;
         }
 
         public string AddAll(List<Supplier> entities)
