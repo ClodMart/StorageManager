@@ -54,9 +54,10 @@ namespace StorageManagerMobile.ViewModels
             MenuList = new List<PageLink>()
             {
                 new PageLink("Home","HomePage"),
+                new PageLink("Fornitori", "Suppliers"),
                 new PageLink("Ingredienti", "Ingredients"),
                 new PageLink("Prodotti", "PaginaProdotti"),
-                new PageLink("Fornitori", "PaginaFornitori"),
+                
             };
             MenuViewModel = new FlyoutMenuViewModel(MenuList.Select(x => x.Label).ToList());
 

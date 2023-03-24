@@ -1,5 +1,6 @@
 ﻿using DBManager.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Scaffolding;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -72,6 +73,16 @@ namespace DBManager.Interfacce
 
         public void Update(IngredientsFormat entity)
         {
+            IngredientsFormat OldRecord = _dbContext.IngredientsFormats.FirstOrDefault(x => x.Id == entity.Id);
+            if (OldRecord != null)
+            {
+                if (entity.Cost != OldRecord.Cost)
+                {
+                    entity.PastCost3 = OldRecord.PastCost2;
+                    entity.PastCost2 = OldRecord.PastCost1;
+                    entity.PastCost1 = OldRecord.Cost;
+                }
+            }
             _dbContext.Entry(entity).State = EntityState.Modified;
             _dbContext.SaveChanges();
         }

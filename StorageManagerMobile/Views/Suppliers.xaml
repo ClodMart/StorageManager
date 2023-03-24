@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:res="clr-namespace:StorageManagerMobile.Resources"
+             xmlns:db="clr-namespace:DBManager.Models;assembly=DBManager"
+             xmlns:viewmodels="clr-namespace:StorageManagerMobile.ViewModels"
+             xmlns:customvievmodels="clr-namespace:StorageManagerMobile.ViewModels.Groupings"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:DataType="viewmodels:SuppliersViewModel"
+             x:Class="StorageManagerMobile.Views.Suppliers"
+             Title="Suppliers">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+
+
+        <SearchBar x:Name="searchBar" Grid.Row="0" Placeholder="Cerca Fornitore..."/>
+                   <!--SearchCommand="{Binding PerformSearch}"
+                   SearchCommandParameter="{Binding Text, Source={x:Reference searchBar}}"
+                   TextChanged="searchBar_TextChanged"-->
+
+    </Grid>
+</ContentPage>

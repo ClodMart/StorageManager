@@ -90,8 +90,8 @@
                     <ImageButton Style="{StaticResource EditIcon}" Grid.Column="0" Grid.RowSpan="2" Margin="0" Padding="0"/>
                     <Label Text="Nome Fornitore" Style="{StaticResource ListMainText}" Grid.Column="1" Grid.Row="0" VerticalOptions="EndAndExpand" HorizontalOptions="StartAndExpand"/>
                     <Label Text="Ultimo Ordine" Style="{StaticResource ListSubText}" Grid.Column="1" Grid.Row="1" VerticalOptions="StartAndExpand" HorizontalOptions="StartAndExpand" />
-                    <Label Text="Pr. €" FontSize="Small" FontAttributes="Italic" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
-                    <Label Text="Boh" FontSize="Small" FontAttributes="Italic" Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="CenterAndExpand"/>
+                    <Label Text="Size Kg" FontSize="Small" FontAttributes="Italic" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
+                    <Label Text="Pr. €" FontSize="Small" FontAttributes="Italic" Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="CenterAndExpand"/>
                     <ImageButton Style="{StaticResource DeleteIcon}" Grid.Column="4"  Grid.Row="0" Grid.RowSpan="2" Margin="0" Padding="0"/>
                 </Grid>
             </toolkit:Expander>
@@ -151,8 +151,10 @@
                                                 <Label x:Name="Id PlaceHolder" Text="{Binding Id}" IsVisible="false"/>
                                                 <Label x:Name="SupplierName" Text="{Binding SupplierId, Converter={StaticResource SupplierConverter}}" Style="{StaticResource ListMainText}" Grid.Column="1" Grid.Row="0" VerticalOptions="EndAndExpand" HorizontalOptions="StartAndExpand" Padding="0"/>
                                                 <Label Text="{Binding LastOrderDate, Converter={StaticResource DateTimeToDate}}" Style="{StaticResource ListSubText}" Grid.Column="1" Grid.Row="1" VerticalOptions="StartAndExpand" HorizontalOptions="StartAndExpand" />
-                                                <Label Text="{Binding Cost}" FontSize="Small" FontAttributes="Italic" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="CenterAndExpand"/>
-                                                <Label Text="{Binding CostUnit, Converter={StaticResource Rounder}}" FontSize="Small" FontAttributes="Italic" Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="CenterAndExpand"/>
+                                                <Label Text="{Binding SizeKg}" FontSize="Small" FontAttributes="Italic" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="CenterAndExpand"/>
+                                                <Frame Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" CornerRadius="10" BackgroundColor="{Binding CostDifference, Converter={StaticResource DoubleToColor}}" Padding="10" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                                                <Label Text="{Binding Cost, Converter={StaticResource Rounder}}" FontSize="Small" FontAttributes="Italic"/>
+                                                </Frame>
                                                 <ImageButton x:Name="Delete" Style="{StaticResource DeleteIcon}" Grid.Column="4"  Grid.Row="0" Grid.RowSpan="2" Margin="0" Padding="0" Clicked="Delete_Clicked"/>
                                             </Grid>
                                     </DataTemplate>
