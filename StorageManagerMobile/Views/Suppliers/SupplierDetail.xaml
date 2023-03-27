@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:res="clr-namespace:StorageManagerMobile.Resources"
+             xmlns:db="clr-namespace:DBManager.Models;assembly=DBManager"
+             xmlns:viewmodels="clr-namespace:StorageManagerMobile.ViewModels.Details"
+             xmlns:customvievmodels="clr-namespace:StorageManagerMobile.ViewModels.Groupings"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:DataType="viewmodels:SupplierDetailsViewModel"
+             x:Class="StorageManagerMobile.Views.Suppliers.SupplierDetail"
+             Title="SupplierDetail">
+    <VerticalStackLayout>
+        <HorizontalStackLayout HorizontalOptions="CenterAndExpand" Margin="5">
+            <Label Text="Nome" Style="{StaticResource ListMainText}" VerticalOptions="CenterAndExpand"/>
+            <Entry Text="{Binding Supplier.SupplierName, Mode=TwoWay}" Margin="10,0,0,0"/>
+        </HorizontalStackLayout>
+        <HorizontalStackLayout Margin="5">
+            <Label Text="Telefono" Style="{StaticResource ListMainText}" VerticalOptions="CenterAndExpand"/>
+            <Entry Text="{Binding Supplier.Phone, Mode=TwoWay}" Margin="10,0,0,0"/>
+        </HorizontalStackLayout>
+        <HorizontalStackLayout Margin="5">
+            <Label Text="Email" Style="{StaticResource ListMainText}" VerticalOptions="CenterAndExpand"/>
+            <Entry Text="{Binding Supplier.Email, Mode=TwoWay}" Margin="10,0,0,0"/>
+        </HorizontalStackLayout>
+        <HorizontalStackLayout Margin="5">
+            <Label Text="Partita Iva" Style="{StaticResource ListMainText}" VerticalOptions="CenterAndExpand"/>
+            <Entry Text="{Binding Supplier.PtIva, Mode=TwoWay}" Margin="10,0,0,0"/>
+        </HorizontalStackLayout>
+        <HorizontalStackLayout Margin="5">
+            <Label Text="Note" Style="{StaticResource ListMainText}" VerticalOptions="CenterAndExpand"/>
+            <Entry Text="{Binding Supplier.Notes, Mode=TwoWay}" Margin="10,0,0,0"/>
+        </HorizontalStackLayout>
+        <HorizontalStackLayout Margin="5" HorizontalOptions="CenterAndExpand">
+            <Button x:Name="Salva" Text="Salva" Clicked="Salva_Clicked"/>
+            <Button x:Name="Elimina" Text="Elimina" Clicked="Elimina_Clicked"/>
+        </HorizontalStackLayout>
+    </VerticalStackLayout>
+</ContentPage>

@@ -7,22 +7,81 @@
              xmlns:customvievmodels="clr-namespace:StorageManagerMobile.ViewModels.Groupings"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:DataType="viewmodels:SuppliersViewModel"
-             x:Class="StorageManagerMobile.Views.Suppliers"
-             Title="Suppliers">
+             x:Class="StorageManagerMobile.Views.SuppliersPage"
+             Title="Suppliers"
+             NavigatedTo="ContentPage_NavigatedTo">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
-            <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
 
 
-        <SearchBar x:Name="searchBar" Grid.Row="0" Placeholder="Cerca Fornitore..."/>
-                   <!--SearchCommand="{Binding PerformSearch}"
+        <SearchBar x:Name="searchBar" Grid.Row="0" Placeholder="Cerca Fornitore..."
+                   SearchCommand="{Binding PerformSearch}"
                    SearchCommandParameter="{Binding Text, Source={x:Reference searchBar}}"
-                   TextChanged="searchBar_TextChanged"-->
-
+                   TextChanged="searchBar_TextChanged"/>
+        <Border Grid.Row="1" StrokeThickness="3" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="10,0,10,0" Padding="5,0,0,5" StrokeShape="RoundRectangle 20">
+            <Grid Padding="0" HeightRequest="60"  Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Label Text="Fornitori" Style="{StaticResource ListMainText}" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="CenterAndExpand" HorizontalOptions="StartAndExpand"/>
+                <ImageButton x:Name="AddButton" Grid.Column="2" Grid.RowSpan="2" Style="{StaticResource AddIcon}" Margin="5" Padding="0" BorderColor="Transparent" BackgroundColor="Transparent" Clicked="AddSupplier_Clicked"/>
+            </Grid>
+        </Border>
+        
+        <CollectionView Grid.Row="2" ItemsSource="{Binding Suppliers}" VerticalScrollBarVisibility="Always">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="db:Supplier">
+                    <Border Grid.Row="2" StrokeThickness="3" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="10,0,10,0" Padding="5,0,0,5" StrokeShape="RoundRectangle 20">
+                        <toolkit:Expander IsExpanded="False">
+                            <toolkit:Expander.Header>
+                                <Grid Padding="0" HeightRequest="60"  Margin="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="3*"/>
+                                        <ColumnDefinition Width="auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Label Text="{Binding Id}" Style="{StaticResource ListMainText}" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="CenterAndExpand" HorizontalOptions="StartAndExpand"/>
+                                    <Label Text="{Binding SupplierName}" Style="{StaticResource ListMainText}" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="CenterAndExpand" HorizontalOptions="StartAndExpand" />
+                                    <ImageButton x:Name="EditSupplier" Grid.Column="2" Grid.RowSpan="2" Style="{StaticResource EditIcon}" Margin="5" Padding="0" BorderColor="Transparent" BackgroundColor="Transparent" Clicked="EditSupplier_Clicked" />
+                                </Grid>
+                            </toolkit:Expander.Header>
+                            <VerticalStackLayout>
+                                <HorizontalStackLayout Margin="5">
+                                    <Label Text="Telefono" Style="{StaticResource ListMainText}" />
+                                    <Label Text="{Binding Phone}" Margin="10,0,0,0"/>
+                                </HorizontalStackLayout>
+                                <HorizontalStackLayout Margin="5">
+                                    <Label Text="Email" Style="{StaticResource ListMainText}" />
+                                    <Label Text="{Binding Email}" Margin="10,0,0,0"/>
+                                </HorizontalStackLayout>
+                                <HorizontalStackLayout Margin="5">
+                                    <Label Text="Partita Iva" Style="{StaticResource ListMainText}" />
+                                    <Label Text="{Binding PtIva}" Margin="10,0,0,0"/>
+                                </HorizontalStackLayout>
+                                <HorizontalStackLayout Margin="5">
+                                    <Label Text="Note" Style="{StaticResource ListMainText}" />
+                                    <Label Text="{Binding Notes}" Margin="10,0,0,0"/>
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                        </toolkit:Expander>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
     </Grid>
 </ContentPage>

@@ -30,6 +30,14 @@ namespace StorageManagerMobile.ViewModels
             set { menuViewModel = value; NotifyPropertyChanged();}
         }
 
+        private SuppliersViewModel suppliersViewModel;
+        public SuppliersViewModel SuppliersViewModel
+        {
+            get { return suppliersViewModel; }
+            set { suppliersViewModel = value;
+            NotifyPropertyChanged();}
+        }
+
         private IngredientsViewModel ingredientsViewModel;
         public IngredientsViewModel IngredientsViewModel
         {
@@ -54,7 +62,7 @@ namespace StorageManagerMobile.ViewModels
             MenuList = new List<PageLink>()
             {
                 new PageLink("Home","HomePage"),
-                new PageLink("Fornitori", "Suppliers"),
+                new PageLink("Fornitori", "SuppliersPage"),
                 new PageLink("Ingredienti", "Ingredients"),
                 new PageLink("Prodotti", "PaginaProdotti"),
                 
@@ -63,8 +71,8 @@ namespace StorageManagerMobile.ViewModels
 
             IngredientList = context.Ingredients.ToList();
             IngredientsViewModel = new IngredientsViewModel();
+            SuppliersViewModel = new SuppliersViewModel();
 
-            
             InizializeModel();
 
         }
@@ -89,6 +97,10 @@ namespace StorageManagerMobile.ViewModels
                 if (newPage is Ingredients)
                 {
                     newPage.BindingContext = IngredientsViewModel;
+                }
+                else if(newPage is SuppliersPage)
+                {
+                    newPage.BindingContext = new SuppliersViewModel();
                 }
                 Pages.Add(newPage);
             }
