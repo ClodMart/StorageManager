@@ -9,23 +9,31 @@
              x:DataType="viewmodels:NewOrderViewModel"
              x:Class="StorageManagerMobile.Views.NewOrder"
              Title="NewOrder">
-    <CollectionView ItemsSource="{Binding Categories}" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" Margin="0,0,0,0">
+    <CollectionView ItemsSource="{Binding Categories}" HorizontalOptions="CenterAndExpand" VerticalOptions="StartAndExpand" Margin="0,20,0,0">
+        <CollectionView.Header>
+            <HorizontalStackLayout HorizontalOptions="CenterAndExpand">
+                <Label Text="Crea nuova categoria" Style="{StaticResource ListMainText}" FontSize="Large" HorizontalOptions="CenterAndExpand" VerticalOptions="StartAndExpand" Margin="0,2,0,0"/>
+                <ImageButton Style="{StaticResource AddIcon}" Padding="0" VerticalOptions="StartAndExpand"/>
+            </HorizontalStackLayout>
+        </CollectionView.Header>
         <CollectionView.ItemTemplate>
             <DataTemplate x:DataType="db:OrderCategory">
-                <Grid BackgroundColor="LightGreen" Padding="20" Margin="40">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="4*"/>
-                        <ColumnDefinition Width="1*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <Label Text="{Binding Name}" Style="{StaticResource ListMainText}" Grid.Column="0" Grid.Row="0"/>
-                    <Label Text="{Binding Description}" Style="{StaticResource ListSubText}" Grid.Column="0" Grid.Row="1"/>
-                    <Button BackgroundColor="Transparent" BorderColor="Transparent" Grid.Column="0" Grid.RowSpan="2"/>
-                    <ImageButton x:Name="EditIngredientGroup" Style="{StaticResource EditIcon}" Grid.Column="1" Grid.RowSpan="2" Margin="0" Padding="0"/> 
-                </Grid>
+                <Border BackgroundColor="LightGreen" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="40,5,40,5" Padding="5" StrokeShape="RoundRectangle 20">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Label Text="{Binding Name}" Style="{StaticResource ListMainText}" Grid.Column="0" Grid.Row="0" HorizontalOptions="StartAndExpand" Margin="10,10,0,0"/>
+                        <Label Text="{Binding Description}" Style="{StaticResource ListSubText}" Grid.Column="0" Grid.Row="1"  HorizontalOptions="StartAndExpand" Margin="10,0,0,10"/>
+                        <Button BackgroundColor="Transparent" BorderColor="Transparent" Grid.Column="0" Grid.RowSpan="2" Margin="0" Padding="0"/>
+                        <ImageButton x:Name="EditIngredientGroup" Style="{StaticResource EditIcon}" Grid.Column="1" Grid.RowSpan="2" Padding="0" HorizontalOptions="EndAndExpand"/>
+                    </Grid>
+                </Border>
             </DataTemplate>
         </CollectionView.ItemTemplate>
     </CollectionView>

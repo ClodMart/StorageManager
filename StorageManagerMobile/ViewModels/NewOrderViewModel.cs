@@ -15,7 +15,7 @@ namespace StorageManagerMobile.ViewModels
         private static readonly StorageManagerDBContext context = DBService.Instance.DbContext;
         private static readonly OrderCategoriesRepository OrderCategoriesRepository = new OrderCategoriesRepository(context);
 
-        private ObservableCollection<OrderCategory> categories;
+        private ObservableCollection<OrderCategory> categories = new ObservableCollection<OrderCategory>();
         public ObservableCollection<OrderCategory> Categories { get { return categories; } set { categories = value; NotifyPropertyChanged(); } }
 
         public NewOrderViewModel()
