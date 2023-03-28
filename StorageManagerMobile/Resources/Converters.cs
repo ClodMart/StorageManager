@@ -126,6 +126,20 @@ namespace StorageManagerMobile.Resources
         }
     }
 
+    public class IdToIngredientConverter : IValueConverter
+    {
+        private readonly StorageManagerDBContext dbContext = DBService.Instance.DbContext;
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return dbContext.Ingredients.FirstOrDefault(x => x.Id.Equals((long)value)).Name;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     public class IsUsedValueConverter : IValueConverter
     {
         private readonly StorageManagerDBContext dbContext = DBService.Instance.DbContext;

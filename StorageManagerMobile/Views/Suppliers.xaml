@@ -22,7 +22,9 @@
         <SearchBar x:Name="searchBar" Grid.Row="0" Placeholder="Cerca Fornitore..."
                    SearchCommand="{Binding PerformSearch}"
                    SearchCommandParameter="{Binding Text, Source={x:Reference searchBar}}"
-                   TextChanged="searchBar_TextChanged"/>
+                   TextChanged="searchBar_TextChanged"
+                   HorizontalOptions="CenterAndExpand"
+                   />
         <Border Grid.Row="1" StrokeThickness="3" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="10,0,10,0" Padding="5,0,0,5" StrokeShape="RoundRectangle 20">
             <Grid Padding="0" HeightRequest="60"  Margin="5">
                 <Grid.ColumnDefinitions>

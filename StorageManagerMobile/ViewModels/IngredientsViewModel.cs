@@ -20,7 +20,6 @@ namespace StorageManagerMobile.ViewModels
     {
         private static readonly StorageManagerDBContext context = DBService.Instance.DbContext;
         private static readonly IngredientsRepository IngredientsRepository = new IngredientsRepository(context);
-        private static readonly IngredientsFormatsRepository IngredientsFormatsRepository = new IngredientsFormatsRepository(context);
 
         private string LastSearch = "";
         private string LastFilter = "FilterAll";

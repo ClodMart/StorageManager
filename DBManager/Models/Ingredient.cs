@@ -7,7 +7,9 @@ namespace DBManager.Models
     {
         public Ingredient()
         {
+            CategoryIngredientLists = new HashSet<CategoryIngredientList>();
             IngredientsFormats = new HashSet<IngredientsFormat>();
+            OrdersLists = new HashSet<OrdersList>();
         }
 
         public long Id { get; set; }
@@ -20,6 +22,8 @@ namespace DBManager.Models
         public bool IsEnough { get; set; }
 
         public virtual IsUsedValue IsUsedValueNavigation { get; set; } = null!;
+        public virtual ICollection<CategoryIngredientList> CategoryIngredientLists { get; set; }
         public virtual ICollection<IngredientsFormat> IngredientsFormats { get; set; }
+        public virtual ICollection<OrdersList> OrdersLists { get; set; }
     }
 }

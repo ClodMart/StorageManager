@@ -116,5 +116,29 @@ namespace DBManager.Interfacce
                 }
             }
         }
+
+        public bool DeleteCascadeSupplier(Supplier Sup)
+        {
+            using (var dbContextTrans = _dbContext.Database.BeginTransaction())
+            {
+
+                try
+                {
+                    foreach (IngredientsFormat x in Sup.IngredientsFormats)
+                    {
+                        _dbContext.IngredientsFormats.Remove(x);
+                    }
+                    _dbContext.Suppliers.Remove(Sup);
+                    dbContextTrans.Commit();
+                    _dbContext.SaveChanges();
+                    return true;
+                }
+                catch
+                {
+                    dbContextTrans.Rollback();
+                    return false;
+                }
+            }
+        }
     }
 }

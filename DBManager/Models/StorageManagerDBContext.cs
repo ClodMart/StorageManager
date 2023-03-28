@@ -16,9 +16,13 @@ namespace DBManager.Models
         {
         }
 
+        public virtual DbSet<CategoryIngredientList> CategoryIngredientLists { get; set; } = null!;
         public virtual DbSet<Ingredient> Ingredients { get; set; } = null!;
         public virtual DbSet<IngredientsFormat> IngredientsFormats { get; set; } = null!;
         public virtual DbSet<IsUsedValue> IsUsedValues { get; set; } = null!;
+        public virtual DbSet<Order> Orders { get; set; } = null!;
+        public virtual DbSet<OrderCategory> OrderCategories { get; set; } = null!;
+        public virtual DbSet<OrdersList> OrdersLists { get; set; } = null!;
         public virtual DbSet<Supplier> Suppliers { get; set; } = null!;
         public virtual DbSet<UnitsOfMeasure> UnitsOfMeasures { get; set; } = null!;
 
@@ -33,6 +37,32 @@ namespace DBManager.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<CategoryIngredientList>(entity =>
+            {
+                entity.HasKey(e => e.EntryId)
+                    .HasName("PK_CategoryList");
+
+                entity.ToTable("CategoryIngredientList");
+
+                entity.Property(e => e.EntryId).ValueGeneratedNever();
+
+                entity.Property(e => e.CategoryId).HasColumnName("Category_Id");
+
+                entity.Property(e => e.IngredientId).HasColumnName("Ingredient_id");
+
+                entity.HasOne(d => d.Category)
+                    .WithMany(p => p.CategoryIngredientLists)
+                    .HasForeignKey(d => d.CategoryId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_Category");
+
+                entity.HasOne(d => d.Ingredient)
+                    .WithMany(p => p.CategoryIngredientLists)
+                    .HasForeignKey(d => d.IngredientId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_Ingredients");
+            });
+
             modelBuilder.Entity<Ingredient>(entity =>
             {
                 entity.Property(e => e.Id).UseIdentityAlwaysColumn();
@@ -93,6 +123,58 @@ namespace DBManager.Models
                 entity.ToTable("IsUsedValue");
 
                 entity.Property(e => e.Id).UseIdentityAlwaysColumn();
+            });
+
+            modelBuilder.Entity<Order>(entity =>
+            {
+                entity.Property(e => e.Id).UseIdentityAlwaysColumn();
+
+                entity.Property(e => e.SupplierId).HasColumnName("Supplier_Id");
+
+                entity.Property(e => e.Time).HasColumnType("timestamp without time zone");
+
+                entity.HasOne(d => d.Supplier)
+                    .WithMany(p => p.Orders)
+                    .HasForeignKey(d => d.SupplierId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_Suppliers");
+            });
+
+            modelBuilder.Entity<OrderCategory>(entity =>
+            {
+                entity.ToTable("OrderCategory");
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
+            });
+
+            modelBuilder.Entity<OrdersList>(entity =>
+            {
+                entity.HasKey(e => e.EntryId)
+                    .HasName("pk_OrderList");
+
+                entity.ToTable("OrdersList");
+
+                entity.Property(e => e.EntryId)
+                    .HasColumnName("Entry_Id")
+                    .UseIdentityAlwaysColumn();
+
+                entity.Property(e => e.IngredientId).HasColumnName("Ingredient_Id");
+
+                entity.Property(e => e.OrderId).HasColumnName("Order_Id");
+
+                entity.Property(e => e.Quantity).HasDefaultValueSql("1");
+
+                entity.HasOne(d => d.Ingredient)
+                    .WithMany(p => p.OrdersLists)
+                    .HasForeignKey(d => d.IngredientId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_Ingredient");
+
+                entity.HasOne(d => d.Order)
+                    .WithMany(p => p.OrdersLists)
+                    .HasForeignKey(d => d.OrderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_Order");
             });
 
             modelBuilder.Entity<Supplier>(entity =>

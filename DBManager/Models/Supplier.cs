@@ -8,6 +8,7 @@ namespace DBManager.Models
         public Supplier()
         {
             IngredientsFormats = new HashSet<IngredientsFormat>();
+            Orders = new HashSet<Order>();
         }
 
         public long Id { get; set; }
@@ -18,5 +19,6 @@ namespace DBManager.Models
         public string? Notes { get; set; }
 
         public virtual ICollection<IngredientsFormat> IngredientsFormats { get; set; }
+        public virtual ICollection<Order> Orders { get; set; }
     }
 }
