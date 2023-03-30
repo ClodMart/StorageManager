@@ -16,21 +16,21 @@
             <RowDefinition Height="50"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Border Grid.Row="0" HorizontalOptions="CenterAndExpand" StrokeThickness="2" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="10,5,10,0" StrokeShape="RoundRectangle 20">
+        <Border Grid.Row="0" HorizontalOptions="CenterAndExpand" StrokeThickness="2" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="0,10,0,5" Padding="5" StrokeShape="RoundRectangle 20">
             <Label Text="Ordine" HorizontalOptions="CenterAndExpand" Style="{StaticResource ListMainText}"/>
         </Border>
         <CollectionView Grid.Row="1" ItemsSource="{Binding SelectedItems}">
             
         </CollectionView>
         
-        <Border Grid.Row="2" HorizontalOptions="CenterAndExpand" StrokeThickness="2" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="10,5,10,0" StrokeShape="RoundRectangle 20">
-            <Label Text="Disponibili" HorizontalOptions="CenterAndExpand" Style="{StaticResource ListMainText}"/>
+        <Border Grid.Row="2" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand" StrokeThickness="2" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="0,10,0,5" Padding="5" StrokeShape="RoundRectangle 20">
+            <Label Text="Disponibili" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" Style="{StaticResource ListMainText}"/>
         </Border>
-        <CollectionView Grid.Row="3" ItemsSource="{Binding AvailableItems}" ItemsLayout="VerticalGrid,4">
+        <CollectionView Grid.Row="3" ItemsSource="{Binding AvailableItems}" ItemsLayout="VerticalGrid,3">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="viewmodels:OrderItem">
-                    <Border BackgroundColor="LightGreen" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="40,5,40,5" Padding="5" StrokeShape="RoundRectangle 20">
-                        <Grid BackgroundColor="LightGreen">
+                    <Border BackgroundColor="LightGreen" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="0,0,0,0" Padding="5" StrokeShape="RoundRectangle 20">
+                        <Grid BackgroundColor="LightGreen" VerticalOptions="FillAndExpand">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="auto"/>
                                 <RowDefinition Height="auto"/>
@@ -42,11 +42,12 @@
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
 
+                            <Button Grid.RowSpan="4" Grid.ColumnSpan="2" BackgroundColor="Transparent" BorderColor="Transparent"/>
                             <Label Style="{StaticResource ListMainText}" Text="{Binding Item.Ingredient.Name}" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand"/>
                             <Label Style="{StaticResource ListSubText}" Text="{Binding Item.Ingredient.Category}" Grid.Row="1" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand"/>
                             <Label Style="{StaticResource ListSubText}" Text="{Binding Item.Supplier.SupplierName}" Grid.Row="2" HorizontalOptions="CenterAndExpand"/>
                             <Label Style="{StaticResource ListSubText}" Text="{Binding Item.Cost}" Grid.Row="2" Grid.Column="1" HorizontalOptions="CenterAndExpand"/>
-                            <Picker Grid.Row="3" Grid.ColumnSpan="2" ItemsSource="{Binding Numbers}" SelectedItem="{Binding NumberOfItems, Mode=TwoWay}" HorizontalOptions="Center" FontSize="Default" TextColor="Black"/>
+                            <Picker Grid.Row="3" Grid.ColumnSpan="2" ItemsSource="{Binding Numbers}" SelectedItem="{Binding NumberOfItems, Mode=TwoWay}" HorizontalOptions="Center" FontSize="Small" TextColor="Black" VerticalOptions="EndAndExpand" HorizontalTextAlignment="Center" ZIndex="2"/>
                         </Grid>
                     </Border>
                 </DataTemplate>
