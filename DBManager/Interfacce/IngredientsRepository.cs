@@ -115,7 +115,6 @@ namespace DBManager.Interfacce
                 }
                 catch (DbUpdateException e)
                 {
-                    StringBuilder sb = new StringBuilder();
                     string inner = e.InnerException.Message;
                     if (inner != null)
                     {
@@ -127,6 +126,16 @@ namespace DBManager.Interfacce
                     }
                 }
             }
+        }
+
+        public List<Ingredient> GetAllById(List<long> Ids)
+        {
+            List<Ingredient> OUT = new List<Ingredient>();
+            foreach(long x in Ids)
+            {
+                OUT.Add(_dbContext.Ingredients.FirstOrDefault(y => y.Id == x));
+            }
+            return OUT;
         }
     }
 }

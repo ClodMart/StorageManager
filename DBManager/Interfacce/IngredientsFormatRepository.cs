@@ -34,6 +34,16 @@ namespace DBManager.Interfacce
             return Out;
         }
 
+        public List<IngredientsFormat> GetDefaultFormatFromCategoryIngredientList(List<CategoryIngredientList> ids)
+        {
+            List<IngredientsFormat> OUT = new List<IngredientsFormat>();
+            foreach (long id in ids.Select(x => x.IngredientId))
+            {
+                OUT.Add(_dbContext.IngredientsFormats.FirstOrDefault(x=>x.IngredientId.Equals(id) && x.IsDefault));
+            }
+            return OUT;
+        }
+
         public long Add(IngredientsFormat entity)
         {
             _dbContext.IngredientsFormats.Add(entity);

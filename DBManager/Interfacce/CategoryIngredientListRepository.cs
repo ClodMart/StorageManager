@@ -86,6 +86,22 @@ namespace DBManager.Interfacce
             return _dbContext.CategoryIngredientLists.Any(x => x.CategoryId == CategoryId);
         }
 
+        public List<CategoryIngredientList> GetFromCategory_Id(long CategoryId)
+        {
+            return _dbContext.CategoryIngredientLists.Where(X=>X.CategoryId == CategoryId).ToList();
+        }
+
+        public List<long> GetIngredientIdFromCategory_Id(long CategoryId)
+        {
+            List<CategoryIngredientList> CatIngredients = _dbContext.CategoryIngredientLists.Where(X => X.CategoryId == CategoryId).ToList();
+            List<long> Ids = new List<long>();
+            foreach (CategoryIngredientList x in CatIngredients)
+            {
+                Ids.Add(x.IngredientId);
+            }
+            return Ids;
+        }
+
         public string InsertFromCSV(string fileUri)
         {
             return "";

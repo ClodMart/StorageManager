@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:res="clr-namespace:StorageManagerMobile.Resources"
+             xmlns:db="clr-namespace:DBManager.Models;assembly=DBManager"
+             xmlns:viewmodels="clr-namespace:StorageManagerMobile.ViewModels"
+             xmlns:customvievmodels="clr-namespace:StorageManagerMobile.ViewModels"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:DataType="viewmodels:CreateOrderViewModel"
+             x:Class="StorageManagerMobile.Views.Orders.CreateOrder"
+             Title="CreateOrder">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0" HorizontalOptions="CenterAndExpand" StrokeThickness="2" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="10,5,10,0" StrokeShape="RoundRectangle 20">
+            <Label Text="Ordine" HorizontalOptions="CenterAndExpand" Style="{StaticResource ListMainText}"/>
+        </Border>
+        <CollectionView Grid.Row="1" ItemsSource="{Binding SelectedItems}">
+            
+        </CollectionView>
+        
+        <Border Grid.Row="2" HorizontalOptions="CenterAndExpand" StrokeThickness="2" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="10,5,10,0" StrokeShape="RoundRectangle 20">
+            <Label Text="Disponibili" HorizontalOptions="CenterAndExpand" Style="{StaticResource ListMainText}"/>
+        </Border>
+        <CollectionView Grid.Row="3" ItemsSource="{Binding AvailableItems}" ItemsLayout="VerticalGrid,4">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="viewmodels:OrderItem">
+                    <Border BackgroundColor="LightGreen" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="40,5,40,5" Padding="5" StrokeShape="RoundRectangle 20">
+                        <Grid BackgroundColor="LightGreen">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Style="{StaticResource ListMainText}" Text="{Binding Item.Ingredient.Name}" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand"/>
+                            <Label Style="{StaticResource ListSubText}" Text="{Binding Item.Ingredient.Category}" Grid.Row="1" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand"/>
+                            <Label Style="{StaticResource ListSubText}" Text="{Binding Item.Supplier.SupplierName}" Grid.Row="2" HorizontalOptions="CenterAndExpand"/>
+                            <Label Style="{StaticResource ListSubText}" Text="{Binding Item.Cost}" Grid.Row="2" Grid.Column="1" HorizontalOptions="CenterAndExpand"/>
+                            <Picker Grid.Row="3" Grid.ColumnSpan="2" ItemsSource="{Binding Numbers}" SelectedItem="{Binding NumberOfItems, Mode=TwoWay}" HorizontalOptions="Center" FontSize="Default" TextColor="Black"/>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

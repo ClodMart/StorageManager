@@ -103,7 +103,7 @@ namespace StorageManagerMobile.Resources
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return Math.Round((decimal)value,2);
+            return Math.Round((decimal)value, 2);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -117,7 +117,7 @@ namespace StorageManagerMobile.Resources
         private readonly StorageManagerDBContext dbContext = DBService.Instance.DbContext;
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return dbContext.Suppliers.FirstOrDefault(x=>x.Id.Equals((long)value)).SupplierName;
+            return dbContext.Suppliers.FirstOrDefault(x => x.Id.Equals((long)value)).SupplierName;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -167,7 +167,7 @@ namespace StorageManagerMobile.Resources
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if(value != null)
+            if (value != null)
             {
                 return ((DateOnly)value);
             }
@@ -175,6 +175,26 @@ namespace StorageManagerMobile.Resources
             {
                 return "NoOrderDoneYet";
             }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public class BoolReverse : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if ((bool)value)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+            
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

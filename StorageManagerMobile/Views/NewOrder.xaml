@@ -12,8 +12,8 @@
     <CollectionView ItemsSource="{Binding Categories}" HorizontalOptions="CenterAndExpand" VerticalOptions="StartAndExpand" Margin="0,20,0,0">
         <CollectionView.Header>
             <HorizontalStackLayout HorizontalOptions="CenterAndExpand">
-                <Label Text="Crea nuova categoria" Style="{StaticResource ListMainText}" FontSize="Large" HorizontalOptions="CenterAndExpand" VerticalOptions="StartAndExpand" Margin="0,2,0,0"/>
-                <ImageButton Style="{StaticResource AddIcon}" Padding="0" VerticalOptions="StartAndExpand"/>
+                <Label Text="Crea nuova categoria" Style="{StaticResource ListMainText}" FontSize="Large" HorizontalOptions="CenterAndExpand" VerticalOptions="StartAndExpand" Margin="0,3,15,0"/>
+                <ImageButton Style="{StaticResource AddIcon}" Padding="0" VerticalOptions="StartAndExpand" Clicked="ImageButton_Clicked"/>
             </HorizontalStackLayout>
         </CollectionView.Header>
         <CollectionView.ItemTemplate>
@@ -30,8 +30,8 @@
                         </Grid.RowDefinitions>
                         <Label Text="{Binding Name}" Style="{StaticResource ListMainText}" Grid.Column="0" Grid.Row="0" HorizontalOptions="StartAndExpand" Margin="10,10,0,0"/>
                         <Label Text="{Binding Description}" Style="{StaticResource ListSubText}" Grid.Column="0" Grid.Row="1"  HorizontalOptions="StartAndExpand" Margin="10,0,0,10"/>
-                        <Button BackgroundColor="Transparent" BorderColor="Transparent" Grid.Column="0" Grid.RowSpan="2" Margin="0" Padding="0"/>
-                        <ImageButton x:Name="EditIngredientGroup" Style="{StaticResource EditIcon}" Grid.Column="1" Grid.RowSpan="2" Padding="0" HorizontalOptions="EndAndExpand"/>
+                        <Button BackgroundColor="Transparent" BorderColor="Transparent" Grid.Column="0" Grid.RowSpan="2" Margin="0" Padding="0" Clicked="Button_Clicked"/>
+                        <ImageButton x:Name="EditIngredientGroup" Style="{StaticResource EditIcon}" Grid.Column="1" Grid.RowSpan="2" Padding="0" HorizontalOptions="EndAndExpand" Clicked="EditIngredientGroup_Clicked"/>
                     </Grid>
                 </Border>
             </DataTemplate>

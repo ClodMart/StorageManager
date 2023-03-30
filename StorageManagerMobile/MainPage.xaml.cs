@@ -9,9 +9,17 @@ namespace StorageManagerMobile
     {
         public MainPage()
         {
-            InitializeComponent();
-            BindingContext = new MainPageViewModel();
-            this.Detail = new NavigationPage(new HomePage());
+            try
+            {
+                InitializeComponent();
+                BindingContext = new MainPageViewModel();
+                this.Detail = new NavigationPage(new HomePage());
+            }
+            catch (Exception ex) when (ex.Message.Contains("Failed to connect"))
+            {
+                DisplayAlert("Connessione fallita", "E' fallita la connessione al database, controllare la configurazione.\nL'applicazione verrà chiusa.", "Ok");
+                Application.Current.Quit();
+            }            
         }
 
         public void ChangePage(string label)
