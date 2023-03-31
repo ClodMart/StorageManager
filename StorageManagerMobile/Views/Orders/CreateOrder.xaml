@@ -8,7 +8,8 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:DataType="viewmodels:CreateOrderViewModel"
              x:Class="StorageManagerMobile.Views.Orders.CreateOrder"
-             Title="CreateOrder">
+             Title="CreateOrder"
+             Loaded="ContentPage_Loaded">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
@@ -16,21 +17,19 @@
             <RowDefinition Height="50"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        
         <Border Grid.Row="0" HorizontalOptions="CenterAndExpand" StrokeThickness="2" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="0,10,0,5" Padding="5" StrokeShape="RoundRectangle 20">
             <Label Text="Ordine" HorizontalOptions="CenterAndExpand" Style="{StaticResource ListMainText}"/>
         </Border>
-        <CollectionView Grid.Row="1" ItemsSource="{Binding SelectedItems}">
-            
-        </CollectionView>
         
-        <Border Grid.Row="2" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand" StrokeThickness="2" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="0,10,0,5" Padding="5" StrokeShape="RoundRectangle 20">
-            <Label Text="Disponibili" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" Style="{StaticResource ListMainText}"/>
-        </Border>
-        <CollectionView Grid.Row="3" ItemsSource="{Binding AvailableItems}" ItemsLayout="VerticalGrid,3">
+        <CollectionView Grid.Row="1" ItemsSource="{Binding SelectedItems}" ItemsLayout="VerticalGrid,3">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="viewmodels:OrderItem">
-                    <Border BackgroundColor="LightGreen" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="0,0,0,0" Padding="5" StrokeShape="RoundRectangle 20">
-                        <Grid BackgroundColor="LightGreen" VerticalOptions="FillAndExpand">
+                    <Border BackgroundColor="OrangeRed" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="0,0,0,0" Padding="5" StrokeShape="RoundRectangle 20">
+                        <Grid VerticalOptions="FillAndExpand">
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="DeselectItem_Clicked"/>
+                            </Grid.GestureRecognizers>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="auto"/>
                                 <RowDefinition Height="auto"/>
@@ -41,14 +40,45 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-
-                            <Button Grid.RowSpan="4" Grid.ColumnSpan="2" BackgroundColor="Transparent" BorderColor="Transparent"/>
                             <Label Style="{StaticResource ListMainText}" Text="{Binding Item.Ingredient.Name}" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand"/>
                             <Label Style="{StaticResource ListSubText}" Text="{Binding Item.Ingredient.Category}" Grid.Row="1" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand"/>
                             <Label Style="{StaticResource ListSubText}" Text="{Binding Item.Supplier.SupplierName}" Grid.Row="2" HorizontalOptions="CenterAndExpand"/>
                             <Label Style="{StaticResource ListSubText}" Text="{Binding Item.Cost}" Grid.Row="2" Grid.Column="1" HorizontalOptions="CenterAndExpand"/>
-                            <Picker Grid.Row="3" Grid.ColumnSpan="2" ItemsSource="{Binding Numbers}" SelectedItem="{Binding NumberOfItems, Mode=TwoWay}" HorizontalOptions="Center" FontSize="Small" TextColor="Black" VerticalOptions="EndAndExpand" HorizontalTextAlignment="Center" ZIndex="2"/>
+                            <Entry x:Name="NumberPicker" Grid.Row="3" Grid.ColumnSpan="2" Text="{Binding NumberOfItems, Mode=TwoWay}" Keyboard="Numeric" HorizontalOptions="FillAndExpand" FontSize="Micro" TextColor="Black" VerticalOptions="End" HorizontalTextAlignment="Center"/>
                         </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>        
+        
+        <Border Grid.Row="2" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand" StrokeThickness="2" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="0,10,0,5" Padding="5" StrokeShape="RoundRectangle 20">
+            <Label Text="Disponibili" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" Style="{StaticResource ListMainText}"/>
+        </Border>
+        
+        <CollectionView Grid.Row="3" ItemsSource="{Binding AvailableItems}" ItemsLayout="VerticalGrid,3">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="viewmodels:OrderItem">
+                    <Border BackgroundColor="LightGreen" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="0,0,0,0" Padding="5" StrokeShape="RoundRectangle 20">
+                        <Grid VerticalOptions="FillAndExpand">
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="SelectItem_Clicked"/>
+                            </Grid.GestureRecognizers>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Label Style="{StaticResource ListMainText}" Text="{Binding Item.Ingredient.Name}" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                            <Label Style="{StaticResource ListSubText}" Text="{Binding Item.Ingredient.Category}" Grid.Row="1" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                            <Label Style="{StaticResource ListSubText}" Text="{Binding Item.Supplier.SupplierName}" Grid.Row="2" HorizontalOptions="CenterAndExpand" VerticalOptions="StartAndExpand"/>
+                            <Label Style="{StaticResource ListSubText}" Text="{Binding Item.Cost}" Grid.Row="2" Grid.Column="1" HorizontalOptions="CenterAndExpand" VerticalOptions="StartAndExpand"/>
+                            <Entry x:Name="NumberPicker" Grid.Row="3" Grid.ColumnSpan="2" Text="{Binding NumberOfItems, Mode=TwoWay}" Keyboard="Numeric" HorizontalOptions="FillAndExpand" FontSize="Micro" TextColor="Black" VerticalOptions="End" HorizontalTextAlignment="Center"/>
+                        </Grid>                            
                     </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

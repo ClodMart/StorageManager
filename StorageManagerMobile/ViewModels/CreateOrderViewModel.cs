@@ -14,6 +14,7 @@ namespace StorageManagerMobile.ViewModels
     {
         public int NumberOfItems { get; set; }
         public bool IsSelected { get; set; }
+        public bool IsFocused { get; set; }
         public IngredientsFormat Item { get; set; }
         public List<int> Numbers { get; set; }
 
@@ -35,6 +36,8 @@ namespace StorageManagerMobile.ViewModels
         private static readonly StorageManagerDBContext context = DBService.Instance.DbContext;
         private static readonly IngredientsFormatsRepository IngredientsFormatsRepository = new IngredientsFormatsRepository(context);
         private static readonly CategoryIngredientListsRepository CategoryIngredientListsRepository = new CategoryIngredientListsRepository(context);
+
+        public bool ItemsMissed = false;
 
         private List<OrderItem> items;
         public List<OrderItem> Items
@@ -64,11 +67,33 @@ namespace StorageManagerMobile.ViewModels
             List<IngredientsFormat> IF = IngredientsFormatsRepository.GetDefaultFormatFromCategoryIngredientList(IngList);
             foreach (IngredientsFormat x in IF)
             {
-                items.Add(new OrderItem(x));
+                if (x != null)
+                {
+                    items.Add(new OrderItem(x));
+                }
+                else
+                {
+                    ItemsMissed = true;
+                }
             }
             Items = items;
             AvailableItems = new ObservableCollection<OrderItem>(items);
             SelectedItems = new ObservableCollection<OrderItem>();
+        }
+
+        public void SelectItem(OrderItem item)
+        {
+            AvailableItems.Remove(item);
+            item.IsSelected= true;
+            SelectedItems.Add(item);
+            
+        }
+
+        public void DeselectItem(OrderItem item)
+        {
+            SelectedItems.Remove(item);
+            item.IsSelected= false;
+            AvailableItems.Add(item);
         }
 
     }
