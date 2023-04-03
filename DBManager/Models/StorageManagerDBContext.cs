@@ -50,6 +50,8 @@ namespace DBManager.Models
 
                 entity.Property(e => e.IngredientId).HasColumnName("Ingredient_id");
 
+                entity.Property(e => e.Quantity).HasDefaultValueSql("1");
+
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.CategoryIngredientLists)
                     .HasForeignKey(d => d.CategoryId)
@@ -160,7 +162,7 @@ namespace DBManager.Models
 
                 entity.Property(e => e.IngredientId).HasColumnName("Ingredient_Id");
 
-                entity.Property(e => e.OrderId).HasColumnName("Order_Id");
+                entity.Property(e => e.OrderCategoryId).HasColumnName("OrderCategory_Id");
 
                 entity.Property(e => e.Quantity).HasDefaultValueSql("1");
 
@@ -170,9 +172,9 @@ namespace DBManager.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_Ingredient");
 
-                entity.HasOne(d => d.Order)
+                entity.HasOne(d => d.OrderCategory)
                     .WithMany(p => p.OrdersLists)
-                    .HasForeignKey(d => d.OrderId)
+                    .HasForeignKey(d => d.OrderCategoryId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_Order");
             });

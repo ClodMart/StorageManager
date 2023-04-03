@@ -76,6 +76,12 @@ namespace DBManager.Interfacce
             _dbContext.SaveChanges();
         }
 
+        public long GetNextId()
+        {
+            long OUT = _dbContext.OrderCategories.Max(x => x.Id);
+            return OUT+1;
+        }
+
         public string InsertFromCSV(string fileUri)
         {
             return "";

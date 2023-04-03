@@ -51,6 +51,8 @@ namespace StorageManagerMobile.ViewModels.Details
         public OrderCategoryDetailsViewModel()
         {
             NewCategory = true;
+            Cat.Id = OrderCategoriesRepository.GetNextId();
+            IngredientList = new ObservableCollection<CategoryIngredientList>(new List<CategoryIngredientList>());
         }
 
         public OrderCategoryDetailsViewModel(long CategoryId)
@@ -65,7 +67,7 @@ namespace StorageManagerMobile.ViewModels.Details
         public void RefreshIngredientList()
         {
             IngredientList.Clear();
-            IngredientList = new ObservableCollection<CategoryIngredientList>(CategoryIngredientListsRepository.GetFromCategory_Id(Cat.Id));
+                IngredientList = new ObservableCollection<CategoryIngredientList>(CategoryIngredientListsRepository.GetFromCategory_Id(Cat.Id));          
         }
 
         public void AddCategoryIngredient(Ingredient Ing)
