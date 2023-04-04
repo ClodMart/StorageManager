@@ -53,4 +53,9 @@ public partial class CreateOrder : ContentPage
         OrderItem Current = (OrderItem)((Entry)sender).BindingContext;
         ((CreateOrderViewModel)BindingContext).UpdateListing(Current);
     }
+
+    private void ExportButton_Clicked(object sender, EventArgs e)
+    {
+
+    }
 }

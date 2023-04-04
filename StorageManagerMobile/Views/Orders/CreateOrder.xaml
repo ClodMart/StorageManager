@@ -19,7 +19,7 @@
         </Grid.RowDefinitions>
 
         <VerticalStackLayout Grid.Row="0" HorizontalOptions="CenterAndExpand" Margin="0,0,0,5">
-            <Button x:Name="ExportButton" Text="Export Order" Margin="0,5,0,0"/>
+            <Button x:Name="ExportButton" Text="Export Order" Margin="0,5,0,0" Clicked="ExportButton_Clicked"/>
             <Border Grid.Row="0" HorizontalOptions="CenterAndExpand" StrokeThickness="2" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="0,5,0,5" Padding="5" StrokeShape="RoundRectangle 20">
                 <Label Text="Ordine" HorizontalOptions="CenterAndExpand" Style="{StaticResource ListMainText}"/>
             </Border>
@@ -35,18 +35,18 @@
                             </Grid.GestureRecognizers>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="auto"/>
-                                <RowDefinition Height="auto"/>
-                                <RowDefinition Height="auto"/>
-                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <Label Style="{StaticResource ListMainText}" Text="{Binding Item.Ingredient.Name}" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand"/>
-                            <Label Style="{StaticResource ListSubText}" Text="{Binding Item.Ingredient.Category}" Grid.Row="1" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand"/>
-                            <Label Style="{StaticResource ListSubText}" Text="{Binding Item.Supplier.SupplierName}" Grid.Row="2" HorizontalOptions="CenterAndExpand"/>
-                            <Label Style="{StaticResource ListSubText}" Text="{Binding Item.Cost}" Grid.Row="2" Grid.Column="1" HorizontalOptions="CenterAndExpand"/>
+                            <Label Style="{StaticResource ListMainText}" Text="{Binding Item.Ingredient.Name}" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                            <Label Style="{StaticResource ListSubText}" Text="{Binding Item.Ingredient.Category}" Grid.Row="1" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                            <Label Style="{StaticResource ListSubText}" Text="{Binding Item.Supplier.SupplierName}" Grid.Row="2" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                            <Label Style="{StaticResource ListSubText}" Text="{Binding Item.Cost}" Grid.Row="2" Grid.Column="1" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
                             <Entry x:Name="NumberPicker" Grid.Row="3" Grid.ColumnSpan="2" Text="{Binding Listing.Quantity, Mode=TwoWay}" Keyboard="Numeric" HorizontalOptions="FillAndExpand" FontSize="Micro" TextColor="Black" VerticalOptions="End" HorizontalTextAlignment="Center" TextChanged="NumberPicker_TextChanged"/>
                         </Grid>
                     </Border>
@@ -68,9 +68,9 @@
                             </Grid.GestureRecognizers>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="auto"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
                                 <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
