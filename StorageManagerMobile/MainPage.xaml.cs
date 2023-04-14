@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Maui.Views;
+﻿using CommunityToolkit.Maui.Storage;
+using CommunityToolkit.Maui.Views;
 using StorageManagerMobile.ViewModels;
 using StorageManagerMobile.Views;
 using System.Reflection;

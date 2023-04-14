@@ -23,6 +23,8 @@ namespace DBManager.Models
         public virtual DbSet<Order> Orders { get; set; } = null!;
         public virtual DbSet<OrderCategory> OrderCategories { get; set; } = null!;
         public virtual DbSet<OrdersList> OrdersLists { get; set; } = null!;
+        public virtual DbSet<Product> Products { get; set; } = null!;
+        public virtual DbSet<ProductComposition> ProductCompositions { get; set; } = null!;
         public virtual DbSet<Supplier> Suppliers { get; set; } = null!;
         public virtual DbSet<UnitsOfMeasure> UnitsOfMeasures { get; set; } = null!;
 
@@ -31,7 +33,7 @@ namespace DBManager.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseNpgsql("Host=192.168.1.222,5432;Database=StorageManagerDB;Username=postgres;Password=1234");
+                optionsBuilder.UseNpgsql("Host=192.168.1.107,5432;Database=StorageManagerDB;Username=postgres;Password=1234");
             }
         }
 
@@ -177,6 +179,44 @@ namespace DBManager.Models
                     .HasForeignKey(d => d.OrderCategoryId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_Order");
+            });
+
+            modelBuilder.Entity<Product>(entity =>
+            {
+                entity.Property(e => e.Id).UseIdentityAlwaysColumn();
+
+                entity.Property(e => e.ProductCategory).HasColumnName("Product_Category");
+
+                entity.Property(e => e.ProductCost).HasColumnName("Product_Cost");
+
+                entity.Property(e => e.ProductName).HasColumnName("Product_Name");
+
+                entity.Property(e => e.ProductPrice).HasColumnName("Product_Price");
+            });
+
+            modelBuilder.Entity<ProductComposition>(entity =>
+            {
+                entity.ToTable("Product_Composition");
+
+                entity.Property(e => e.Id).UseIdentityAlwaysColumn();
+
+                entity.Property(e => e.IngredientId).HasColumnName("Ingredient_Id");
+
+                entity.Property(e => e.ProductId).HasColumnName("Product_Id");
+
+                entity.Property(e => e.Quantity).HasDefaultValueSql("1");
+
+                entity.HasOne(d => d.Ingredient)
+                    .WithMany(p => p.ProductCompositions)
+                    .HasForeignKey(d => d.IngredientId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_Ingredient_Id");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.ProductCompositions)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_Product_Id");
             });
 
             modelBuilder.Entity<Supplier>(entity =>

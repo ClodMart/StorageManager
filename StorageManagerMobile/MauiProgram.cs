@@ -1,4 +1,6 @@
 ﻿using CommunityToolkit.Maui;
+using CommunityToolkit.Maui.Storage;
+using StorageManagerMobile.Views.Orders;
 
 namespace StorageManagerMobile
 {
@@ -12,6 +14,9 @@ namespace StorageManagerMobile
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             }).UseMauiCommunityToolkit();
+
+            //builder.Services.AddSingleton(FileSaver.Default);
+            //builder.Services.AddTransient<CreateOrder>();
             return builder.Build();
         }
     }

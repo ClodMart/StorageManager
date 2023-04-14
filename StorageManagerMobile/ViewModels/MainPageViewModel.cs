@@ -52,6 +52,13 @@ namespace StorageManagerMobile.ViewModels
             set { newOrderViewModel = value; NotifyPropertyChanged(); }
         }
 
+        private ProductsViewModel productsViewModel;
+        public ProductsViewModel ProductsViewModel
+        {
+            get { return productsViewModel; }
+            set { productsViewModel = value; NotifyPropertyChanged(); }
+        }
+
         private List<PageLink> menuList;
         public List<PageLink> MenuList { get { return menuList; } set { menuList = value; NotifyPropertyChanged(); } }
 
@@ -71,15 +78,16 @@ namespace StorageManagerMobile.ViewModels
                 new PageLink("Home","HomePage"),
                 new PageLink("Fornitori", "SuppliersPage"),
                 new PageLink("Ingredienti", "Ingredients"),
-                new PageLink("Nuovo Ordine", "NewOrder"),
-                
+                new PageLink("Prodotti", "Products"),
+                new PageLink("Nuovo Ordine", "NewOrder"), 
             };
             MenuViewModel = new FlyoutMenuViewModel(MenuList.Select(x => x.Label).ToList());
 
-            IngredientList = context.Ingredients.ToList();
+            //IngredientList = context.Ingredients.ToList();
             IngredientsViewModel = new IngredientsViewModel();
             SuppliersViewModel = new SuppliersViewModel();
             NewOrderViewModel = new NewOrderViewModel();
+            ProductsViewModel = new ProductsViewModel();
 
             InizializeModel();
 
@@ -113,6 +121,10 @@ namespace StorageManagerMobile.ViewModels
                 else if(newPage is NewOrder)
                 {
                     newPage.BindingContext = NewOrderViewModel;
+                }
+                else if (newPage is Products)
+                {
+                    newPage.BindingContext = ProductsViewModel;
                 }
                 Pages.Add(newPage);
             }

@@ -1,6 +1,17 @@
 using DBManager.Models;
+using PdfSharp.Maui;
 using StorageManagerMobile.ViewModels;
+using StorageManagerMobile.Views.Orders.ExportTemplate;
 using System.Text;
+using PdfSharpCore;
+using CommunityToolkit.Maui.Storage;
+using System.IO;
+using System.Threading;
+using PdfSharpCore.Pdf;
+using PdfSharpCore.Drawing;
+using Microsoft.EntityFrameworkCore.Migrations.Internal;
+using Microsoft.Maui.Controls.PlatformConfiguration;
+using CommunityToolkit.Maui.Alerts;
 
 namespace StorageManagerMobile.Views.Orders;
 
@@ -42,20 +53,29 @@ public partial class CreateOrder : ContentPage
         ((CreateOrderViewModel)BindingContext).DeselectItem(Current);
     }
 
-    //private void NumberPicker_Focused(object sender, FocusEventArgs e)
-    //{
-    //    OrderItem Current = (OrderItem)((Picker)sender).BindingContext;
-    //    Current.IsFocused = false;
-    //}
-
     private void NumberPicker_TextChanged(object sender, TextChangedEventArgs e)
     {
         OrderItem Current = (OrderItem)((Entry)sender).BindingContext;
         ((CreateOrderViewModel)BindingContext).UpdateListing(Current);
     }
 
+    async Task SaveFile(CancellationToken cancellationToken, PdfDocument document)
+    {
+        using var stream = new MemoryStream();
+        document.Save(stream, false);
+        var fileSaverResult = await FileSaver.Default.SaveAsync("test.pdf", stream, cancellationToken);
+        if (fileSaverResult.IsSuccessful)
+        {
+            await Toast.Make($"The file was saved successfully to location: {fileSaverResult.FilePath}").Show(cancellationToken);
+        }
+        else
+        {
+            await Toast.Make($"The file was not saved successfully with error: {fileSaverResult.Exception.Message}").Show(cancellationToken);
+        }
+    }
+
     private void ExportButton_Clicked(object sender, EventArgs e)
     {
-
+        Navigation.PushAsync(new ExportPreview());
     }
 }

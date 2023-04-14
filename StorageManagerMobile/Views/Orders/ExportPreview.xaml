@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:views="clr-namespace:StorageManagerMobile.Views.Orders.ExportTemplate"
+             x:Class="StorageManagerMobile.Views.Orders.ExportPreview"
+             Title="ExportPreview">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+        <Picker Grid.Row="0"/>
+
+        <views:OrderTemplate1 x:Name="Preview" Grid.Row="1" />
+        <Button Text="Export" Clicked="ExportButton_Clicked" Grid.Row="2"/>
+    </Grid>
+</ContentPage>

@@ -19,8 +19,7 @@ namespace StorageManagerMobile.ViewModels.Groupings
     {
         #region Parameters
 
-        private static readonly StorageManagerDBContext context = DBService.Instance.DbContext;
-        private static readonly IngredientsRepository IngredientsRepository = new IngredientsRepository(context);
+        private static readonly StorageManagerDBContext context = DBService.Instance.DbContext;   
         private static readonly IngredientsFormatsRepository IngredientsFormatsRepository = new IngredientsFormatsRepository(context);
 
         private List<IngredientsFormat> AllFormats = new List<IngredientsFormat>();
