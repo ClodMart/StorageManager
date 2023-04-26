@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StorageManagerMobile.Views.Product.ProductDetail"
+              xmlns:res="clr-namespace:StorageManagerMobile.Resources"
+             xmlns:db="clr-namespace:DBManager.Models;assembly=DBManager"
+             xmlns:viewmodels="clr-namespace:StorageManagerMobile.ViewModels.Details"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:DataType="viewmodels:ProductDetailsViewModel"
+             Title="ProductDetail">
+    <ContentPage.Resources>
+        <res:IntToColorConverter x:Key="IntToColor"/>
+        <res:DoubleToColorConverter x:Key="DoubleToColor"/>
+        <res:BoolToHeight x:Key="BoolToHeight"/>
+        <res:BoolToImageConverterDarkMode x:Key="BoolToImageDark"/>
+        <res:BoolToImageConverterLightmode x:Key="BoolToImageLight"/>
+        <res:IntRounder x:Key="Rounder"/>
+        <res:IdToSupplierConverter x:Key="SupplierConverter"/>
+        <res:IdToIngredientConverter x:Key="IngredientConverter"/>
+        <res:DatetimeToDate x:Key="DateTimeToDate"/>
+        <res:IsUsedValueConverter x:Key="IsUsedConverter"/>
+    </ContentPage.Resources>
+    <VerticalStackLayout>
+        <Grid VerticalOptions="CenterAndExpand" Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <HorizontalStackLayout Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                <Label Text="Name" Margin="0" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand"/>
+                <Entry x:Name="ProductName" Margin="5,0,0,0" Style="{StaticResource ListMainText}" Text="{Binding Product.ProductName, Mode=TwoWay}" TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                <Label Text="Category" Margin="0" Grid.Row="1" Grid.Column="0" HorizontalOptions="EndAndExpand" VerticalOptions="CenterAndExpand"/>
+                <Entry x:Name="Category" Margin="5,0,0,0" Text="{Binding Product.ProductCategory, Mode=TwoWay}" TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}" Grid.Row="1" Grid.Column="2" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" Margin="0,0,0,0">
+                <HorizontalStackLayout Margin="-30,0,30,0">
+                    <Label Text="Price" Margin="0" Grid.Row="1" Grid.Column="0" HorizontalOptions="EndAndExpand" VerticalOptions="CenterAndExpand"/>
+                    <Entry x:Name="Price" Margin="5,0,0,0" Keyboard="Numeric" Text="{Binding Product.ProductPrice, Mode=TwoWay}" TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}" Grid.Row="1" Grid.Column="2" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand"/>
+                </HorizontalStackLayout>
+            </HorizontalStackLayout>
+            <VerticalStackLayout Grid.Row="3" Grid.RowSpan="2" Grid.Column="0" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                <Label Text="Notes" Margin="0" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                <Editor x:Name="Notes" Margin="5,0,0,0" MaximumWidthRequest="350" FontAutoScalingEnabled="True" Placeholder="{Binding Product.Notes}" PlaceholderColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}" Grid.Row="1" Grid.Column="2" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+            </VerticalStackLayout>
+            <CollectionView Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" ItemsSource="{Binding Compositions}">
+                <CollectionView.Header>
+                    <HorizontalStackLayout HorizontalOptions="CenterAndExpand">
+                        <Label Text="Ingredienti" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                        <ImageButton Style="{StaticResource AddIcon}" Padding="5" VerticalOptions="CenterAndExpand" Clicked="ImageButton_Clicked"/>
+                    </HorizontalStackLayout>
+                </CollectionView.Header>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="db:ProductComposition">
+                        <Border Grid.Row="2" StrokeThickness="2" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="10,5,10,0" StrokeShape="RoundRectangle 20">
+                            <Grid Margin="5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Label x:Name="SupplierName" Text="{Binding IngredientId, Converter={StaticResource IngredientConverter}}" TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+                                <ImageButton x:Name="DeleteFormat" Style="{StaticResource DeleteIcon}" Grid.Column="1" Grid.RowSpan="2"  Padding="5" HeightRequest="50" WidthRequest="50" Clicked="DeleteFormat_Clicked"/>
+                                <HorizontalStackLayout Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" >
+                                    <HorizontalStackLayout Grid.Row="1" Grid.Column="2" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand" Margin="5">
+                                        <Label Text="Kg" Margin="0" Grid.Row="1" Grid.Column="0" HorizontalOptions="EndAndExpand" VerticalOptions="CenterAndExpand"/>
+                                        <Entry x:Name="SizeKg" Margin="5,0,0,0" Keyboard="Numeric" Text="{Binding Quantity, Mode=TwoWay}" TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}" Grid.Row="1" Grid.Column="2" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand"/>
+                                    </HorizontalStackLayout>
+                                    <HorizontalStackLayout Grid.Row="2" Grid.Column="2" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand" Margin="5">
+                                        <Label Text="Cost" Margin="0" Grid.Row="1" Grid.Column="0" HorizontalOptions="EndAndExpand" VerticalOptions="CenterAndExpand"/>
+                                        <Entry x:Name="Cost" Margin="5,0,0,0" Keyboard="Numeric" Text="{Binding Cost, Mode=TwoWay}" TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}" Grid.Row="1" Grid.Column="2" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand"/>
+                                    </HorizontalStackLayout>
+                                    <!--<HorizontalStackLayout Grid.Row="3" Grid.Column="2" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand" Margin="5">
+                                        <Label Text="Cost" Margin="0" Grid.Row="1" Grid.Column="0" HorizontalOptions="EndAndExpand" VerticalOptions="CenterAndExpand"/>
+                                        <Entry x:Name="Cost" Margin="5,0,0,0" Keyboard="Numeric" Text="{Binding Cost, Mode=TwoWay}" TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}" Grid.Row="1" Grid.Column="2" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand"/>
+                                    </HorizontalStackLayout>-->
+                                </HorizontalStackLayout>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+        <HorizontalStackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="Center" Grid.Row="2">
+            <Button x:Name="Save" Margin="5"  Text=" Salva " HorizontalOptions="CenterAndExpand" VerticalOptions="Center" Grid.Row="2" WidthRequest="100" Command="{Binding SaveModifications}" Clicked="Save_Clicked"/>
+            <Button x:Name="Elimina" Margin="5"  Text="Elimina" HorizontalOptions="CenterAndExpand" VerticalOptions="Center" Grid.Row="2" WidthRequest="100" Command="{Binding Delete}"/>
+        </HorizontalStackLayout>
+    </VerticalStackLayout>
+</ContentPage>

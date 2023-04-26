@@ -55,7 +55,14 @@ namespace DBManager.Interfacce
                 {
                     foreach (var entity in entities)
                     {
-                        _dbContext.ProductCompositions.Add(entity);
+                        if(_dbContext.ProductCompositions.Any(x=>x.Id== entity.Id))
+                        {
+                            _dbContext.ProductCompositions.Update(entity);
+                        }
+                        else
+                        {
+                            _dbContext.ProductCompositions.Add(entity);
+                        }                        
                     }
                     _dbContext.SaveChanges();
                     dbContextTrans.Commit();
@@ -143,6 +150,12 @@ namespace DBManager.Interfacce
             {
                 OUT.Add(_dbContext.ProductCompositions.FirstOrDefault(y => y.Id == x));
             }
+            return OUT;
+        }
+
+        public List<ProductComposition> GetAllByProductId(long Id)
+        {
+            List<ProductComposition> OUT = _dbContext.ProductCompositions.Where(y => y.ProductId == Id).ToList();
             return OUT;
         }
     }

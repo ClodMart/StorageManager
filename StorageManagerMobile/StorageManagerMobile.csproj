@@ -149,6 +149,12 @@
 	  <MauiXaml Update="Views\Products.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\Product\Popup\IngredientSelection.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Product\ProductDetail.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\Suppliers.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -161,10 +167,6 @@
 	  <MauiXaml Update="Views\Suppliers\SupplierDetail.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Views\Products\" />
 	</ItemGroup>
 
 </Project>

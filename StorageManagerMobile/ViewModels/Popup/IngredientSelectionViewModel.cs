@@ -11,27 +11,43 @@ using System.Windows.Input;
 
 namespace StorageManagerMobile.ViewModels.Popup
 {
-    public class AddIngredientToOrderListViewModel : BaseViewModel
+    public class IngredientSelectionViewModel : BaseViewModel
     {
         private static readonly StorageManagerDBContext context = DBService.Instance.DbContext;
         private static readonly IngredientsRepository IngredientsRepository = new IngredientsRepository(context);
+        private static readonly IngredientsFormatsRepository ingredientsFormatsRepository = new IngredientsFormatsRepository(context);
+        private static readonly ProductCompositionsRepository ProductCompositionsRepository = new ProductCompositionsRepository(context);
 
         private List<Ingredient> AllIngredients { get; set; }
 
-        private OrderCategory cat;
-        public OrderCategory Cat { get { return cat; } set { cat = value; NotifyPropertyChanged(); } }
+        private Product product;
+        public Product Product { get { return product; } set { product = value; NotifyPropertyChanged(); } }
 
         private Ingredient ingredient;
         public Ingredient Ingredient { get { return ingredient; } set { ingredient = value; NotifyPropertyChanged(); } }
 
         private ObservableCollection<Ingredient> ingredients;
-        public ObservableCollection<Ingredient> Ingredients { get { return ingredients; } set { ingredients = value;NotifyPropertyChanged(); } }
+        public ObservableCollection<Ingredient> Ingredients { get { return ingredients; } set { ingredients = value; NotifyPropertyChanged(); } }
 
-        public AddIngredientToOrderListViewModel(OrderCategory cat)
+        private double quantity;
+        public double Quantity
+        {
+            get { return quantity; }
+            set { quantity = value; NotifyPropertyChanged(); }
+        }
+
+        public IngredientSelectionViewModel(Product prod)
         {
             AllIngredients = IngredientsRepository.GetAll().ToList();
             Ingredients = new ObservableCollection<Ingredient>(AllIngredients);
-            Cat = cat;
+            Product = prod;
+        }
+
+        public IngredientSelectionViewModel()
+        {
+            AllIngredients = IngredientsRepository.GetAll().ToList();
+            Ingredients = new ObservableCollection<Ingredient>(AllIngredients);
+            Product = new Product();
         }
 
         public ICommand PerformSearch => new Command<string>((query) =>
@@ -59,7 +75,17 @@ namespace StorageManagerMobile.ViewModels.Popup
 
             results.Sort((l, r) => l.Name.CompareTo(r.Name));
             Ingredients = new ObservableCollection<Ingredient>(results);
-            //CollapseExpanders();
+        }
+
+        public double GetCost()
+        {
+            double cost = 0;
+            IngredientsFormat format = ingredientsFormatsRepository.GetFormatsFromIngredientId(Ingredient.Id).FirstOrDefault(x => x.IsDefault);
+            if (format != null) 
+            {
+                cost = (double)format.Cost * Quantity;
+            }
+            return cost;
         }
     }
 }

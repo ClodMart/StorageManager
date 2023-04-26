@@ -15,6 +15,7 @@ namespace DBManager.Models
         public double ProductPrice { get; set; }
         public double? ProductCost { get; set; }
         public string ProductCategory { get; set; } = null!;
+        public string? Notes { get; set; }
 
         public virtual ICollection<ProductComposition> ProductCompositions { get; set; }
     }

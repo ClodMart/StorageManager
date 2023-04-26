@@ -15,7 +15,7 @@
         <res:BoolToHeight x:Key="BoolToHeight"/>
         <res:BoolToImageConverterDarkMode x:Key="BoolToImageDark"/>
         <res:BoolToImageConverterLightmode x:Key="BoolToImageLight"/>
-        <res:IntRounder x:Key="Rounder"/>
+        <res:DoubleRounder x:Key="Rounder"/>
         <res:IdToSupplierConverter x:Key="SupplierConverter"/>
         <res:IdToProductConverter x:Key="ProductConverter"/>
         <res:IdToIngredientConverter x:Key="IngedientConverter"/>
@@ -133,7 +133,7 @@
                                 <CollectionView x:Name="ExpanderContent" ItemsSource="{Binding Compositions}">
                                     <CollectionView.ItemTemplate>
                                         <DataTemplate  x:DataType="db:ProductComposition">
-                                            <Grid Padding="0" HeightRequest="50" WidthRequest="350" Margin="5">
+                                            <Grid Padding="5" HeightRequest="50" WidthRequest="350" Margin="5">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="auto"/>
                                                     <ColumnDefinition Width="3*"/>
@@ -147,8 +147,8 @@
                                                 </Grid.RowDefinitions>
                                                 <!--<RadioButton x:Name="SetDefault" IsChecked="{Binding IsDefault}" CheckedChanged="SetDefault_Clicked"/>-->
                                                 <Label x:Name="Id PlaceHolder" Text="{Binding Id}" IsVisible="false"/>
-                                                <Label x:Name="SupplierName" Text="{Binding ProductId, Converter={StaticResource ProductConverter}}" Style="{StaticResource ListMainText}" Grid.Column="1" Grid.Row="0" VerticalOptions="EndAndExpand" HorizontalOptions="StartAndExpand" Padding="0"/>
-                                                <Label Text="{Binding Product.ProductCategory, Converter={StaticResource DateTimeToDate}}" Style="{StaticResource ListSubText}" Grid.Column="1" Grid.Row="1" VerticalOptions="StartAndExpand" HorizontalOptions="StartAndExpand" />
+                                                <Label x:Name="SupplierName" Text="{Binding IngredientId, Converter={StaticResource IngedientConverter}}" Style="{StaticResource ListMainText}" Grid.Column="1" Grid.Row="0" VerticalOptions="EndAndExpand" HorizontalOptions="StartAndExpand" Padding="0"/>
+                                                <Label Text="{Binding Ingredient.Category}" Style="{StaticResource ListSubText}" Grid.Column="1" Grid.Row="1" VerticalOptions="StartAndExpand" HorizontalOptions="StartAndExpand" />
                                                 <Label Text="{Binding Quantity}" FontSize="Small" FontAttributes="Italic" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="CenterAndExpand"/>
                                                 <Frame Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" CornerRadius="10" Padding="10" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
                                                     <Label Text="{Binding Cost, Converter={StaticResource Rounder}}" FontSize="Small" FontAttributes="Italic"/>

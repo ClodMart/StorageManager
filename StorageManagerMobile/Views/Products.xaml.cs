@@ -1,5 +1,8 @@
 using CommunityToolkit.Maui.Views;
 using DBManager.Models;
+using StorageManagerMobile.ViewModels.Details;
+using StorageManagerMobile.ViewModels.Groupings;
+using StorageManagerMobile.Views.Product;
 
 namespace StorageManagerMobile.Views;
 
@@ -89,11 +92,11 @@ public partial class Products : ContentPage
 
     private void EditIngredientGroup_Clicked(object sender, EventArgs e)
     {
-        //IngredientViewerViewModel Current = (IngredientViewerViewModel)((ImageButton)sender).BindingContext;
-        //IngredientDetailViewModel VM = new IngredientDetailViewModel(Current);
-        //IngredientDetail Edit = new IngredientDetail();
-        //Edit.BindingContext = VM;
-        //Navigation.PushAsync(Edit);
+        ProductViewerViewModel Current = (ProductViewerViewModel)((ImageButton)sender).BindingContext;
+        ProductDetailsViewModel VM = new ProductDetailsViewModel(Current);
+        ProductDetail Edit = new ProductDetail();
+        Edit.BindingContext = VM;
+        Navigation.PushAsync(Edit);
     }
 
     private void SetDefault_Clicked(object sender, CheckedChangedEventArgs e)
