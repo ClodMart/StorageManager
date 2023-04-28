@@ -1,5 +1,6 @@
 using CommunityToolkit.Maui.Views;
 using DBManager.Models;
+using StorageManagerMobile.ViewModels;
 using StorageManagerMobile.ViewModels.Details;
 using StorageManagerMobile.ViewModels.Groupings;
 using StorageManagerMobile.Views.Product;
@@ -47,7 +48,7 @@ public partial class Products : ContentPage
 
     public void RefreshList()
     {
-        //((IngredientsViewModel)BindingContext).RefreshIngredientList();
+       ((ProductsViewModel)BindingContext).RefreshIngredientList();
     }
 
     private void ContentPage_NavigatedTo(object sender, NavigatedToEventArgs e)
@@ -126,13 +127,13 @@ public partial class Products : ContentPage
 
     private void Delete_Clicked(object sender, EventArgs e)
     {
-        //IngredientsFormat Selected = (IngredientsFormat)((ImageButton)sender).BindingContext;
-        //IngredientViewerViewModel Current = ((IngredientsViewModel)BindingContext).IngredientList.FirstOrDefault(x => x.Title.Id == Selected.IngredientId);
-        //if (Current.DeleteIngredient(Selected) == 0)
-        //{
-        //    ((IngredientsViewModel)BindingContext).DeleteIngredients(Current);
-        //}
-        //RefreshList();
+        ProductComposition Selected = (ProductComposition)((ImageButton)sender).BindingContext;
+        ProductViewerViewModel Current = ((ProductsViewModel)BindingContext).ProductList.FirstOrDefault(x => x.Title.Id == Selected.ProductId);
+        if (Current.DeleteComposition(Selected) == 0)
+        {
+           // ((IngredientsViewModel)BindingContext).DeleteIngredients(Current);
+        }
+        RefreshList();
     }
 
     #endregion

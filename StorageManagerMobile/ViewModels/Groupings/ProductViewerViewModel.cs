@@ -126,6 +126,24 @@ namespace StorageManagerMobile.ViewModels.Groupings
                 ProductCompositionsRepository.Delete(composition);
             }
         }
+
+        public int DeleteComposition(ProductComposition composition)
+        {
+            try
+            {
+                if (composition != null)
+                {
+                    Compositions.Remove(composition);
+                    ProductCompositionsRepository.Delete(composition);
+                }
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+            
+        }
         #endregion
     }
 }
