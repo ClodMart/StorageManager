@@ -2,6 +2,7 @@
 using DBManager.Interfacce;
 using DBManager.Models;
 using Microsoft.EntityFrameworkCore;
+using StorageManagerMobile.Resources;
 using StorageManagerMobile.Services;
 using StorageManagerMobile.ViewModels.Groupings;
 using System;
@@ -20,20 +21,39 @@ namespace StorageManagerMobile.ViewModels
     {
         private static readonly StorageManagerDBContext context = DBService.Instance.DbContext;
         private static readonly IngredientsRepository IngredientsRepository = new IngredientsRepository(context);
+        private static readonly IsUsedValuesRepository isUsedValuesRepository = new IsUsedValuesRepository(context);
 
         private string LastSearch = "";
+        private string LastSearchUnused = "";
         private string LastFilter = "FilterAll";
 
         private List<Ingredient> AllIngredients = new List<Ingredient>();
+        private List<Ingredient> NotUsedIngredients = new List<Ingredient>();
+        private List<Ingredient> UsedIngredients = new List<Ingredient>();
+        private List<IngredientViewerViewModel> UsedIngredientLists = new List<IngredientViewerViewModel>();
+        private List<IngredientViewerViewModel> NotUsedIngredientLists = new List<IngredientViewerViewModel>();
         private List<IngredientViewerViewModel> FullIngredients { get; set; }
         private List<IngredientViewerViewModel> FilteredIngredients { get; set; }
 
+        private List<string> usedValuesList = new List<string>() { "Tutti" };
+        public List<string> UsedValuesList
+        {
+            get { return usedValuesList; }
+            set { usedValuesList = value; NotifyPropertyChanged(); }
+        }
 
         private ObservableCollection<IngredientViewerViewModel> ingredientList;
         public ObservableCollection<IngredientViewerViewModel> IngredientList
         {
             get { return ingredientList; }
             set { ingredientList = value; NotifyPropertyChanged(); }
+        }
+
+        private ObservableCollection<IngredientViewerViewModel> notUsedIngredientList;
+        public ObservableCollection<IngredientViewerViewModel> NotUsedIngredientList
+        {
+            get { return notUsedIngredientList; }
+            set { notUsedIngredientList = value; NotifyPropertyChanged(); }
         }
 
         private bool showFilters = false;
@@ -43,36 +63,44 @@ namespace StorageManagerMobile.ViewModels
             set { showFilters = value; NotifyPropertyChanged(); }
         }
 
-        public IngredientsViewModel()
+        private bool showNotUsed = false;
+        public bool ShowNotUsed
         {
-            AllIngredients = IngredientsRepository.GetAll().ToList();
-            AllIngredients.Sort((l, r) => l.Name.CompareTo(r.Name));
-            FullIngredients = new List<IngredientViewerViewModel>();
-
-            foreach (Ingredient x in AllIngredients)
-            {
-                FullIngredients.Add(new IngredientViewerViewModel(x));
-            }
-            FilteredIngredients = FullIngredients;
-            IngredientList = new ObservableCollection<IngredientViewerViewModel>(FullIngredients);
+            get { return showNotUsed; }
+            set { showNotUsed = value; NotifyPropertyChanged(); }
         }
 
-        #region Icommands
+        public IngredientsViewModel()
+        {
+            UsedValuesList.AddRange(UsedValues.IsUsedValues.Where(x=>!x.CorrespondsToUsed).Select(x=>x.Description).ToList());
+            List<long> IsUsedID = isUsedValuesRepository.GetUsedId();
+            AllIngredients = IngredientsRepository.GetAll().ToList();
+            NotUsedIngredients = AllIngredients.Where(x=> !IsUsedID.Contains(x.IsUsedValue)).ToList();
+            UsedIngredients = AllIngredients.Where(x => IsUsedID.Contains(x.IsUsedValue)).ToList();
+            
+            foreach(Ingredient y in NotUsedIngredients)
+            {
+                NotUsedIngredientLists.Add(new IngredientViewerViewModel(y));
+            }
+            foreach (Ingredient x in UsedIngredients)
+            {
+                UsedIngredientLists.Add(new IngredientViewerViewModel(x));
+            }
+
+            UsedIngredientLists.Sort((l, r) => l.Title.Name.CompareTo(r.Title.Name));
+            NotUsedIngredientLists.Sort((l, r) => l.Title.Name.CompareTo(r.Title.Name));
+            FilteredIngredients = UsedIngredientLists;
+            IngredientList = new ObservableCollection<IngredientViewerViewModel>(FilteredIngredients);
+            NotUsedIngredientList = new ObservableCollection<IngredientViewerViewModel>(NotUsedIngredientLists);
+        }
+
+        #region UsedIngredients
+        #region UsedCommands
 
         public ICommand PerformSearch => new Command<string>((query) =>
         {
             Search(query);
         });
-
-        public ICommand Filters => new Command(() =>
-        {
-            FiltersMethod();
-        });
-
-        private void FiltersMethod()
-        {
-            ShowFilters = !ShowFilters;
-        }
 
         public void Search(string query)
         {
@@ -84,18 +112,18 @@ namespace StorageManagerMobile.ViewModels
             }
             else
             {
-                foreach (IngredientViewerViewModel Ingredient in FilteredIngredients)
-                {
-                    if (Ingredient.Title.Name.Contains(query, StringComparison.OrdinalIgnoreCase) || Ingredient.Title.Category.Contains(query, StringComparison.OrdinalIgnoreCase))
-                    {
-                        results.Add(Ingredient);
-                    }
-                }
+
+                results = FilteredIngredients.Where(x => x.Title.Name.Contains(query, StringComparison.OrdinalIgnoreCase) || x.Title.Category.Contains(query, StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
             results.Sort((l, r) => l.Title.Name.CompareTo(r.Title.Name));
             IngredientList = new ObservableCollection<IngredientViewerViewModel>(results);
             CollapseExpanders();
+        }
+
+        public void SearchEmpty()
+        {
+            IngredientList = new ObservableCollection<IngredientViewerViewModel>(FilteredIngredients);
         }
 
         private void SearchDefault()
@@ -107,16 +135,20 @@ namespace StorageManagerMobile.ViewModels
             }
             else
             {
-                foreach (IngredientViewerViewModel Ingredient in FilteredIngredients)
-                {
-                    if (Ingredient.Title.Name.Contains(LastSearch, StringComparison.OrdinalIgnoreCase) || Ingredient.Title.Category.Contains(LastSearch, StringComparison.OrdinalIgnoreCase))
-                    {
-                        results.Add(Ingredient);
-                    }
-                }
+                results = FilteredIngredients.Where(x => x.Title.Name.Contains(LastSearch, StringComparison.OrdinalIgnoreCase) || x.Title.Category.Contains(LastSearch, StringComparison.OrdinalIgnoreCase)).ToList();
             }
             results.Sort((l, r) => l.Title.Name.CompareTo(r.Title.Name));
             IngredientList = new ObservableCollection<IngredientViewerViewModel>(results);
+        }
+
+        public ICommand Filters => new Command(() =>
+        {
+            FiltersMethod();
+        });
+
+        private void FiltersMethod()
+        {
+            ShowFilters = !ShowFilters;
         }
 
         public void CollapseExpanders()
@@ -126,29 +158,45 @@ namespace StorageManagerMobile.ViewModels
                 x.IsExpanded = false;
             }
         }
-
         #endregion
-        public void FilterList(string Filter)
+        #region UsedMethods
+
+        public void RefreshIngredientList()
+        {
+            List<long> IsUsedID = isUsedValuesRepository.GetUsedId();
+            AllIngredients = IngredientsRepository.GetAll().ToList();
+            UsedIngredients = AllIngredients.Where(x => IsUsedID.Contains(x.IsUsedValue)).ToList();
+            UsedIngredientLists = new List<IngredientViewerViewModel>();
+            foreach (Ingredient x in UsedIngredients)
+            {
+                UsedIngredientLists.Add(new IngredientViewerViewModel(x));
+            }
+            UsedIngredientLists.Sort((l, r) => l.Title.Name.CompareTo(r.Title.Name));
+            FilteredIngredients = UsedIngredientLists;
+            IngredientList = new ObservableCollection<IngredientViewerViewModel>(FilteredIngredients);
+        }
+
+            public void FilterList(string Filter)
         {
             LastFilter = Filter;
             switch (Filter)
             {
                 case "FilterAll":
-                    FilteredIngredients = FullIngredients;
+                    FilteredIngredients = UsedIngredientLists;
                     SearchDefault();
                     break;
                 case "FilterEnough":
-                    FilteredIngredients = FullIngredients.FindAll(x => x.Title.IsEnough == true);
+                    FilteredIngredients = UsedIngredientLists.FindAll(x => x.Title.IsEnough == true);
                     SearchDefault();
                     break;
                 case "NotEnough":
-                    FilteredIngredients = FullIngredients.FindAll(x => x.Title.IsEnough == false);
+                    FilteredIngredients = UsedIngredientLists.FindAll(x => x.Title.IsEnough == false);
                     SearchDefault();
                     break;
                 case "FilterPriceRising":
                     List<IngredientsFormat> Default = new List<IngredientsFormat>();
                     FilteredIngredients.Clear();
-                    foreach (IngredientViewerViewModel x in FullIngredients)
+                    foreach (IngredientViewerViewModel x in UsedIngredientLists)
                     {
                         if (x.Ingredients.Any(x => x.IsDefault))
                         {
@@ -158,12 +206,11 @@ namespace StorageManagerMobile.ViewModels
                             }
                         }
 
-                    }
-                    //FilteredIngredients = FullIngredients.FindAll(x => x.Ingredients.FirstOrDefault(x=>x.IsDefault).CostDifference > 0);
+                    }                    
                     SearchDefault();
                     break;
                 case "FilterPriceLowering":
-                    foreach (IngredientViewerViewModel x in FullIngredients)
+                    foreach (IngredientViewerViewModel x in UsedIngredientLists)
                     {
                         if (x.Ingredients.Any(x => x.IsDefault))
                         {
@@ -173,8 +220,7 @@ namespace StorageManagerMobile.ViewModels
                             }
                         }
 
-                    }
-                    //FilteredIngredients = FullIngredients.FindAll(x => x.Ingredients.FirstOrDefault(x => x.IsDefault).CostDifference < 0);
+                    }                    
                     SearchDefault();
                     break;
             }
@@ -186,21 +232,21 @@ namespace StorageManagerMobile.ViewModels
             switch (LastFilter)
             {
                 case "FilterAll":
-                    FilteredIngredients = FullIngredients;
+                    FilteredIngredients = UsedIngredientLists;
                     SearchDefault();
                     break;
                 case "FilterEnough":
-                    FilteredIngredients = FullIngredients.FindAll(x => x.Title.IsEnough == true);
+                    FilteredIngredients = UsedIngredientLists.FindAll(x => x.Title.IsEnough == true);
                     SearchDefault();
                     break;
                 case "NotEnough":
-                    FilteredIngredients = FullIngredients.FindAll(x => x.Title.IsEnough == false);
+                    FilteredIngredients = UsedIngredientLists.FindAll(x => x.Title.IsEnough == false);
                     SearchDefault();
                     break;
                 case "FilterPriceRising":
                     List<IngredientsFormat> Default = new List<IngredientsFormat>();
                     FilteredIngredients.Clear();
-                    foreach (IngredientViewerViewModel x in FullIngredients)
+                    foreach (IngredientViewerViewModel x in UsedIngredientLists)
                     {
                         if (x.Ingredients.Any(x => x.IsDefault))
                         {
@@ -209,13 +255,11 @@ namespace StorageManagerMobile.ViewModels
                                 FilteredIngredients.Add(x);
                             }
                         }
-
-                    }
-                    //FilteredIngredients = FullIngredients.FindAll(x => x.Ingredients.FirstOrDefault(x=>x.IsDefault).CostDifference > 0);
+                    }                   
                     SearchDefault();
                     break;
                 case "FilterPriceLowering":
-                    foreach (IngredientViewerViewModel x in FullIngredients)
+                    foreach (IngredientViewerViewModel x in UsedIngredientLists)
                     {
                         if (x.Ingredients.Any(x => x.IsDefault))
                         {
@@ -224,41 +268,9 @@ namespace StorageManagerMobile.ViewModels
                                 FilteredIngredients.Add(x);
                             }
                         }
-
-                    }
-                    //FilteredIngredients = FullIngredients.FindAll(x => x.Ingredients.FirstOrDefault(x => x.IsDefault).CostDifference < 0);
+                    }           
                     SearchDefault();
                     break;
-            }
-
-        }
-
-        public void RefreshIngredientList()
-        {
-            List<Ingredient> ToDelete = new List<Ingredient>();
-            List<Ingredient> List = IngredientsRepository.GetAll().ToList();
-            List.Sort((l, r) => l.Name.CompareTo(r.Name));
-            FullIngredients.Clear();
-
-            foreach (Ingredient x in List)
-            {
-                IngredientViewerViewModel VM = new IngredientViewerViewModel(x);
-                if (VM.Ingredients.Count != 0)
-                {
-                    FullIngredients.Add(VM);
-                }
-                else
-                {
-                    ToDelete.Add(x);
-                }
-            }
-            //FilteredIngredients = FullIngredients;
-            //IngredientList = new ObservableCollection<IngredientViewerViewModel>(FullIngredients);   
-
-            FilterDefault();
-            foreach (Ingredient x in ToDelete)
-            {
-                IngredientsRepository.Delete(x);
             }
         }
 
@@ -272,7 +284,128 @@ namespace StorageManagerMobile.ViewModels
         {
             IngredientList.Remove(Ig);
             FilteredIngredients.Remove(Ig);
-            FullIngredients.Remove(Ig);
+            UsedIngredientLists.Remove(Ig);
         }
+        #endregion
+        #endregion
+
+        #region UnUsedIngredients
+        #region UnUsedCommands
+
+        public ICommand PerformUnusedSearch => new Command<string>((query) =>
+        {
+            SearchUnused(query);
+        });            
+
+        public void SearchUnused(string query)
+        {
+            LastSearchUnused = query;
+            List<IngredientViewerViewModel> results = new List<IngredientViewerViewModel>();
+            if (query == "")
+            {
+                results = NotUsedIngredientLists;
+            }
+            else
+            {
+
+                results = NotUsedIngredientLists.Where(x => x.Title.Name.Contains(query, StringComparison.OrdinalIgnoreCase) || x.Title.Category.Contains(query, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            results.Sort((l, r) => l.Title.Name.CompareTo(r.Title.Name));
+            NotUsedIngredientList = new ObservableCollection<IngredientViewerViewModel>(results);
+            CollapseUnusedExpanders();
+        }
+
+        private void SearchUnusedDefault()
+        {
+            List<IngredientViewerViewModel> results = new List<IngredientViewerViewModel>();
+            if (LastSearch == "")
+            {
+                results = FilteredIngredients;
+            }
+            else
+            {
+                results = FilteredIngredients.Where(x => x.Title.Name.Contains(LastSearch, StringComparison.OrdinalIgnoreCase) || x.Title.Category.Contains(LastSearch, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+            results.Sort((l, r) => l.Title.Name.CompareTo(r.Title.Name));
+            IngredientList = new ObservableCollection<IngredientViewerViewModel>(results);
+        }
+
+
+
+        public void CollapseUnusedExpanders()
+        {
+            foreach (IngredientViewerViewModel x in NotUsedIngredientList)
+            {
+                x.IsExpanded = false;
+            }
+        }
+
+        public void FilterListUnused(string Filter)
+        {
+            long UsedId = isUsedValuesRepository.GetAll().FirstOrDefault(x => x.Description == Filter).Id;
+            NotUsedIngredientList = new ObservableCollection<IngredientViewerViewModel>(NotUsedIngredientLists.Where(x => x.Title.IsUsedValue.Equals(UsedId)));
+        }
+
+        public void RefreshUnusedIngredientList()
+        {
+            List<long> IsUsedID = isUsedValuesRepository.GetUsedId();
+            AllIngredients = IngredientsRepository.GetAll().ToList();
+            List<Ingredient> NotUsed = AllIngredients.Where(x => !IsUsedID.Contains(x.IsUsedValue)).ToList();
+            NotUsedIngredientLists = new List<IngredientViewerViewModel>();
+            foreach (Ingredient x in NotUsed)
+            {
+                NotUsedIngredientLists.Add(new IngredientViewerViewModel(x));
+            }
+            NotUsedIngredientLists.Sort((l, r) => l.Title.Name.CompareTo(r.Title.Name));
+            NotUsedIngredientList = new ObservableCollection<IngredientViewerViewModel>(NotUsedIngredientLists);
+        }
+
+        #endregion
+
+        #endregion      
+
+
+        //public void RefreshIngredientList()
+        //{
+        //    long IsUsedID = isUsedValuesRepository.GetUsedId();
+        //    AllIngredients = IngredientsRepository.GetAll().ToList();
+
+        //    NotUsedIngredients = AllIngredients.Where(x => x.IsUsedValue != IsUsedID).ToList();
+        //    UsedIngredients = AllIngredients.Where(x => x.IsUsedValue == IsUsedID).ToList();
+        //    UsedIngredientLists = new List<IngredientViewerViewModel>();
+
+        //    foreach (Ingredient y in NotUsedIngredients)
+        //    {
+        //        NotUsedIngredientLists.Add(new IngredientViewerViewModel(y));
+        //    }
+        //    foreach (Ingredient x in UsedIngredients)
+        //    {
+        //        UsedIngredientLists.Add(new IngredientViewerViewModel(x));
+        //    }
+        //    if (ShowNotUsed)
+        //    {
+        //        FilteredIngredients = UsedIngredientLists;
+        //        FilteredIngredients.AddRange(NotUsedIngredientLists);
+        //    }
+
+        //    UsedIngredientLists.Sort((l, r) => l.Title.Name.CompareTo(r.Title.Name));
+        //    FilteredIngredients = UsedIngredientLists;
+        //    IngredientList = new ObservableCollection<IngredientViewerViewModel>(FilteredIngredients);
+        //}
+
+        //public void AddNotUsed()
+        //{
+        //    UsedIngredientLists.AddRange(NotUsedIngredientLists);
+        //    FilterDefault();
+        //    SearchDefault();
+        //}
+
+        //public void RemoveNotUsed()
+        //{
+        //    UsedIngredientLists.RemoveAll(NotUsedIngredientLists.Contains);
+        //    FilterDefault();
+        //    SearchDefault();
+        //}
     }
 }

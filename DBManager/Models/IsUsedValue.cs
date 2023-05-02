@@ -12,6 +12,7 @@ namespace DBManager.Models
 
         public long Id { get; set; }
         public string Description { get; set; } = null!;
+        public bool CorrespondsToUsed { get; set; }
 
         public virtual ICollection<Ingredient> Ingredients { get; set; }
     }

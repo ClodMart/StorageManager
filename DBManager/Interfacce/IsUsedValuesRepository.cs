@@ -110,5 +110,10 @@ namespace DBManager.Interfacce
                 }
             }
         }
+
+        public List<long> GetUsedId()
+        {
+            return _dbContext.IsUsedValues.Where(x=>x.CorrespondsToUsed).Select(x=>x.Id).ToList();
+        }
     }
 }

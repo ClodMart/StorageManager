@@ -22,13 +22,17 @@ public partial class Ingredients : ContentPage
 		InitializeComponent();
     }
 
+    #region UsedList
     #region ListManagement
 
     #region Search
-    
+
     private void searchBar_TextChanged(object sender, TextChangedEventArgs e)
     {
-        ((IngredientsViewModel)BindingContext).Search(e.NewTextValue);
+        if(e.NewTextValue == "")
+        {
+            ((IngredientsViewModel)BindingContext).SearchEmpty();
+        }        
     }
 
     #endregion
@@ -59,6 +63,7 @@ public partial class Ingredients : ContentPage
     private void ContentPage_NavigatedTo(object sender, NavigatedToEventArgs e)
     {
         Refresher.IsRefreshing = true;
+        RefresherUnused.IsRefreshing = true;
     }
 
     #endregion
@@ -128,6 +133,7 @@ public partial class Ingredients : ContentPage
             refreshView = true;
         }
     }
+
     #endregion
 
     #region Delete
@@ -147,16 +153,69 @@ public partial class Ingredients : ContentPage
 
     #endregion
 
+    private void AddButton_Clicked(object sender, EventArgs e)
+    {
+        AddIngredient NewPage = new AddIngredient();
+        AddIngredientViewModel VM = new AddIngredientViewModel();
+        NewPage.BindingContext = VM;
+        Navigation.PushAsync(NewPage);
+    }
+    #endregion
     private void Expander_ExpandedChanged(object sender, CommunityToolkit.Maui.Core.ExpandedChangedEventArgs e)
     {
         InvalidateMeasure();
     }
 
-    private void AddButton_Clicked(object sender, EventArgs e)
+    #region UnusedList
+
+    private void UnusedFilters_CheckedChanged(object sender, CheckedChangedEventArgs e)
     {
-        AddIngredient NewPage = new AddIngredient();
-        AddIngredientViewModel VM = new AddIngredientViewModel();
-        NewPage.BindingContext= VM;
-        Navigation.PushAsync(NewPage);
+        ((IngredientsViewModel)BindingContext).FilterListUnused(((RadioButton)sender).Content.ToString());
     }
+
+    private void SetDefaultUnused_Clicked(object sender, CheckedChangedEventArgs e)
+    {
+        IngredientsFormat Selected = (IngredientsFormat)((RadioButton)sender).BindingContext;
+        IngredientViewerViewModel Current = ((IngredientsViewModel)BindingContext).NotUsedIngredientList.FirstOrDefault(x => x.Title.Id == Selected.IngredientId);
+        if (refreshView)
+        {
+            foreach (IngredientsFormat x in Current.Ingredients)
+            {
+                if (x.Id != Selected.Id)
+                {
+                    x.IsDefault = false;
+                }
+            }
+            Current.SaveIngredients();
+            refreshView = false;
+        }
+        else
+        {
+            refreshView = true;
+        }
+    }
+
+    private void DeleteUnused_Clicked(object sender, EventArgs e)
+    {
+        IngredientsFormat Selected = (IngredientsFormat)((ImageButton)sender).BindingContext;
+        IngredientViewerViewModel Current = ((IngredientsViewModel)BindingContext).NotUsedIngredientList.FirstOrDefault(x => x.Title.Id == Selected.IngredientId);
+        if (Current.DeleteIngredient(Selected) == 0)
+        {
+            ((IngredientsViewModel)BindingContext).DeleteIngredients(Current);
+        }
+        RefreshUnusedList();
+    }
+
+    public void RefreshUnusedList()
+    {
+        ((IngredientsViewModel)BindingContext).RefreshUnusedIngredientList();
+    }
+
+    private void RefresherUnusing_Refreshing(object sender, EventArgs e)
+    {
+        RefreshUnusedList();
+        RefresherUnused.IsRefreshing = false;
+    }
+    #endregion
+
 }

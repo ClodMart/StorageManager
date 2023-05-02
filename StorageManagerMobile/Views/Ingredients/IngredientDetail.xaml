@@ -98,7 +98,7 @@
         </Grid>
         <HorizontalStackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="Center" Grid.Row="2">
             <Button x:Name="Save" Margin="5"  Text=" Salva " HorizontalOptions="CenterAndExpand" VerticalOptions="Center" Grid.Row="2" WidthRequest="100" Command="{Binding SaveModifications}" Clicked="Save_Clicked"/>
-            <Button x:Name="Elimina" Margin="5"  Text="Elimina" HorizontalOptions="CenterAndExpand" VerticalOptions="Center" Grid.Row="2" WidthRequest="100" Command="{Binding Delete}"/>
+            <Button x:Name="Elimina" Margin="5"  Text="Elimina" HorizontalOptions="CenterAndExpand" VerticalOptions="Center" Grid.Row="2" WidthRequest="100" Command="{Binding Delete}" Clicked="Save_Clicked"/>
         </HorizontalStackLayout>
     </VerticalStackLayout>
 </ContentPage>
