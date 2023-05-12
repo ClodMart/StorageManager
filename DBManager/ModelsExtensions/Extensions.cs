@@ -130,7 +130,25 @@ namespace DBManager.Models
     public partial class IngredientsFormat
     {
         StorageManagerDBContext context = new StorageManagerDBContext();
+        
+        private bool PriceChanged = false;
 
+        public void ChangePrice(decimal val)
+        {
+           if (!PriceChanged)
+            {                
+                PastCost3 = PastCost2;
+                PastCost2= PastCost1;
+                PastCost1 = Cost;
+                Cost = val;
+                LastPriceChange = DateOnly.FromDateTime(DateTime.Now);
+                PriceChanged = true;
+            }
+            else
+            {
+                Cost= val;
+            }
+        }
 
         public override string ToString()
         {

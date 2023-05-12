@@ -1,5 +1,6 @@
 ﻿using DBManager.Interfacce;
 using DBManager.Models;
+using StorageManagerMobile.Resources;
 using StorageManagerMobile.Services;
 using StorageManagerMobile.ViewModels.Popup;
 using StorageManagerMobile.Views.Popup;
@@ -19,7 +20,7 @@ namespace StorageManagerMobile.ViewModels.Groupings
     {
         #region Parameters
 
-        private static readonly StorageManagerDBContext context = DBService.Instance.DbContext;   
+        private static readonly StorageManagerDBContext context = DBService.Instance.DbContext;
         private static readonly IngredientsFormatsRepository IngredientsFormatsRepository = new IngredientsFormatsRepository(context);
 
         private List<IngredientsFormat> AllFormats = new List<IngredientsFormat>();
@@ -141,5 +142,11 @@ namespace StorageManagerMobile.ViewModels.Groupings
             return Ingredients.Count;
         }
         #endregion
+
+        public void UpdateIsUsedValues(IsUsedValue value)
+        {
+            Title.IsUsedValue = value.Id;
+            Title.IsUsedValueNavigation = value;
+        }
     }
 }

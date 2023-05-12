@@ -83,6 +83,7 @@
 	  <PackageReference Include="CommunityToolkit.Maui" Version="5.0.0" />
 	  <PackageReference Include="CommunityToolkit.Maui.Core" Version="5.0.0" />
 	  <PackageReference Include="DevExpress.Data" Version="22.2.4" />
+	  <PackageReference Include="GemBox.Spreadsheet" Version="49.0.1301" />
 	  <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="7.0.4" />
 	  <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
 	  <PackageReference Include="MigraDoc.Rendering.Standard" Version="1.0.10" />
@@ -98,6 +99,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Views\IngredientsPage.xaml.cs">
+	    <DependentUpon>IngredientsPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\Orders\OrderCategoryDetails.xaml.cs">
 	    <DependentUpon>OrderCategoryDetails.xaml</DependentUpon>
 	  </Compile>
@@ -110,6 +114,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Views\CustomControl\OrderIngredientGrouping.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\CustomControl\OrderItem.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\Ingredients\AddIngredient.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -119,7 +129,13 @@
 	  <MauiXaml Update="Views\HomePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\Ingredients.xaml">
+	  <MauiXaml Update="Views\IngredientsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Ingredients\Popup\CostChange.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Ingredients\Popup\IsUsedSelection.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Ingredients\Popup\QuantityPopup.xaml">
@@ -138,6 +154,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Orders\OrderCategoryDetails.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Orders\OrderManager.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Orders\Popup\AddIngredientToOrderList.xaml">

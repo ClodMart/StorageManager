@@ -76,6 +76,11 @@ namespace DBManager.Interfacce
             _dbContext.SaveChanges();
         }
 
+        public List<OrdersList> GetListByCategory(long categoryId)
+        {
+            return _dbContext.OrdersLists.Where(x=>x.OrderCategoryId == categoryId).ToList();
+        }
+
         public string InsertFromCSV(string fileUri)
         {
             return "";

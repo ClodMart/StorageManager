@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Maui.Core;
 using DBManager.Interfacce;
 using DBManager.Models;
+using Microsoft.EntityFrameworkCore;
 using StorageManagerMobile.Resources;
 using StorageManagerMobile.Services;
 using StorageManagerMobile.ViewModels.Groupings;
@@ -54,6 +55,8 @@ namespace StorageManagerMobile.ViewModels.Details
             get { return ingredients; }
             set { ingredients = value; NotifyPropertyChanged(); }
         }
+
+        public double? OldPrice { get; set; }
         #endregion
 
         public IngredientDetailViewModel(IngredientViewerViewModel vm)
@@ -71,8 +74,24 @@ namespace StorageManagerMobile.ViewModels.Details
             SaveModificationsMethod();
         });
 
-        private void SaveModificationsMethod()
+        public void SaveModificationsMethod()
         {
+
+            foreach (IngredientsFormat x in Ingredients)
+            {
+                //IngredientsFormat OldRecord = IngredientsFormatsRepository.GetById(x.Id);
+                //if (OldRecord != null)
+                //{
+                //    if (x.Cost != OldRecord.Cost)
+                //    {
+                //        x.PastCost3 = OldRecord.PastCost2;
+                //        x.PastCost2 = OldRecord.PastCost1;
+                //        x.PastCost1 = OldRecord.Cost;
+                //        x.LastPriceChange = DateOnly.FromDateTime(DateTime.Now);
+                //    }
+                //}
+                IngredientsFormatsRepository.Update(x);
+            }
             IngredientsRepository.Update(Title);
             context.SaveChanges();
         }
@@ -116,6 +135,11 @@ namespace StorageManagerMobile.ViewModels.Details
             IngredientsFormatsRepository.Delete(Ingredient);
             context.SaveChanges();
             //Ingredients = new ObservableCollection<IngredientsFormat>(IngredientsFormatsRepository.GetFormatsFromIngredientId(Title.Id));
+        }
+
+        public void ChangePrice(double val)
+        {
+            
         }
     }
 }

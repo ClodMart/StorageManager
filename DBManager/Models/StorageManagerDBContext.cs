@@ -54,6 +54,8 @@ namespace DBManager.Models
 
                 entity.Property(e => e.Quantity).HasDefaultValueSql("1");
 
+                entity.Property(e => e.SelectedFormatId).HasColumnName("SelectedFormat_Id");
+
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.CategoryIngredientLists)
                     .HasForeignKey(d => d.CategoryId)
@@ -65,6 +67,11 @@ namespace DBManager.Models
                     .HasForeignKey(d => d.IngredientId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_Ingredients");
+
+                entity.HasOne(d => d.SelectedFormat)
+                    .WithMany(p => p.CategoryIngredientLists)
+                    .HasForeignKey(d => d.SelectedFormatId)
+                    .HasConstraintName("fk_Format");
             });
 
             modelBuilder.Entity<Ingredient>(entity =>

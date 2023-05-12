@@ -10,6 +10,7 @@ namespace StorageManagerMobile.Views.DetailPage;
 public partial class IngredientDetail : ContentPage
 {
     SupplierSelectionViewModel VM;
+    private bool IsChanging = false;
 
     public IngredientDetail()
 	{
@@ -18,7 +19,12 @@ public partial class IngredientDetail : ContentPage
 
     private void Save_Clicked(object sender, EventArgs e)
     {
-		Navigation.PopAsync();
+        //foreach(IngredientsFormat x in ((IngredientDetailViewModel)BindingContext).Ingredients)
+        //{
+        //    ((IngredientDetailViewModel)BindingContext).
+        //}
+        //((IngredientDetailViewModel)BindingContext).SaveModificationsMethod();
+        Navigation.PopAsync();
     }
 
     private async Task OpenSupplierSelectionPopupAsync()
@@ -55,5 +61,22 @@ public partial class IngredientDetail : ContentPage
         IngredientsFormat actual = (IngredientsFormat)((ImageButton)sender).BindingContext;
         ((IngredientDetailViewModel)BindingContext).RemoveIngredientFormat(actual);
         ((IngredientDetailViewModel)BindingContext).Ingredients.Remove(actual);
+    }
+
+    private void Cost_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        if (e.OldTextValue != null)
+        {
+            if (!IsChanging)
+            {
+                IngredientsFormat actual = (IngredientsFormat)((Entry)sender).BindingContext;
+                actual.ChangePrice(decimal.Parse(e.NewTextValue));
+                IsChanging = true;
+            }
+            else
+            {
+                IsChanging = false;
+            }
+        }
     }
 }

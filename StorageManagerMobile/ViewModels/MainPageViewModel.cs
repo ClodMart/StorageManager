@@ -77,7 +77,7 @@ namespace StorageManagerMobile.ViewModels
             {
                 new PageLink("Home","HomePage"),
                 new PageLink("Fornitori", "SuppliersPage"),
-                new PageLink("Ingredienti", "Ingredients"),
+                new PageLink("Ingredienti", "IngredientsPage"),
                 new PageLink("Prodotti", "Products"),
                 new PageLink("Nuovo Ordine", "NewOrder"), 
             };
@@ -110,7 +110,7 @@ namespace StorageManagerMobile.ViewModels
                     break;
                 }
 
-                if (newPage is Ingredients)
+                if (newPage is IngredientsPage)
                 {
                     newPage.BindingContext = IngredientsViewModel;
                 }

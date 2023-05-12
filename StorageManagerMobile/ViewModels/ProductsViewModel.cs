@@ -19,11 +19,18 @@ namespace StorageManagerMobile.ViewModels
 
         private string LastSearch = "";
         private string LastFilter = "FilterAll";
+        
 
         private List<Product> AllProducts = new List<Product>();
         private List<ProductViewerViewModel> FullProducts { get; set; }
         private List<ProductViewerViewModel> FilteredProducts { get; set; }
 
+        private bool isRefreshing = false;
+        public bool IsRefreshing
+        {
+            get { return isRefreshing; }
+            set { isRefreshing = value; NotifyPropertyChanged(); }
+        }
 
         private ObservableCollection<ProductViewerViewModel> productList;
         public ObservableCollection<ProductViewerViewModel> ProductList
@@ -255,6 +262,7 @@ namespace StorageManagerMobile.ViewModels
             {
                 productsRepository.Delete(x);
             }
+            IsRefreshing = false;
         }
 
         public void UpdateIngredientList(Product In)

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:res="clr-namespace:StorageManagerMobile.Resources"
+             xmlns:db="clr-namespace:DBManager.Models;assembly=DBManager"
+             xmlns:viewmodels="clr-namespace:StorageManagerMobile.ViewModels"
+             xmlns:compVM="clr-namespace:StorageManagerMobile.ViewModels.Components"
+             xmlns:grouping="clr-namespace:StorageManagerMobile.ViewModels.Groupings"
+             xmlns:customvievmodels="clr-namespace:StorageManagerMobile.ViewModels"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:comp="clr-namespace:StorageManagerMobile.Views.CustomControl"
+             x:DataType="viewmodels:CreateOrderViewModel"
+             x:Class="StorageManagerMobile.Views.Orders.OrderManager"
+             Title="OrderManager">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <VerticalStackLayout Grid.Row="0" HorizontalOptions="CenterAndExpand" Margin="0,0,0,5">
+            <Button x:Name="ExportButton" Text="Export Order" Margin="0,5,0,0"/>
+            <Border Grid.Row="0" HorizontalOptions="CenterAndExpand" StrokeThickness="2" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="0,5,0,5" Padding="5" StrokeShape="RoundRectangle 20">
+                <Label Text="Ordine" HorizontalOptions="CenterAndExpand" Style="{StaticResource ListMainText}"/>
+            </Border>
+        </VerticalStackLayout>
+        <CollectionView Grid.Row="1" ItemsSource="{Binding SelectedItems}" Background="Green">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="compVM:OrderIngredientGroupingViewModel">
+                    <toolkit:Expander>
+                        <toolkit:Expander.Header>
+                            <Label Text="{Binding Title}" HorizontalOptions="CenterAndExpand"/>
+                        </toolkit:Expander.Header>
+                        <CollectionView ItemsSource="{Binding Items}" ItemsLayout="VerticalGrid,3">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="compVM:OrderItemViewModel">
+                                    <Border StrokeShape="RoundRectangle 20"
+                                            BackgroundColor="{Binding Ingredient.Selected, Converter={StaticResource BoolToColor}}" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="0,0,0,0" Padding="5">
+                                        <Grid>
+                                            <Grid.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                                            </Grid.GestureRecognizers>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="auto"/>
+                                                <RowDefinition Height="*"/>
+                                                <RowDefinition Height="*"/>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
+                                            <Label Style="{StaticResource ListMainText}" Text="{Binding Ingredient.Ingredient.Name}" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                                            <Label Style="{StaticResource ListSubText}" Text="{Binding Ingredient.Ingredient.Category}" Grid.Row="1" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                                            <Label Style="{StaticResource ListSubText}" Text="{Binding Ingredient.SelectedFormat.Cost}" Grid.Row="2" Grid.Column="1" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                                            <Picker Style="{StaticResource ListSubText}" SelectedItem="{Binding Ingredient.SelectedFormat.Supplier, Mode=TwoWay}" ItemsSource="{Binding SupplierList}" ItemDisplayBinding="{Binding SupplierName}" Grid.Row="2" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                                            <Entry x:Name="NumberPicker" Grid.Row="3" Grid.ColumnSpan="2" Text="{Binding Ingredient.Quantity, Mode=TwoWay}" Keyboard="Numeric" HorizontalOptions="FillAndExpand" FontSize="Micro" TextColor="Black" VerticalOptions="End" HorizontalTextAlignment="Center" TextChanged="NumberPicker_TextChanged"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </toolkit:Expander>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <Border Grid.Row="2" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand" StrokeThickness="2" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="0,10,0,5" Padding="5" StrokeShape="RoundRectangle 20">
+            <Label Text="Disponibili" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" Style="{StaticResource ListMainText}"/>
+        </Border>
+        <CollectionView Grid.Row="3" ItemsSource="{Binding AvailableItems}" Background="Blue">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="compVM:OrderIngredientGroupingViewModel">
+                    <toolkit:Expander IsExpanded="False">
+                        <toolkit:Expander.Header>
+                            <Label Text="{Binding Title}" HorizontalOptions="CenterAndExpand"/>
+                        </toolkit:Expander.Header>
+                        <CollectionView ItemsSource="{Binding Items}" ItemsLayout="VerticalGrid,3">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="compVM:OrderItemViewModel">
+                                    <Border StrokeShape="RoundRectangle 20"
+                                            BackgroundColor="{Binding Ingredient.Selected, Converter={StaticResource BoolToColor}}" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="0,0,0,0" Padding="5">
+                                        <!--<Label Text="test"/>-->
+                                        <Grid>
+                                            <Grid.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                                            </Grid.GestureRecognizers>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="auto"/>
+                                                <RowDefinition Height="*"/>
+                                                <RowDefinition Height="*"/>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
+                                            <Label Style="{StaticResource ListMainText}" Text="{Binding Ingredient.Ingredient.Name}" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                                            <Label Style="{StaticResource ListSubText}" Text="{Binding Ingredient.Ingredient.Category}" Grid.Row="1" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                                            <Label Style="{StaticResource ListSubText}" Text="{Binding Ingredient.SelectedFormat.Cost}" Grid.Row="2" Grid.Column="1" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                                            <Picker Style="{StaticResource ListSubText}" SelectedItem="{Binding Ingredient.SelectedFormat.Supplier, Mode=TwoWay}" ItemsSource="{Binding SupplierList}" ItemDisplayBinding="{Binding SupplierName}" Grid.Row="2" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                                            <Entry x:Name="NumberPicker" Grid.Row="3" Grid.ColumnSpan="2" Text="{Binding Ingredient.Quantity, Mode=TwoWay}" Keyboard="Numeric" HorizontalOptions="FillAndExpand" FontSize="Micro" TextColor="Black" VerticalOptions="End" HorizontalTextAlignment="Center" TextChanged="NumberPicker_TextChanged"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </toolkit:Expander>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>            
+        </CollectionView>        
+    </Grid>
+</ContentPage>

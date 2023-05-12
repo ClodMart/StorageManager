@@ -12,6 +12,7 @@ using PdfSharpCore.Drawing;
 using Microsoft.EntityFrameworkCore.Migrations.Internal;
 using Microsoft.Maui.Controls.PlatformConfiguration;
 using CommunityToolkit.Maui.Alerts;
+using StorageManagerMobile.ViewModels.Groupings;
 
 namespace StorageManagerMobile.Views.Orders;
 
@@ -43,13 +44,13 @@ public partial class CreateOrder : ContentPage
 
     private void SelectItem_Clicked(object sender, EventArgs e)
     {
-        OrderItem Current = (OrderItem)((Grid)sender).BindingContext;
+        OrderCategoryIngredient Current = (OrderCategoryIngredient)((Grid)sender).BindingContext;
         ((CreateOrderViewModel)BindingContext).SelectItem(Current);
     }
 
     private void DeselectItem_Clicked(object sender, EventArgs e)
     {
-        OrderItem Current = (OrderItem)((Grid)sender).BindingContext;
+        OrderCategoryIngredient Current = (OrderCategoryIngredient)((Grid)sender).BindingContext;
         ((CreateOrderViewModel)BindingContext).DeselectItem(Current);
     }
 

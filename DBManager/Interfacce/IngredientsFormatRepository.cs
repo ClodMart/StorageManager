@@ -96,6 +96,7 @@ namespace DBManager.Interfacce
                     entity.PastCost3 = OldRecord.PastCost2;
                     entity.PastCost2 = OldRecord.PastCost1;
                     entity.PastCost1 = OldRecord.Cost;
+                    entity.LastPriceChange= DateOnly.FromDateTime(DateTime.Now);
                 }
             }
             _dbContext.Entry(entity).State = EntityState.Modified;

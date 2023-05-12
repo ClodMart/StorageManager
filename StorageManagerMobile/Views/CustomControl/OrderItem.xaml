@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<VerticalStackLayout xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:StorageManagerMobile.ViewModels.Components"   
+             xmlns:res="clr-namespace:StorageManagerMobile.Resources"
+             x:DataType="viewmodels:OrderItemViewModel"
+             x:Class="StorageManagerMobile.Views.CustomControl.OrderItem"
+            >
+    <VerticalStackLayout.Resources>
+        <res:SelectedToColorConverter x:Key="BoolToColor"/>
+    </VerticalStackLayout.Resources>
+    <Border StrokeShape="RoundRectangle 20"
+             BackgroundColor="{Binding Ingredient.Selected, Converter={StaticResource BoolToColor}}" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="0,0,0,0" Padding="5">
+        <Grid>
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+            </Grid.GestureRecognizers>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Label Style="{StaticResource ListMainText}" Text="{Binding Ingredient.Ingredient.Name}" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+            <Label Style="{StaticResource ListSubText}" Text="{Binding Ingredient.Ingredient.Category}" Grid.Row="1" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+            <Label Style="{StaticResource ListSubText}" Text="{Binding Ingredient.SelectedFormat.Cost}" Grid.Row="2" Grid.Column="1" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+            <Picker Style="{StaticResource ListSubText}" SelectedItem="{Binding Ingredient.SelectedFormat.Supplier, Mode=TwoWay}" ItemsSource="{Binding SupplierList}" ItemDisplayBinding="{Binding SupplierName}" Grid.Row="2" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+            <Entry x:Name="NumberPicker" Grid.Row="3" Grid.ColumnSpan="2" Text="{Binding Ingredient.Quantity, Mode=TwoWay}" Keyboard="Numeric" HorizontalOptions="FillAndExpand" FontSize="Micro" TextColor="Black" VerticalOptions="End" HorizontalTextAlignment="Center" TextChanged="NumberPicker_TextChanged"/>
+        </Grid>
+    </Border>
+</VerticalStackLayout>

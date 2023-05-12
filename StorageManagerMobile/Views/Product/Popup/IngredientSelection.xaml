@@ -18,7 +18,7 @@
         <VerticalStackLayout Padding="10" Grid.Row="1">
             <Label x:Name="IngredientName" Text="Select Ingredient" TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}" Grid.Row="0" Grid.Column="0" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
             <Picker x:Name="IngredientPicker" ItemsSource="{Binding Ingredients}" ItemDisplayBinding="{Binding Name}" SelectedItem="{Binding Ingredient, Mode=TwoWay}"/>
-            <Entry x:Name="Quatity" Keyboard="Numeric" HorizontalOptions="CenterAndExpand"/>
+            <Entry x:Name="Quatity" Text="{Binding Quantity, Mode=TwoWay}" Keyboard="Numeric" HorizontalOptions="CenterAndExpand"/>
             <Button x:Name="Save" Margin="5"  Text="Salva" HorizontalOptions="CenterAndExpand" VerticalOptions="Center" Grid.Row="2" Clicked="Save_Clicked"/>
         </VerticalStackLayout>
     </Grid>

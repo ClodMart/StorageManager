@@ -1,5 +1,7 @@
 using CommunityToolkit.Maui.Storage;
+using DBManager.Interfacce;
 using DBManager.Models;
+using StorageManagerMobile.Services;
 using StorageManagerMobile.ViewModels;
 using StorageManagerMobile.ViewModels.Details;
 using StorageManagerMobile.Views.Orders;
@@ -8,8 +10,7 @@ namespace StorageManagerMobile.Views;
 
 public partial class NewOrder : ContentPage
 {
-    IFileSaver fileSaver;
-	public NewOrder()
+    public NewOrder()
 	{
 		InitializeComponent();
 	}
@@ -30,10 +31,16 @@ public partial class NewOrder : ContentPage
 
     private void Button_Clicked(object sender, EventArgs e)
     {
-        //fileSaver = this.Handler.MauiContext.Services.GetServices<IFileSaver>().FirstOrDefault();
-        CreateOrder newPage = new CreateOrder();
+        //CreateOrder newPage = new CreateOrder();
+        //OrderCategory Currrent = (OrderCategory)((Button)sender).BindingContext;
+        //CreateOrderViewModel VM = new CreateOrderViewModel(Currrent);
+        //newPage.BindingContext = VM;
+        //Navigation.PushAsync(newPage);
+
+        OrderManager newPage = new OrderManager();
         OrderCategory Currrent = (OrderCategory)((Button)sender).BindingContext;
-        CreateOrderViewModel VM = new CreateOrderViewModel(Currrent);
+        //List<OrdersList> List = OrderLists.GetListByCategory(Currrent.Id);
+        OrderManagerViewModel VM = new OrderManagerViewModel(Currrent);
         newPage.BindingContext = VM;
         Navigation.PushAsync(newPage);
     }

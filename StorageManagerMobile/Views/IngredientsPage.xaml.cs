@@ -1,6 +1,8 @@
 using CommunityToolkit.Maui.Views;
+using DBManager.Interfacce;
 using DBManager.Models;
 using StorageManagerMobile.Resources;
+using StorageManagerMobile.Services;
 using StorageManagerMobile.ViewModels;
 using StorageManagerMobile.ViewModels.Add;
 using StorageManagerMobile.ViewModels.Details;
@@ -8,16 +10,20 @@ using StorageManagerMobile.ViewModels.Groupings;
 using StorageManagerMobile.ViewModels.Popup;
 using StorageManagerMobile.Views.AddPages;
 using StorageManagerMobile.Views.DetailPage;
+using StorageManagerMobile.Views.Ingredients.Popup;
 using StorageManagerMobile.Views.Popup;
 using System.Collections.ObjectModel;
 
 namespace StorageManagerMobile.Views;
 
-public partial class Ingredients : ContentPage
+public partial class IngredientsPage : ContentPage
 {
+    private static readonly StorageManagerDBContext context = DBService.Instance.DbContext;
+    private static readonly IngredientsFormatsRepository IngredientsFormatsRepository = new IngredientsFormatsRepository(context);
     private bool refreshView = false;
+    private bool IsChanging = false;
 
-    public Ingredients()
+    public IngredientsPage()
 	{
 		InitializeComponent();
     }
@@ -218,4 +224,67 @@ public partial class Ingredients : ContentPage
     }
     #endregion
 
+    private void ContentPage_Loaded(object sender, EventArgs e)
+    {
+        ((IngredientsViewModel)BindingContext).RefreshIngredientList();
+        ((IngredientsViewModel)BindingContext).RefreshUnusedIngredientList();
+    }
+
+    private async Task EditIsUsedAsync(object sender, EventArgs e)
+    {
+        List<Ingredient> updated = new List<Ingredient>();
+        IngredientViewerViewModel Current = (IngredientViewerViewModel)((Button)sender).BindingContext;
+        Ingredient Title = Current.Title;
+        var popup = new IsUsedSelection();
+        popup.BindingContext = new IsUsedSelectionViewModel(Title.IsUsedValueNavigation);
+        var result = await this.ShowPopupAsync(popup);
+        if (result != null)
+        {
+            Current.UpdateIsUsedValues((IsUsedValue)result);
+            ((IngredientsViewModel)BindingContext).UpdateIngredientList(Current.Title);
+            ((IngredientsViewModel)BindingContext).RefreshIngredientList();
+            ((IngredientsViewModel)BindingContext).RefreshUnusedIngredientList();
+            //    updated.Add(Current.Title);
+
+            //Current.Title = new ObservableCollection<Ingredient>(updated);
+        }
+    }
+
+    private void Button_Clicked(object sender, EventArgs e)
+    {
+        EditIsUsedAsync(sender, e);
+    }
+
+    private void EditCost_Clicked(object sender, EventArgs e)
+    {
+        OpenEditCost(sender, e);
+    }
+
+    private async Task OpenEditCost(object sender, EventArgs e)
+    {
+        IngredientsFormat Current = (IngredientsFormat)((Button)sender).BindingContext;
+        var popup = new CostChange();
+        popup.BindingContext = new CostChangeViewModel(Current);
+        var result = await this.ShowPopupAsync(popup);
+        RefreshList();
+        RefreshUnusedList();
+    }
+
+    //private void Entry_TextChanged(object sender, TextChangedEventArgs e)
+    //{
+    //    if (e.OldTextValue != null)
+    //    {
+    //        IngredientsFormat actual = (IngredientsFormat)((Entry)sender).BindingContext;
+    //        if (!IsChanging)
+    //        {                
+    //            actual.ChangePrice(decimal.Parse(e.NewTextValue));
+    //            IsChanging = true;
+    //            IngredientsFormatsRepository.Update(actual);
+    //        }
+    //        else
+    //        {
+    //            IsChanging = false;
+    //        }
+    //    }
+    //}
 }

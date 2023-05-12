@@ -10,8 +10,10 @@ namespace DBManager.Models
         public long IngredientId { get; set; }
         public bool Selected { get; set; }
         public int Quantity { get; set; }
+        public long? SelectedFormatId { get; set; }
 
         public virtual OrderCategory Category { get; set; } = null!;
         public virtual Ingredient Ingredient { get; set; } = null!;
+        public virtual IngredientsFormat? SelectedFormat { get; set; }
     }
 }

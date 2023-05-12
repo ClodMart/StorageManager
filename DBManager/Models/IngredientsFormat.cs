@@ -5,6 +5,11 @@ namespace DBManager.Models
 {
     public partial class IngredientsFormat
     {
+        public IngredientsFormat()
+        {
+            CategoryIngredientLists = new HashSet<CategoryIngredientList>();
+        }
+
         public long Id { get; set; }
         public long IngredientId { get; set; }
         public long SupplierId { get; set; }
@@ -19,8 +24,10 @@ namespace DBManager.Models
         public decimal? CostDifference { get; set; }
         public DateOnly? LastOrderDate { get; set; }
         public bool IsDefault { get; set; }
+        public DateOnly? LastPriceChange { get; set; }
 
         public virtual Ingredient Ingredient { get; set; } = null!;
         public virtual Supplier Supplier { get; set; } = null!;
+        public virtual ICollection<CategoryIngredientList> CategoryIngredientLists { get; set; }
     }
 }

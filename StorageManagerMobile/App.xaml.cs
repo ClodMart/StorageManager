@@ -1,4 +1,6 @@
-﻿namespace StorageManagerMobile
+﻿using GemBox.Spreadsheet;
+
+namespace StorageManagerMobile
 {
     public partial class App : Application
     {
@@ -6,6 +8,7 @@
         {
           InitializeComponent();
           MainPage = new MainPage();
+          SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
         }
     }
 }

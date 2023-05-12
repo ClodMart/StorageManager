@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Maui.Core;
 using DBManager.Interfacce;
 using DBManager.Models;
+using GemBox.Spreadsheet;
 using Microsoft.EntityFrameworkCore;
 using StorageManagerMobile.Resources;
 using StorageManagerMobile.Services;
@@ -8,6 +9,7 @@ using StorageManagerMobile.ViewModels.Groupings;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -72,19 +74,22 @@ namespace StorageManagerMobile.ViewModels
 
         public IngredientsViewModel()
         {
-            UsedValuesList.AddRange(UsedValues.IsUsedValues.Where(x=>!x.CorrespondsToUsed).Select(x=>x.Description).ToList());
+            UsedValuesList.AddRange(UsedValues.IsUsedValues.Where(x => !x.CorrespondsToUsed).Select(x => x.Description).ToList());
             List<long> IsUsedID = isUsedValuesRepository.GetUsedId();
             AllIngredients = IngredientsRepository.GetAll().ToList();
-            NotUsedIngredients = AllIngredients.Where(x=> !IsUsedID.Contains(x.IsUsedValue)).ToList();
+            NotUsedIngredients = AllIngredients.Where(x => !IsUsedID.Contains(x.IsUsedValue)).ToList();
             UsedIngredients = AllIngredients.Where(x => IsUsedID.Contains(x.IsUsedValue)).ToList();
-            
-            foreach(Ingredient y in NotUsedIngredients)
+
+            foreach (Ingredient y in NotUsedIngredients)
             {
-                NotUsedIngredientLists.Add(new IngredientViewerViewModel(y));
+                IngredientViewerViewModel New = new IngredientViewerViewModel(y);
+                NotUsedIngredientLists.Add(New);
+
             }
             foreach (Ingredient x in UsedIngredients)
-            {
-                UsedIngredientLists.Add(new IngredientViewerViewModel(x));
+            { 
+                IngredientViewerViewModel New = new IngredientViewerViewModel(x);
+                UsedIngredientLists.Add(New);
             }
 
             UsedIngredientLists.Sort((l, r) => l.Title.Name.CompareTo(r.Title.Name));
@@ -92,6 +97,16 @@ namespace StorageManagerMobile.ViewModels
             FilteredIngredients = UsedIngredientLists;
             IngredientList = new ObservableCollection<IngredientViewerViewModel>(FilteredIngredients);
             NotUsedIngredientList = new ObservableCollection<IngredientViewerViewModel>(NotUsedIngredientLists);
+        }
+
+        private void UpdateVisualUnusedIngredientViewer(object sender, EventArgs e)
+        {
+            RefreshUnusedIngredientList();
+        }
+
+        private void UpdateVisualIngredientViewer(object sender, EventArgs e)
+        {
+            RefreshIngredientList();
         }
 
         #region UsedIngredients
@@ -119,6 +134,16 @@ namespace StorageManagerMobile.ViewModels
             results.Sort((l, r) => l.Title.Name.CompareTo(r.Title.Name));
             IngredientList = new ObservableCollection<IngredientViewerViewModel>(results);
             CollapseExpanders();
+        }
+
+        public ICommand ExportListUsed => new Command(() =>
+        {
+            ExportUsedMethod();
+        });
+
+        public void ExportUsedMethod()
+        {
+
         }
 
         public void SearchEmpty()
@@ -343,8 +368,16 @@ namespace StorageManagerMobile.ViewModels
 
         public void FilterListUnused(string Filter)
         {
-            long UsedId = isUsedValuesRepository.GetAll().FirstOrDefault(x => x.Description == Filter).Id;
-            NotUsedIngredientList = new ObservableCollection<IngredientViewerViewModel>(NotUsedIngredientLists.Where(x => x.Title.IsUsedValue.Equals(UsedId)));
+            if (Filter != "Tutti")
+            {
+                long UsedId = isUsedValuesRepository.GetAll().FirstOrDefault(x => x.Description == Filter).Id;
+                NotUsedIngredientList = new ObservableCollection<IngredientViewerViewModel>(NotUsedIngredientLists.Where(x => x.Title.IsUsedValue.Equals(UsedId)));
+            }
+            else
+            {
+                List<long> UsedId = isUsedValuesRepository.GetUsedId();
+                NotUsedIngredientList = new ObservableCollection<IngredientViewerViewModel>(NotUsedIngredientLists.Where(x => !UsedId.Contains(x.Title.IsUsedValue)));
+            }
         }
 
         public void RefreshUnusedIngredientList()
@@ -364,7 +397,6 @@ namespace StorageManagerMobile.ViewModels
         #endregion
 
         #endregion      
-
 
         //public void RefreshIngredientList()
         //{

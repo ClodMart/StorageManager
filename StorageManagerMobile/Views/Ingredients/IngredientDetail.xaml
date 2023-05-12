@@ -87,7 +87,7 @@
                                     </HorizontalStackLayout>
                                     <HorizontalStackLayout Grid.Row="3" Grid.Column="2" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand" Margin="5">
                                         <Label Text="Cost" Margin="0" Grid.Row="1" Grid.Column="0" HorizontalOptions="EndAndExpand" VerticalOptions="CenterAndExpand"/>
-                                        <Entry x:Name="Cost" Margin="5,0,0,0" Keyboard="Numeric" Text="{Binding Cost, Mode=TwoWay}" TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}" Grid.Row="1" Grid.Column="2" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand"/>
+                                        <Entry x:Name="Cost" Margin="5,0,0,0" Keyboard="Numeric" Text="{Binding Cost, Mode=OneWay}" TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}" Grid.Row="1" Grid.Column="2" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand" TextChanged="Cost_TextChanged"/>
                                     </HorizontalStackLayout>
                                 </HorizontalStackLayout>
                             </Grid>

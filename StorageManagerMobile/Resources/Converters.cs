@@ -53,6 +53,26 @@ namespace StorageManagerMobile.Resources
         }
     }
 
+    public class SelectedToColorConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if ((bool)value)
+            {
+                return Colors.OrangeRed;
+            }
+            else
+            {
+                return Colors.LightGreen;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     public class BoolToHeight : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -108,7 +128,7 @@ namespace StorageManagerMobile.Resources
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return value;
         }
     }
 
@@ -121,7 +141,7 @@ namespace StorageManagerMobile.Resources
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return value;
         }
     }
 
@@ -186,14 +206,22 @@ namespace StorageManagerMobile.Resources
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            if(value != null)
+            {
+                long Out = dbContext.IsUsedValues.FirstOrDefault(x => x.Description.Equals((string)value)).Id;
+                return Out;
+            }
+            else
+            {
+                return null;
+            }           
         }
     }
 
     public class DatetimeToDate : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
+        {            
             if (value != null)
             {
                 return ((DateOnly)value);
@@ -222,6 +250,39 @@ namespace StorageManagerMobile.Resources
                 return true;
             }
             
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class IngredientFormatToPriceColor : IValueConverter
+    {
+        private readonly StorageManagerDBContext dbContext = DBService.Instance.DbContext;
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            IngredientsFormat inf = dbContext.IngredientsFormats.FirstOrDefault(x=>x.Id == (long)value);
+            if (((DateOnly.FromDateTime(DateTime.Now)).DayNumber - (inf.LastPriceChange ?? DateOnly.MinValue).DayNumber) < 30)
+            {
+                if (inf.CostDifference == 0)
+                {
+                    return Colors.Transparent;
+                }
+                else if (inf.CostDifference > 0)
+                {
+                    return Colors.Red;
+                }
+                else
+                {
+                    return Colors.Green;
+                }
+            }
+            else
+            {
+                return Colors.Transparent;
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

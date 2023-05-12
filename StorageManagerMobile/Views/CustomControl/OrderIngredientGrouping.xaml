@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CollectionView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:viewmodels="clr-namespace:StorageManagerMobile.ViewModels.Components"
+             xmlns:comp="clr-namespace:StorageManagerMobile.Views.CustomControl"
+             x:DataType="viewmodels:OrderIngredientGroupingViewModel"
+             x:Class="StorageManagerMobile.Views.CustomControl.OrderIngredientGrouping">
+    <CollectionView.ItemTemplate>
+        <DataTemplate>
+            <toolkit:Expander>
+                <toolkit:Expander.Header>
+                    <Label Text="{Binding Title}"/>
+                </toolkit:Expander.Header>
+                <CollectionView ItemsSource="{Binding Items}" ItemsLayout="VerticalGrid,3">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <comp:OrderItem BindingContext="{Binding}"/>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>                
+            </toolkit:Expander>
+        </DataTemplate>
+    </CollectionView.ItemTemplate>
+</CollectionView>

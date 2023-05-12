@@ -14,7 +14,7 @@
         <res:BoolToHeight x:Key="BoolToHeight"/>
         <res:BoolToImageConverterDarkMode x:Key="BoolToImageDark"/>
         <res:BoolToImageConverterLightmode x:Key="BoolToImageLight"/>
-        <res:IntRounder x:Key="Rounder"/>
+        <res:DoubleRounder x:Key="Rounder"/>
         <res:IdToSupplierConverter x:Key="SupplierConverter"/>
         <res:IdToIngredientConverter x:Key="IngredientConverter"/>
         <res:DatetimeToDate x:Key="DateTimeToDate"/>
@@ -80,7 +80,7 @@
                                     </HorizontalStackLayout>
                                     <HorizontalStackLayout Grid.Row="2" Grid.Column="2" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand" Margin="5">
                                         <Label Text="Cost" Margin="0" Grid.Row="1" Grid.Column="0" HorizontalOptions="EndAndExpand" VerticalOptions="CenterAndExpand"/>
-                                        <Entry x:Name="Cost" Margin="5,0,0,0" Keyboard="Numeric" Text="{Binding Cost, Mode=TwoWay}" TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}" Grid.Row="1" Grid.Column="2" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand"/>
+                                        <Entry x:Name="Cost" Margin="5,0,0,0" Keyboard="Numeric" Text="{Binding Cost, Converter={StaticResource Rounder}, Mode=TwoWay}" TextColor="{AppThemeBinding Default=Black, Light=Black, Dark=White}" Grid.Row="1" Grid.Column="2" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand"/>
                                     </HorizontalStackLayout>
                                     <!--<HorizontalStackLayout Grid.Row="3" Grid.Column="2" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand" Margin="5">
                                         <Label Text="Cost" Margin="0" Grid.Row="1" Grid.Column="0" HorizontalOptions="EndAndExpand" VerticalOptions="CenterAndExpand"/>

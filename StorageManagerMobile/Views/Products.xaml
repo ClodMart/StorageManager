@@ -60,6 +60,7 @@
                             <ColumnDefinition Width="3*"/>
                             <ColumnDefinition Width="1*"/>
                             <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
                             <ColumnDefinition Width="auto"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
@@ -68,9 +69,10 @@
                         </Grid.RowDefinitions>
                         <Label Text="Nome" Style="{StaticResource ListMainText}" Grid.Column="0" Grid.Row="0" VerticalOptions="EndAndExpand" HorizontalOptions="StartAndExpand"/>
                         <Label Text="Categoria" Style="{StaticResource ListSubText}" Grid.Column="0" Grid.Row="1" VerticalOptions="StartAndExpand" HorizontalOptions="StartAndExpand" />
-                        <Label Text="Costo" Style="{StaticResource ListMainText}" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="CenterAndExpand"/>
+                        <Label Text="Ricavo" Style="{StaticResource ListMainText}" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="CenterAndExpand"/>
+                        <Label Text="Costo" Style="{StaticResource ListMainText}" Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="CenterAndExpand"/>
                         <Label Text="Prezzo" Style="{StaticResource ListMainText}" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="CenterAndExpand" />
-                        <ImageButton x:Name="AddButton" Grid.Column="3" Grid.RowSpan="2" Style="{StaticResource AddIcon}" Margin="5" Padding="0" BorderColor="Transparent" BackgroundColor="Transparent" Clicked="AddButton_Clicked"/>
+                        <ImageButton x:Name="AddButton" Grid.Column="4" Grid.RowSpan="2" Style="{StaticResource AddIcon}" Margin="5" Padding="0" BorderColor="Transparent" BackgroundColor="Transparent" Clicked="AddButton_Clicked"/>
                     </Grid>
                 </toolkit:Expander.Header>
                 <Grid Padding="0" HeightRequest="50" Margin="5">
@@ -95,7 +97,7 @@
             </toolkit:Expander>
         </Border>
         
-        <RefreshView x:Name="Refresher" Grid.Row="3" Refreshing="Refresher_Refreshing">
+        <RefreshView x:Name="Refresher" Grid.Row="3" Refreshing="Refresher_Refreshing" IsRefreshing="{Binding IsRefreshing}">
             <CollectionView x:Name="List" ItemsSource="{Binding ProductList, Mode=TwoWay}" Grid.Row="3" VerticalScrollBarVisibility="Always">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
@@ -108,6 +110,7 @@
                                             <ColumnDefinition Width="3*"/>
                                             <ColumnDefinition Width="1*"/>
                                             <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="1*"/>
                                             <ColumnDefinition Width="auto"/>
                                         </Grid.ColumnDefinitions>
                                         <Grid.RowDefinitions>
@@ -117,9 +120,10 @@
                                         <ImageButton x:Name="EditIngredientGroup" Style="{StaticResource EditIcon}" Grid.Column="0" Grid.RowSpan="2" Margin="0" Padding="0" Clicked="EditIngredientGroup_Clicked"/>
                                         <Label Text="{Binding Title.ProductName}" Style="{StaticResource ListMainText}" Grid.Column="1" Grid.Row="0" VerticalOptions="CenterAndExpand" HorizontalOptions="StartAndExpand"/>
                                         <Label Text="{Binding Title.ProductCategory}" Style="{StaticResource ListSubText}" Grid.Column="1" Grid.Row="1" VerticalOptions="StartAndExpand" HorizontalOptions="StartAndExpand" FontAutoScalingEnabled="True"/>
-                                        <Label Text="{Binding Title.ProductCost}" Style="{StaticResource ListIsUsedText}" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="Center"/>
+                                        <Label Text="{Binding GainPercent}" Style="{StaticResource ListMainText}" Grid.Column="2" Grid.Row="0" VerticalOptions="CenterAndExpand" HorizontalOptions="StartAndExpand"/>
+                                        <Label Text="{Binding Title.ProductCost, Converter={StaticResource Rounder}}" Style="{StaticResource ListIsUsedText}" Grid.Column="4" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="Center"/>
                                         <Button x:Name="EditQuantity" Padding="7" Text="{Binding Title.ProductPrice}" Style="{StaticResource ButtonContentText}" Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="Center" Clicked="EditQuantity_Clicked"/>
-                                        <Image Grid.Column="4" Grid.RowSpan="2" Source="{AppThemeBinding Default=arrowdown_lightmode.svg, Light=arrowdown_lightmode.svg, Dark=arrowdown_darkmode.svg}" BackgroundColor="Transparent" WidthRequest="50" HeightRequest="50">
+                                        <Image Grid.Column="5" Grid.RowSpan="2" Source="{AppThemeBinding Default=arrowdown_lightmode.svg, Light=arrowdown_lightmode.svg, Dark=arrowdown_darkmode.svg}" BackgroundColor="Transparent" WidthRequest="50" HeightRequest="50">
                                             <Image.Triggers>
                                                 <DataTrigger TargetType="{x:Type Image}" Binding="{Binding Source={x:RelativeSource AncestorType={x:Type toolkit:Expander}}, Path=IsExpanded}" Value="true">
                                                     <Setter Property="Source" Value="{AppThemeBinding Default=arrowup_lightmode.svg, Light=arrowup_lightmode.svg, Dark=arrowup_darkmode.svg}"/>
@@ -150,9 +154,9 @@
                                                 <Label x:Name="SupplierName" Text="{Binding IngredientId, Converter={StaticResource IngedientConverter}}" Style="{StaticResource ListMainText}" Grid.Column="1" Grid.Row="0" VerticalOptions="EndAndExpand" HorizontalOptions="StartAndExpand" Padding="0"/>
                                                 <Label Text="{Binding Ingredient.Category}" Style="{StaticResource ListSubText}" Grid.Column="1" Grid.Row="1" VerticalOptions="StartAndExpand" HorizontalOptions="StartAndExpand" />
                                                 <Label Text="{Binding Quantity}" FontSize="Small" FontAttributes="Italic" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="CenterAndExpand"/>
-                                                <Frame Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" CornerRadius="10" Padding="10" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
-                                                    <Label Text="{Binding Cost, Converter={StaticResource Rounder}}" FontSize="Small" FontAttributes="Italic"/>
-                                                </Frame>
+                                                <!--<Frame Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" CornerRadius="10" Padding="10" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">-->
+                                                <Label Text="{Binding Cost, Converter={StaticResource Rounder}}" FontSize="Small" FontAttributes="Italic" Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                                                <!--</Frame>-->
                                                 <ImageButton x:Name="Delete" Style="{StaticResource DeleteIcon}" Grid.Column="4"  Grid.Row="0" Grid.RowSpan="2" Margin="0" Padding="0" Clicked="Delete_Clicked"/>
                                             </Grid>
                                         </DataTemplate>

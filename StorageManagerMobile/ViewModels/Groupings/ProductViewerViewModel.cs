@@ -16,6 +16,7 @@ namespace StorageManagerMobile.ViewModels.Groupings
         #region Parameters
         private static readonly StorageManagerDBContext context = DBService.Instance.DbContext;
         private static readonly ProductCompositionsRepository ProductCompositionsRepository = new ProductCompositionsRepository(context);
+        private static readonly ProductsRepository ProductsRepository = new ProductsRepository(context);
 
         private List<ProductComposition> AllIngredients = new List<ProductComposition>();
 
@@ -43,6 +44,13 @@ namespace StorageManagerMobile.ViewModels.Groupings
             }
         }
 
+        private string gainPercent;
+        public string GainPercent
+        {
+            get { return gainPercent; }
+            set { gainPercent = value; NotifyPropertyChanged();}
+        }
+
         //private string quantityDisplay;
         //public string QuantityDisplay
         //{
@@ -59,6 +67,9 @@ namespace StorageManagerMobile.ViewModels.Groupings
             l.IngredientId.CompareTo(r.IngredientId));
             //AllIngredients.Reverse();
             Compositions = new ObservableCollection<ProductComposition>(AllIngredients);
+            Title.ProductCost = AllIngredients.Sum(x => x.Cost);
+            CalculateGainPercent();
+            ProductsRepository.Update(Title);
         }
 
         #region Commands
@@ -94,6 +105,9 @@ namespace StorageManagerMobile.ViewModels.Groupings
             l.IngredientId.CompareTo(r.IngredientId));
             //AllIngredients.Reverse();
             Compositions = new ObservableCollection<ProductComposition>(AllIngredients);
+            Title.ProductCost = AllIngredients.Sum(x => x.Cost);
+            CalculateGainPercent();
+            ProductsRepository.Update(Title);
         }
 
         //private void CalcQuantityDisplay()
@@ -145,5 +159,10 @@ namespace StorageManagerMobile.ViewModels.Groupings
             
         }
         #endregion
+
+        private void CalculateGainPercent()
+        {
+            GainPercent = (Math.Round((decimal)((Title.ProductPrice/1.1)/Title.ProductCost/100), 2)).ToString() + "%";
+        }
     }
 }

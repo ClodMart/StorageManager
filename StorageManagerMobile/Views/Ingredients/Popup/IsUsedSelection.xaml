@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:db="clr-namespace:DBManager.Models;assembly=DBManager"
+             xmlns:viewmodels="clr-namespace:StorageManagerMobile.ViewModels.Popup"
+             x:DataType="viewmodels:IsUsedSelectionViewModel"
+             x:Class="StorageManagerMobile.Views.Ingredients.Popup.IsUsedSelection"
+               Opened="Popup_Opened">
+    <VerticalStackLayout  HorizontalOptions="FillAndExpand">
+        <CollectionView ItemsSource="{Binding ItemList}" SelectedItem="{Binding Selected, Mode=TwoWay}" SelectionMode="Single" HorizontalOptions="FillAndExpand" SelectionChanged="CollectionView_SelectionChanged">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="db:IsUsedValue">
+                    <Grid HorizontalOptions="FillAndExpand" Style="{StaticResource SelectedItemSource}">
+                        <Label Margin="5,0,0,0" Text="{Binding Description}" BackgroundColor="Transparent" HorizontalOptions="StartAndExpand" Padding="10">
+                        </Label>
+                    </Grid>                    
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!--<Button Text="Conferma" HorizontalOptions="CenterAndExpand" Clicked="Button_Clicked" Margin="0,5,0,5"/>-->
+    </VerticalStackLayout>
+
+</toolkit:Popup>
