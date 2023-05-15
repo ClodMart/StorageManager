@@ -1,6 +1,7 @@
 using CommunityToolkit.Maui.Views;
 using DBManager.Models;
 using StorageManagerMobile.ViewModels;
+using StorageManagerMobile.ViewModels.Add;
 using StorageManagerMobile.ViewModels.Details;
 using StorageManagerMobile.ViewModels.Groupings;
 using StorageManagerMobile.Views.Product;
@@ -53,7 +54,8 @@ public partial class Products : ContentPage
 
     private void ContentPage_NavigatedTo(object sender, NavigatedToEventArgs e)
     {
-        //Refresher.IsRefreshing = true;
+        Refresher.IsRefreshing = true;
+        Refresher_Refreshing(sender, e);
     }
 
     #endregion
@@ -147,6 +149,10 @@ public partial class Products : ContentPage
 
     private void AddButton_Clicked(object sender, EventArgs e)
     {
+        AddProduct newPage = new AddProduct();
+        AddProductViewModel VM = new AddProductViewModel();
+        newPage.BindingContext= VM;
+        Navigation.PushAsync(newPage);
         //AddIngredient NewPage = new AddIngredient();
         //AddIngredientViewModel VM = new AddIngredientViewModel();
         //NewPage.BindingContext = VM;

@@ -27,13 +27,6 @@ namespace StorageManagerMobile.ViewModels.Details
             set { _product = value; NotifyPropertyChanged(); }
         }
 
-        private ObservableCollection<Ingredient> _ingredients;
-        public ObservableCollection<Ingredient> Ingredients 
-        {
-            get { return _ingredients;}
-            set { _ingredients = value; NotifyPropertyChanged(); }
-        }
-
         private ObservableCollection<ProductComposition> _compositions;
         public ObservableCollection<ProductComposition> Compositions
         {
@@ -45,7 +38,6 @@ namespace StorageManagerMobile.ViewModels.Details
         {
             Product= vm.Title;
             Compositions = vm.Compositions;
-            //Ingredients= new ObservableCollection<Ingredient>(IngredientsRepository.GetAll().ToList());
         }
 
         #region Commands
@@ -87,9 +79,6 @@ namespace StorageManagerMobile.ViewModels.Details
             Out.ProductId = Product.Id;
             Compositions.Add(Out);
             ProductCompositionsRepository.Add(Out);
-            //IngredientsFormatsRepository.Add(Ingredient);
-            //context.SaveChanges();
-            //Ingredients = new ObservableCollection<IngredientsFormat>(IngredientsFormatsRepository.GetFormatsFromIngredientId(Title.Id));
         }
 
         public void AddComposition(ProductComposition composition)

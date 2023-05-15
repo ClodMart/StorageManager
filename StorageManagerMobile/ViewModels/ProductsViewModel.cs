@@ -237,31 +237,38 @@ namespace StorageManagerMobile.ViewModels
 
         public void RefreshIngredientList()
         {
-            List<Product> ToDelete = new List<Product>();
-            List<Product> List = productsRepository.GetAll().ToList();
-            List.Sort((l, r) => l.ProductName.CompareTo(r.ProductName));
-            FullProducts.Clear();
+            AllProducts = productsRepository.GetAll().ToList();
+            AllProducts.Sort((l, r) => l.ProductName.CompareTo(r.ProductName));
+            FullProducts = new List<ProductViewerViewModel>();            
 
-            foreach (Product x in List)
+            foreach (Product x in AllProducts)
             {
                 ProductViewerViewModel VM = new ProductViewerViewModel(x);
-                if (VM.Compositions.Count != 0)
-                {
-                    FullProducts.Add(VM);
-                }
-                else
-                {
-                    ToDelete.Add(x);
-                }
+                FullProducts.Add(VM);
             }
+            FilteredProducts = FullProducts;
+            ProductList = new ObservableCollection<ProductViewerViewModel>(FullProducts);
+
+            //foreach (Product x in List)
+            //{
+            //    ProductViewerViewModel VM = new ProductViewerViewModel(x);
+            //    if (VM.Compositions.Count != 0)
+            //    {
+            //        FullProducts.Add(VM);
+            //    }
+            //    else
+            //    {
+            //        ToDelete.Add(x);
+            //    }
+            //}
             //FilteredProducts = FullIngredients;
             //IngredientList = new ObservableCollection<ProductViewerViewModel>(FullIngredients);   
 
             //FilterDefault();
-            foreach (Product x in ToDelete)
-            {
-                productsRepository.Delete(x);
-            }
+            //foreach (Product x in ToDelete)
+            //{
+            //    productsRepository.Delete(x);
+            //}
             IsRefreshing = false;
         }
 

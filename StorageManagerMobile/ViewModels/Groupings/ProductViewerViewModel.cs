@@ -162,7 +162,7 @@ namespace StorageManagerMobile.ViewModels.Groupings
 
         private void CalculateGainPercent()
         {
-            GainPercent = (Math.Round((decimal)((Title.ProductPrice/1.1)/Title.ProductCost/100), 2)).ToString() + "%";
+            GainPercent = (Math.Round((double)((Title.ProductPrice/1.1)/Title.ProductCost/100), 2)).ToString() + "%";
         }
     }
 }

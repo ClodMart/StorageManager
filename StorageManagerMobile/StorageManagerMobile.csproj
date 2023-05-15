@@ -168,6 +168,9 @@
 	  <MauiXaml Update="Views\Products.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\Product\AddProduct.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\Product\Popup\IngredientSelection.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

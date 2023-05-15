@@ -8,7 +8,8 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:DataType="viewmodels:ProductsViewModel"
              x:Class="StorageManagerMobile.Views.Products"
-             Title="Products">
+             Title="Products"
+             NavigatedTo="ContentPage_NavigatedTo">
     <ContentPage.Resources>
         <res:IntToColorConverter x:Key="IntToColor"/>
         <res:DoubleToColorConverter x:Key="DoubleToColor"/>
@@ -33,7 +34,7 @@
         </Grid.RowDefinitions>
 
         <SearchBar x:Name="searchBar" Grid.Row="0" Placeholder="Cerca Materiale..."
-                   SearchCommand="{Binding}"
+                   SearchCommand="{Binding PerformSearch}"
                    SearchCommandParameter="{Binding Text, Source={x:Reference searchBar}}"
                    TextChanged="searchBar_TextChanged"/>
 
@@ -122,7 +123,7 @@
                                         <Label Text="{Binding Title.ProductCategory}" Style="{StaticResource ListSubText}" Grid.Column="1" Grid.Row="1" VerticalOptions="StartAndExpand" HorizontalOptions="StartAndExpand" FontAutoScalingEnabled="True"/>
                                         <Label Text="{Binding GainPercent}" Style="{StaticResource ListMainText}" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="CenterAndExpand" HorizontalOptions="StartAndExpand"/>
                                         <Label Text="{Binding Title.ProductCost, Converter={StaticResource Rounder}}" Style="{StaticResource ListIsUsedText}" Grid.Column="4" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="Center"/>
-                                        <Button x:Name="EditQuantity" Padding="7" Text="{Binding Title.ProductPrice}" Style="{StaticResource ButtonContentText}" Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="Center" Clicked="EditQuantity_Clicked"/>
+                                        <Label Padding="7" Text="{Binding Title.ProductPrice}" Style="{StaticResource ButtonContentText}" Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="Center"/>
                                         <Image Grid.Column="5" Grid.RowSpan="2" Source="{AppThemeBinding Default=arrowdown_lightmode.svg, Light=arrowdown_lightmode.svg, Dark=arrowdown_darkmode.svg}" BackgroundColor="Transparent" WidthRequest="50" HeightRequest="50">
                                             <Image.Triggers>
                                                 <DataTrigger TargetType="{x:Type Image}" Binding="{Binding Source={x:RelativeSource AncestorType={x:Type toolkit:Expander}}, Path=IsExpanded}" Value="true">
