@@ -102,6 +102,9 @@
 	  <Compile Update="Views\IngredientsPage.xaml.cs">
 	    <DependentUpon>IngredientsPage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\OrderTypes.xaml.cs">
+	    <DependentUpon>OrderTypes.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\Orders\OrderCategoryDetails.xaml.cs">
 	    <DependentUpon>OrderCategoryDetails.xaml</DependentUpon>
 	  </Compile>
@@ -144,13 +147,10 @@
 	  <MauiXaml Update="Views\Ingredients\Popup\SupplierSelection.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\NewOrder.xaml">
+	  <MauiXaml Update="Views\Orders\OrderSelector.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\Orders\ExportPreview.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Orders\ExportTemplate\OrderTemplate1.xaml">
+	  <MauiXaml Update="Views\OrderTypes.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Orders\OrderCategoryDetails.xaml">

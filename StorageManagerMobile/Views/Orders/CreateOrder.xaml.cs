@@ -1,7 +1,6 @@
 using DBManager.Models;
 using PdfSharp.Maui;
 using StorageManagerMobile.ViewModels;
-using StorageManagerMobile.Views.Orders.ExportTemplate;
 using System.Text;
 using PdfSharpCore;
 using CommunityToolkit.Maui.Storage;
@@ -77,6 +76,5 @@ public partial class CreateOrder : ContentPage
 
     private void ExportButton_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new ExportPreview());
     }
 }

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace StorageManagerMobile.ViewModels
 {
-    public class NewOrderViewModel : BaseViewModel
+    public class OrderTypesViewModel : BaseViewModel
     {
         private static readonly StorageManagerDBContext context = DBService.Instance.DbContext;
         private static readonly OrderCategoriesRepository OrderCategoriesRepository = new OrderCategoriesRepository(context);
@@ -18,7 +18,7 @@ namespace StorageManagerMobile.ViewModels
         private ObservableCollection<OrderCategory> categories = new ObservableCollection<OrderCategory>();
         public ObservableCollection<OrderCategory> Categories { get { return categories; } set { categories = value; NotifyPropertyChanged(); } }
 
-        public NewOrderViewModel()
+        public OrderTypesViewModel()
         {
             Categories= new ObservableCollection<OrderCategory>(OrderCategoriesRepository.GetAll());
         }

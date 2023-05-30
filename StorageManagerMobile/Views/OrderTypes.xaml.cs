@@ -8,9 +8,9 @@ using StorageManagerMobile.Views.Orders;
 
 namespace StorageManagerMobile.Views;
 
-public partial class NewOrder : ContentPage
+public partial class OrderTypes : ContentPage
 {
-    public NewOrder()
+    public OrderTypes()
 	{
 		InitializeComponent();
 	}
@@ -37,11 +37,17 @@ public partial class NewOrder : ContentPage
         //newPage.BindingContext = VM;
         //Navigation.PushAsync(newPage);
 
-        OrderManager newPage = new OrderManager();
+        OrderSelector newPage = new OrderSelector();
         OrderCategory Currrent = (OrderCategory)((Button)sender).BindingContext;
-        //List<OrdersList> List = OrderLists.GetListByCategory(Currrent.Id);
-        OrderManagerViewModel VM = new OrderManagerViewModel(Currrent);
+        OrderSelectorViewModel VM = new OrderSelectorViewModel(Currrent);
         newPage.BindingContext = VM;
         Navigation.PushAsync(newPage);
+
+        //OrderManager newPage = new OrderManager();
+        //OrderCategory Currrent = (OrderCategory)((Button)sender).BindingContext;
+        ////List<OrdersList> List = OrderLists.GetListByCategory(Currrent.Id);
+        //OrderManagerViewModel VM = new OrderManagerViewModel(Currrent);
+        //newPage.BindingContext = VM;
+        //Navigation.PushAsync(newPage);
     }
 }
