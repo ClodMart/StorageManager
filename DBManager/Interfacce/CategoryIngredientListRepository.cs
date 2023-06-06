@@ -106,5 +106,10 @@ namespace DBManager.Interfacce
         {
             return "";
         }
+
+        public List<CategoryIngredientList> GetSelectedIngredientList(long id)
+        {
+           return _dbContext.CategoryIngredientLists.Where(x=>x.CategoryId == id && x.Selected).ToList();
+        }
     }
 }
