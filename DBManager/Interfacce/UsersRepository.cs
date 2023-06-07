@@ -8,33 +8,38 @@ using System.Threading.Tasks;
 
 namespace DBManager.Interfacce
 {
-    public class OrdersListsRepository : IRepository<OrdersList>
+    public class UsersRepository : IRepository<User>
     {
         private readonly StorageManagerDBContext _dbContext;
 
-        public OrdersListsRepository(StorageManagerDBContext dbContext)
+        public UsersRepository(StorageManagerDBContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public IEnumerable<OrdersList> GetAll()
+        public IEnumerable<User> GetAll()
         {
-            return _dbContext.OrdersLists.ToList();
+            return _dbContext.Users.ToList();
         }
 
-        public OrdersList GetById(long id)
+        public User GetById(long id)
         {
-            return _dbContext.OrdersLists.Find(id);
+            return _dbContext.Users.Find(id);
         }
 
-        public long Add(OrdersList entity)
+        public User GetByName(string Name)
         {
-            _dbContext.OrdersLists.Add(entity);
+            return _dbContext.Users.FirstOrDefault(x => x.Username == Name);
+        }
+
+        public long Add(User entity)
+        {
+            _dbContext.Users.Add(entity);
             _dbContext.SaveChanges();
-            return entity.EntryId;
+            return entity.Id;
         }
 
-        public string AddAll(List<OrdersList> entities)
+        public string AddAll(List<User> entities)
         {
             using (var dbContextTrans = _dbContext.Database.BeginTransaction())
             {
@@ -42,11 +47,11 @@ namespace DBManager.Interfacce
                 {
                     foreach (var entity in entities)
                     {
-                        _dbContext.OrdersLists.Add(entity);
+                        _dbContext.Users.Add(entity);
                     }
                     _dbContext.SaveChanges();
                     dbContextTrans.Commit();
-                    return "Succeded";
+                    return "Succesful";
                 }
                 catch (Exception e)
                 {
@@ -64,21 +69,16 @@ namespace DBManager.Interfacce
             }
         }
 
-        public void Update(OrdersList entity)
+        public void Update(User entity)
         {
             _dbContext.Entry(entity).State = EntityState.Modified;
             _dbContext.SaveChanges();
         }
 
-        public void Delete(OrdersList entity)
+        public void Delete(User entity)
         {
-            _dbContext.OrdersLists.Remove(entity);
+            _dbContext.Users.Remove(entity);
             _dbContext.SaveChanges();
-        }
-
-        public List<OrdersList> GetListByCategory(long categoryId)
-        {
-            return _dbContext.OrdersLists.Where(x=>x.OrderId == categoryId).ToList();
         }
 
         public string InsertFromCSV(string fileUri)

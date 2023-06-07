@@ -1,4 +1,5 @@
-﻿using DBManager.Interfacce;
+﻿using CommunityToolkit.Maui.Core.Views;
+using DBManager.Interfacce;
 using DBManager.Models;
 using StorageManagerMobile.Services;
 using StorageManagerMobile.Views.Orders;
@@ -70,15 +71,26 @@ namespace StorageManagerMobile.ViewModels.Details
                 IngredientList = new ObservableCollection<CategoryIngredientList>(CategoryIngredientListsRepository.GetFromCategory_Id(Cat.Id));          
         }
 
-        public void AddCategoryIngredient(Ingredient Ing)
+        public long AddCategoryIngredient(Ingredient Ing)
         {
             CategoryIngredientList Ingredient = new CategoryIngredientList();
             Ingredient.CategoryId = Cat.Id;
             Ingredient.IngredientId = Ing.Id;
             Ingredient.Ingredient = Ing;
             Ingredient.Category = Cat;
+            if(CategoryIngredientListsRepository.GetFromCategory_Id(Cat.Id).Select(x=>x.IngredientId).Contains(Ingredient.IngredientId)) 
+            {
+                return -1;
+            }
+            else
+            {
+               return CategoryIngredientListsRepository.Add(Ingredient);                
+            }
+        }
 
-            CategoryIngredientListsRepository.Add(Ingredient);
+        public void RemoveCategoryIngredient(CategoryIngredientList Ing)
+        {
+               CategoryIngredientListsRepository.Delete(Ing);
         }
 
         public void SaveNewCategory()

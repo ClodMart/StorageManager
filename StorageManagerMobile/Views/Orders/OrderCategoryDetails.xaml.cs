@@ -27,8 +27,15 @@ public partial class OrderCategoryDetails : ContentPage
         }
         else
         {
-            ((OrderCategoryDetailsViewModel)BindingContext).AddCategoryIngredient((Ingredient)result);
-            ((OrderCategoryDetailsViewModel)BindingContext).RefreshIngredientList();
+            long res = ((OrderCategoryDetailsViewModel)BindingContext).AddCategoryIngredient((Ingredient)result);
+            if (res == -1)
+            {
+                await DisplayAlert("Alert", "Ingrediente già aggiunto alla lista", "OK");
+            }
+            else
+            {
+                ((OrderCategoryDetailsViewModel)BindingContext).RefreshIngredientList();
+            }            
         }
     }
 
@@ -45,5 +52,12 @@ public partial class OrderCategoryDetails : ContentPage
     private void Save_Clicked(object sender, EventArgs e)
     {
         ((OrderCategoryDetailsViewModel)BindingContext).SaveNewCategory();
+    }
+
+    private void ImageButton_Clicked(object sender, EventArgs e)
+    {
+        CategoryIngredientList current = (CategoryIngredientList)(((ImageButton)sender).BindingContext);
+        ((OrderCategoryDetailsViewModel)BindingContext).RemoveCategoryIngredient(current);
+        ((OrderCategoryDetailsViewModel)BindingContext).RefreshIngredientList();
     }
 }

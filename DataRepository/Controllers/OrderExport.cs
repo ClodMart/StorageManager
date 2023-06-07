@@ -11,12 +11,13 @@ using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace DataRepository.Controllers
 {
-    [Route("api/ExportOrder")]
+    [Route("api/ExportOrder/{Username}/{Password}")]
     [ApiController]
-    public class OrderExport : Controller
+    public class OrderExport : ControllerBase
     {
         private static readonly StorageManagerDBContext context = DBService.Instance.DbContext;
         private static readonly CategoryIngredientListsRepository CategoryIngredientsRepository = new CategoryIngredientListsRepository(context);
+        private static readonly UsersRepository UsersRepository = new UsersRepository(context);
 
         public OrderExport()
         {
@@ -27,15 +28,29 @@ namespace DataRepository.Controllers
         [HttpGet]
         [Route("GetOrderById/{Id}")]
 
-        public IActionResult GetOrderById(long id)
+        public IActionResult GetOrderById(string Username, string Password, long Id)
         {
-            string Filepath = AppDomain.CurrentDomain.BaseDirectory + "Order" + DateOnly.FromDateTime(DateTime.Now).ToString().Replace("/", "-") + ".xls";
-            List<CategoryIngredientList> order = CategoryIngredientsRepository.GetSelectedIngredientList(id);
-            DataSet Out = ExcelCreator.CreateExcel(order);
+            User CurrentUser;
+            try
+            {
+                CurrentUser = UsersRepository.GetByName(Username);
+            }
+            catch (Exception ex)
+            {
+                return Unauthorized();
+            }
+            if(CurrentUser.Password == Password)
+            {
+                string Filepath = AppDomain.CurrentDomain.BaseDirectory + "Order" + DateOnly.FromDateTime(DateTime.Now).ToString().Replace("/", "-") + ".xls";
+                List<CategoryIngredientList> order = CategoryIngredientsRepository.GetSelectedIngredientList(Id);
+                DataSet Out = ExcelCreator.CreateExcel(order);
                 using (var ms = new MemoryStream())
                 {
                     return File(Helper.ExportToExcelDownload(Out), "application/vnd.ms-excel", "Order" + DateOnly.FromDateTime(DateTime.Now).ToString().Replace("/", "-") + ".xlsx");
                 }
+            }
+            return Unauthorized();
+           
             }
         }
     }

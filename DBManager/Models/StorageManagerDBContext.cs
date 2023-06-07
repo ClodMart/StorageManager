@@ -27,6 +27,7 @@ namespace DBManager.Models
         public virtual DbSet<ProductComposition> ProductCompositions { get; set; } = null!;
         public virtual DbSet<Supplier> Suppliers { get; set; } = null!;
         public virtual DbSet<UnitsOfMeasure> UnitsOfMeasures { get; set; } = null!;
+        public virtual DbSet<User> Users { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -140,9 +141,9 @@ namespace DBManager.Models
             {
                 entity.Property(e => e.Id).UseIdentityAlwaysColumn();
 
-                entity.Property(e => e.SupplierId).HasColumnName("Supplier_Id");
+                entity.Property(e => e.OrderDateTime).HasColumnType("timestamp without time zone");
 
-                entity.Property(e => e.Time).HasColumnType("timestamp without time zone");
+                entity.Property(e => e.SupplierId).HasColumnName("Supplier_Id");
 
                 entity.HasOne(d => d.Supplier)
                     .WithMany(p => p.Orders)
@@ -171,7 +172,7 @@ namespace DBManager.Models
 
                 entity.Property(e => e.IngredientId).HasColumnName("Ingredient_Id");
 
-                entity.Property(e => e.OrderCategoryId).HasColumnName("OrderCategory_Id");
+                entity.Property(e => e.OrderId).HasColumnName("Order_Id");
 
                 entity.Property(e => e.Quantity).HasDefaultValueSql("1");
 
@@ -181,9 +182,9 @@ namespace DBManager.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_Ingredient");
 
-                entity.HasOne(d => d.OrderCategory)
+                entity.HasOne(d => d.Order)
                     .WithMany(p => p.OrdersLists)
-                    .HasForeignKey(d => d.OrderCategoryId)
+                    .HasForeignKey(d => d.OrderId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_Order");
             });
@@ -239,6 +240,11 @@ namespace DBManager.Models
             {
                 entity.ToTable("UnitsOfMeasure");
 
+                entity.Property(e => e.Id).UseIdentityAlwaysColumn();
+            });
+
+            modelBuilder.Entity<User>(entity =>
+            {
                 entity.Property(e => e.Id).UseIdentityAlwaysColumn();
             });
 

@@ -12,6 +12,8 @@ namespace DataRepository.Services
         private static readonly IngredientsFormatsRepository FormatRepository = new IngredientsFormatsRepository(context);
         private static readonly SuppliersRepository SuppliersRepository = new SuppliersRepository(context);
         private static readonly IngredientsRepository Ingredients = new IngredientsRepository(context);
+        private static readonly OrdersRepository Orders = new OrdersRepository(context);
+        private static readonly OrdersListsRepository OrdersList = new OrdersListsRepository(context);
 
 
         public static DataSet CreateExcel(List<CategoryIngredientList> order)
@@ -34,9 +36,13 @@ namespace DataRepository.Services
                     suppliers.Add(sup);
                 }                
             }
-            //order.Select(x => x.SelectedFormat.Supplier).Distinct().ToList();
             foreach (Supplier supplier in suppliers)
             {
+                Order or = new Order();
+                or.OrderDateTime = DateTime.Now;
+                or.SupplierId = supplier.Id;
+
+                long OrId = Orders.Add(or);
                 int i = 0;
                 DataTable dt = new DataTable(supplier.SupplierName);
                 dt.Locale = System.Threading.Thread.CurrentThread.CurrentCulture;
@@ -65,20 +71,15 @@ namespace DataRepository.Services
                     row["Categoria"] = ing.Category;
                     row["Quantità"] = x.Quantity;
                     dt.Rows.Add(row);
+                    OrdersList list = new OrdersList();
+                    list.OrderId = OrId;
+                    list.IngredientId = ing.Id;
+                    list.Quantity = x.Quantity;
+                    OrdersList.Add(list);
                     i++;
                 }
-                //while(i < 100)
-                //{
-                //    DataRow row = dt.NewRow();
-                //    row["Prodotto"] = "";
-                //    row["Categoria"] = "";
-                //    row["Quantità"] = "";
-                //    dt.Rows.Add(row);
-                //    i++;
-                //}
                 
                 ds.Tables.Add(dt);
-                //dt.Rows.Clear();
             }
 
             return ds;

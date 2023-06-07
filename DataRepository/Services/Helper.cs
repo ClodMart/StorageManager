@@ -4,7 +4,7 @@ using DocumentFormat.OpenXml;
 using System.Data;
 using System.Globalization;
 
-namespace DataRepository.Controllers
+namespace DataRepository.Services
 {
     public static class Helper
     {
@@ -172,8 +172,8 @@ namespace DataRepository.Controllers
                 return ((char)('A' + columnIndex)).ToString();
             }
 
-            char firstChar = (char)('A' + (columnIndex / 26) - 1);
-            char secondChar = (char)('A' + (columnIndex % 26));
+            char firstChar = (char)('A' + columnIndex / 26 - 1);
+            char secondChar = (char)('A' + columnIndex % 26);
 
             return string.Format(CultureInfo.CurrentCulture, "{0}{1}", firstChar, secondChar);
         }
@@ -287,7 +287,7 @@ namespace DataRepository.Controllers
 
                 if (value != DBNull.Value)
                 {
-                    System.Globalization.CultureInfo cultureinfo = new System.Globalization.CultureInfo("en-US");
+                    CultureInfo cultureinfo = new CultureInfo("en-US");
                     DateTime valueDate = (DateTime)value;
                     string valueString = valueDate.ToOADate().ToString(cultureinfo);
                     CellValue cellValue = new CellValue(valueString);

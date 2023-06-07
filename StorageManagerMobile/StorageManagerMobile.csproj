@@ -150,6 +150,9 @@
 	  <MauiXaml Update="Views\Orders\OrderSelector.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\Orders\Popup\SupplierSelector.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\OrderTypes.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

@@ -82,6 +82,10 @@ namespace StorageManagerMobile.Resources
             {
                 SelectedSupplier = Category.SelectedFormat.Supplier;
             }
+            else
+            {
+                SelectedSupplier = null;
+            }
             NotifyChanges();
         }
 

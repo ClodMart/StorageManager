@@ -12,8 +12,7 @@ namespace DBManager.Models
 
         public long Id { get; set; }
         public long SupplierId { get; set; }
-        public DateOnly OrderDate { get; set; }
-        public DateTime Time { get; set; }
+        public DateTime OrderDateTime { get; set; }
 
         public virtual Supplier Supplier { get; set; } = null!;
         public virtual ICollection<OrdersList> OrdersLists { get; set; }

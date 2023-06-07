@@ -9,9 +9,13 @@
              xmlns:customvievmodels="clr-namespace:StorageManagerMobile.ViewModels"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:comp="clr-namespace:StorageManagerMobile.Views.CustomControl"
+             xmlns:conv="clr-namespace:StorageManagerMobile.Resources"
              x:Class="StorageManagerMobile.Views.Orders.OrderSelector"             
              x:DataType="viewmodels:OrderSelectorViewModel"
              Title="OrderSelector">
+    <ContentPage.Resources>
+        <res:SupplierChecker x:Key="SupplierConv"/>
+    </ContentPage.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -21,7 +25,7 @@
         </Grid.RowDefinitions>
 
         <VerticalStackLayout Grid.Row="0" HorizontalOptions="CenterAndExpand" Margin="0,0,0,5">
-            <Button x:Name="ExportButton" Text="Export Order" Margin="0,5,0,0"/>
+            <Button x:Name="ExportButton" Text="Export Order" Margin="0,5,0,0" Clicked="ExportButton_Clicked"/>
             <Border Grid.Row="0" HorizontalOptions="CenterAndExpand" StrokeThickness="2" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="0,5,0,5" Padding="5" StrokeShape="RoundRectangle 20">
                 <Label Text="Ordine" HorizontalOptions="CenterAndExpand" Style="{StaticResource ListMainText}"/>
             </Border>
@@ -33,7 +37,7 @@
                     <Border StrokeShape="RoundRectangle 20"
                                             BackgroundColor="LightCoral" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="0,0,0,0" Padding="5">
                         <!--<Label Text="test"/>-->
-                        <Grid>
+                        <Grid VerticalOptions="CenterAndExpand">
                             <Grid.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="Deselect_Tapped"/>
                             </Grid.GestureRecognizers>
@@ -50,8 +54,8 @@
                             <Label Style="{StaticResource ListMainText}" Text="{Binding Ingredient.Name}" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
                             <Label Style="{StaticResource ListSubText}" Text="{Binding Ingredient.Category}" Grid.Row="1" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
                             <!--<Label Style="{StaticResource ListSubText}" Text="{Binding SelectedSupplier.Cost}" Grid.Row="2" Grid.Column="1" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>-->
-                            <Picker Style="{StaticResource ListSubText}" SelectedItem="{Binding SelectedSupplier, Mode=TwoWay}" ItemsSource="{Binding SuppliersList}" ItemDisplayBinding="{Binding SupplierName}" Grid.Row="2" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
-                            <Entry x:Name="NumberPicker" Grid.Row="3" Grid.ColumnSpan="2" Text="{Binding NumberOfItems, Mode=TwoWay}" Keyboard="Numeric" HorizontalOptions="FillAndExpand" FontSize="Micro" TextColor="Black" VerticalOptions="End" HorizontalTextAlignment="Center"/>
+                            <Button Style="{StaticResource ListSupplierText}" Text="{Binding SelectedSupplier.SupplierName}" Grid.Row="2" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" Clicked="Button_Clicked" BackgroundColor="LightBlue" BorderColor="Black" BorderWidth="1" Padding="5" Margin="2" CornerRadius="20" MinimumWidthRequest="30"/>
+                            <Entry x:Name="NumberPicker" Grid.Row="3" Grid.ColumnSpan="2" Text="{Binding NumberOfItems, Mode=TwoWay}" Keyboard="Numeric" HorizontalOptions="FillAndExpand" FontSize="Micro" TextColor="Black" VerticalOptions="EndAndExpand" HorizontalTextAlignment="Center"/>
                         </Grid>
                     </Border>
                 </DataTemplate>
@@ -66,7 +70,7 @@
                     <Border StrokeShape="RoundRectangle 20"
                                             BackgroundColor="LightGreen" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="0,0,0,0" Padding="5">
                         <!--<Label Text="test"/>-->
-                        <Grid>
+                        <Grid VerticalOptions="CenterAndExpand">
                             <Grid.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="Select_Tapped"/>
                             </Grid.GestureRecognizers>
@@ -83,8 +87,8 @@
                             <Label Style="{StaticResource ListMainText}" Text="{Binding Ingredient.Name}" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
                             <Label Style="{StaticResource ListSubText}" Text="{Binding Ingredient.Category}" Grid.Row="1" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
                             <!--<Label Style="{StaticResource ListSubText}" Text="{Binding SelectedSupplier.Cost}" Grid.Row="2" Grid.Column="1" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>-->
-                            <Picker Style="{StaticResource ListSubText}" SelectedItem="{Binding SelectedSupplier}" ItemsSource="{Binding SuppliersList}" ItemDisplayBinding="{Binding SupplierName}" Grid.Row="2" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" SelectedIndexChanged="Picker_SelectedIndexChanged"/>
-                            <Entry x:Name="NumberPicker" Grid.Row="3" Grid.ColumnSpan="2" Text="{Binding NumberOfItems, Mode=TwoWay}" Keyboard="Numeric" HorizontalOptions="FillAndExpand" FontSize="Micro" TextColor="Black" VerticalOptions="End" HorizontalTextAlignment="Center"/>
+                            <Button Style="{StaticResource ListSupplierText}" Text="{Binding SelectedSupplier.SupplierName}" Grid.Row="2" Grid.ColumnSpan="2" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" Clicked="Button_Clicked" BackgroundColor="LightBlue" BorderColor="Black" BorderWidth="1" Padding="5" Margin="2" CornerRadius="20" MinimumWidthRequest="30"/>
+                            <Entry x:Name="NumberPicker" Grid.Row="3" Grid.ColumnSpan="2" Text="{Binding NumberOfItems, Mode=TwoWay}" Keyboard="Numeric" HorizontalOptions="FillAndExpand" FontSize="Micro" TextColor="Black" VerticalOptions="EndAndExpand" HorizontalTextAlignment="Center"/>
                         </Grid>
                     </Border>
                 </DataTemplate>

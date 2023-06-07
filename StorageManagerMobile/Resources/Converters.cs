@@ -290,4 +290,24 @@ namespace StorageManagerMobile.Resources
             throw new NotImplementedException();
         }
     }
+
+
+    public class SupplierChecker : IValueConverter
+    {
+        private readonly StorageManagerDBContext dbContext = DBService.Instance.DbContext;
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if(value == null)
+            {
+                return "Seleziona Fornitore";
+            }
+            return value;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return value;
+        }
+    }
+
 }
