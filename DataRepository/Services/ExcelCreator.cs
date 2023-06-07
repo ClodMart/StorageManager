@@ -78,7 +78,7 @@ namespace DataRepository.Services
                 //}
                 
                 ds.Tables.Add(dt);
-                dt.Rows.Clear();
+                //dt.Rows.Clear();
             }
 
             return ds;
