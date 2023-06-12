@@ -34,6 +34,10 @@
 	  <WarningLevel>7</WarningLevel>
 	</PropertyGroup>
 
+  <PropertyGroup>
+    <AndroidHttpClientHandlerType>DangerousAndroidMessageHandler, DangerousAndroidMessageHandler</AndroidHttpClientHandlerType>
+  </PropertyGroup>
+
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-maccatalyst|AnyCPU'">
 	  <WarningLevel>7</WarningLevel>
 	</PropertyGroup>

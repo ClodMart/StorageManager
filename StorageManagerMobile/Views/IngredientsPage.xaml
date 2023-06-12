@@ -22,7 +22,7 @@
         <res:IdToSupplierConverter x:Key="SupplierConverter"/>
         <res:DatetimeToDate x:Key="DateTimeToDate"/>
         <res:IsUsedValueConverter x:Key="IsUsedConverter"/>
-        <res:BoolReverse x:Key="BoolReverse"/>
+        <res:BoolReverse x:Kzey="BoolReverse"/>
         <res:IngredientFormatToPriceColor x:Key="IngredientFormatPriceColor"/>
 
     </ContentPage.Resources>

@@ -51,7 +51,8 @@ public partial class OrderCategoryDetails : ContentPage
 
     private void Save_Clicked(object sender, EventArgs e)
     {
-        ((OrderCategoryDetailsViewModel)BindingContext).SaveNewCategory();
+        //((OrderCategoryDetailsViewModel)BindingContext).SaveNewCategory();
+        ((OrderCategoryDetailsViewModel)((Button)sender).BindingContext).SaveNewCategory();
     }
 
     private void ImageButton_Clicked(object sender, EventArgs e)

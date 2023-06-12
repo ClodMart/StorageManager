@@ -1,4 +1,5 @@
-﻿using DBManager.Interfacce;
+﻿using CommunityToolkit.Maui.Core.Views;
+using DBManager.Interfacce;
 using DBManager.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using StorageManagerMobile.Services;
@@ -31,12 +32,18 @@ namespace StorageManagerMobile.ViewModels.Add
             Supplier= new Supplier();
         }
 
-        public void SaveSupplier()
+        public long SaveSupplier()
         {
-            if(Supplier != null)
-            {                
-                SuppliersRepository.Add(Supplier);
-                IngredientsFormatsRepository.AddAll(Supplier.IngredientsFormats.ToList());                
+            if(Supplier != null && Supplier.SupplierName != null)
+            {
+                long SupId = SuppliersRepository.Add(Supplier);
+                IngredientsFormatsRepository.AddAll(Supplier.IngredientsFormats.ToList());
+                return SupId;
+            }
+            else
+            {
+                //await DisplayAlert("Attenzione", "Impossibile salvare il fornitore, prego inserire nuovi dati", "Ok");
+                return -1;
             }
         }
 

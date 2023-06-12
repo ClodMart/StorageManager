@@ -75,7 +75,7 @@ namespace StorageManagerMobile.ViewModels
         {
             MenuList = new List<PageLink>()
             {
-                new PageLink("Home","HomePage"),
+                new PageLink("Home","HomePage"),  
                 new PageLink("Fornitori", "SuppliersPage"),
                 new PageLink("Ingredienti", "IngredientsPage"),
                 new PageLink("Prodotti", "Products"),

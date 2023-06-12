@@ -17,8 +17,14 @@ public partial class AddSuppliers : ContentPage
 
     private void Salva_Clicked(object sender, EventArgs e)
     {
-		((AddSupplierViewModel)BindingContext).SaveSupplier();
-		Navigation.PopAsync();
+		if( ((AddSupplierViewModel)BindingContext).SaveSupplier() > 0)
+        {
+            Navigation.PopAsync();
+        }
+        else
+        {
+            DisplayAlert("Attenzione", "Impossibile salvare il fornitore, prego inserire nuovi dati", "Ok");
+        }
     }
     
     private async Task OpenFormatSelectionPopupAsync()

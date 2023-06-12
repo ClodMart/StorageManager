@@ -29,9 +29,9 @@ namespace DBManager.Interfacce
 
         public long Add(Supplier entity)
         {
-            _dbContext.Suppliers.Add(entity);
-            _dbContext.SaveChanges();
-            return entity.Id;
+                _dbContext.Suppliers.Add(entity);
+                _dbContext.SaveChanges();
+                return entity.Id;          
         }
 
         public string AddAll(List<Supplier> entities)
