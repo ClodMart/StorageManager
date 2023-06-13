@@ -22,5 +22,10 @@ namespace StorageManagerMobile.ViewModels
         {
             Categories= new ObservableCollection<OrderCategory>(OrderCategoriesRepository.GetAll());
         }
+
+        public void RefreshList()
+        {
+            Categories = new ObservableCollection<OrderCategory>(OrderCategoriesRepository.GetAll());
+        }
     }
 }

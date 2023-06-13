@@ -1,14 +1,20 @@
+using CommunityToolkit.Maui.Storage;
 using CommunityToolkit.Maui.Views;
 using DBManager.Models;
 using StorageManagerMobile.Resources;
 using StorageManagerMobile.ViewModels;
 using StorageManagerMobile.ViewModels.Popup;
 using StorageManagerMobile.Views.Orders.Popup;
+using System.Diagnostics;
+using System.Drawing;
+using System.Text.Json;
+using static System.Net.WebRequestMethods;
 
 namespace StorageManagerMobile.Views.Orders;
 
 public partial class OrderSelector : ContentPage
 {
+
 	public OrderSelector()
 	{
 		InitializeComponent();
@@ -33,8 +39,27 @@ public partial class OrderSelector : ContentPage
 
     private void ExportButton_Clicked(object sender, EventArgs e)
     {
-        HttpClient client = new HttpClient();
+        HttpRequestAsync();
+    }
 
+    private async Task HttpRequestAsync()
+    {
+        string Username = "Prins";
+        string PW = "Prins123!";
+        string CategoryId = ((OrderSelectorViewModel)BindingContext).Cat.Id.ToString();
+        HttpClient client = new HttpClient();
+        Uri uri = new Uri(string.Format("https://10.147.18.219:5024/api/ExportOrder/{0}/{1}/GetOrderById/{2}", Username, PW, CategoryId));
+        try
+        {
+            HttpResponseMessage response = await client.GetAsync(uri);
+            //string SavePath = FolderPicker.PickAsync();
+            var stream = response.Content.ReadAsStreamAsync();
+            FileSaver.SaveAsync("Order" + DateOnly.FromDateTime(DateTime.Now).ToString().Replace("/", "-") + ".xls",stream.Result , cancellationToken:default);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(@"\tERROR {0}", ex.Message);
+        }
     }
 
     private async Task EditIsUsedAsync(object sender, EventArgs e)

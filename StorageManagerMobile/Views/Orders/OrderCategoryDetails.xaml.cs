@@ -53,6 +53,7 @@ public partial class OrderCategoryDetails : ContentPage
     {
         //((OrderCategoryDetailsViewModel)BindingContext).SaveNewCategory();
         ((OrderCategoryDetailsViewModel)((Button)sender).BindingContext).SaveNewCategory();
+        Navigation.PopAsync();
     }
 
     private void ImageButton_Clicked(object sender, EventArgs e)
@@ -60,5 +61,11 @@ public partial class OrderCategoryDetails : ContentPage
         CategoryIngredientList current = (CategoryIngredientList)(((ImageButton)sender).BindingContext);
         ((OrderCategoryDetailsViewModel)BindingContext).RemoveCategoryIngredient(current);
         ((OrderCategoryDetailsViewModel)BindingContext).RefreshIngredientList();
+    }
+
+    private void Delete_Clicked(object sender, EventArgs e)
+    {
+        ((OrderCategoryDetailsViewModel)((Button)sender).BindingContext).DeleteCategory();
+        Navigation.PopAsync();
     }
 }

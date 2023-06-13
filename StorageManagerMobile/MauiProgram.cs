@@ -18,8 +18,8 @@ namespace StorageManagerMobile
             }).UseMauiCommunityToolkit();
 
 
-            //builder.Services.AddSingleton(FileSaver.Default);
-            //builder.Services.AddTransient<CreateOrder>();
+            builder.Services.AddSingleton(FileSaver.Default);
+            builder.Services.AddTransient<OrderSelector>();
             return builder.Build();
         }
     }

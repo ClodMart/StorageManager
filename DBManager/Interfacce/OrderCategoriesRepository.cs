@@ -78,7 +78,11 @@ namespace DBManager.Interfacce
 
         public long GetNextId()
         {
-            long OUT = _dbContext.OrderCategories.Max(x => x.Id);
+            long OUT = 0;
+            if (_dbContext.OrderCategories.Count() > 0)
+            {
+                OUT = _dbContext.OrderCategories.Max(x => x.Id);
+            }            
             return OUT+1;
         }
 
@@ -115,6 +119,39 @@ namespace DBManager.Interfacce
             //        }
             //    }
             //}
+        }
+
+        public bool DeleteCategoryCascade(OrderCategory entity)
+        {
+            using (var dbContextTrans = _dbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    List<CategoryIngredientList> ingredients = _dbContext.CategoryIngredientLists.Where(x => x.CategoryId == entity.Id).ToList();
+                    foreach(CategoryIngredientList x in ingredients)
+                    {
+                        _dbContext.CategoryIngredientLists.Remove(x);
+                    }
+                    _dbContext.OrderCategories.Remove(entity);
+                    _dbContext.SaveChanges();
+                    dbContextTrans.Commit();
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    dbContextTrans.Rollback();
+                    string inner = e.InnerException.Message;
+                    if (inner != null)
+                    {
+                        string err = e.Message + "\nInner Exeption: " + inner;
+                        return false;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
         }
     }
 }
