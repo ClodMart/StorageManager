@@ -24,7 +24,7 @@
         <Label Text="Titolo" Style="{StaticResource ListMainText}" HorizontalOptions="CenterAndExpand"/>
         <Entry x:Name="Titolo" Text="{Binding Title}" HorizontalOptions="CenterAndExpand"/>
         <Label Text="Descrizione" Style="{StaticResource ListMainText}" HorizontalOptions="CenterAndExpand"/>
-        <Editor x:Name="Descrizione" Text="{Binding Description}" HorizontalOptions="CenterAndExpand" VerticalOptions="StartAndExpand"/>
+        <Entry x:Name="Descrizione" Text="{Binding Description}" HorizontalOptions="CenterAndExpand" VerticalOptions="StartAndExpand"/>
     </VerticalStackLayout>
 
         <CollectionView IsVisible="{Binding NewCategory, Converter={StaticResource BoolReverse}}" Grid.Row="1" HorizontalOptions="CenterAndExpand" VerticalOptions="StartAndExpand" ItemsSource="{Binding IngredientList}">
