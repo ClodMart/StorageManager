@@ -52,7 +52,8 @@ namespace StorageManagerMobile.ViewModels.Details
         public OrderCategoryDetailsViewModel()
         {
             NewCategory = true;
-            Cat.Id = OrderCategoriesRepository.GetNextId();
+            Cat = new OrderCategory();
+            //Cat.Id = -1;
             IngredientList = new ObservableCollection<CategoryIngredientList>(new List<CategoryIngredientList>());
         }
 
@@ -98,6 +99,11 @@ namespace StorageManagerMobile.ViewModels.Details
             Cat.Name = Title;
             Cat.Description = Description;
             OrderCategoriesRepository.Add(Cat);
+        }
+
+        public void DeleteCategory()
+        {
+            OrderCategoriesRepository.DeleteCategoryCascade(Cat);
         }
 
     }

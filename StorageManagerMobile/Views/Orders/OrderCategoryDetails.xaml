@@ -24,7 +24,7 @@
         <Label Text="Titolo" Style="{StaticResource ListMainText}" HorizontalOptions="CenterAndExpand"/>
         <Entry x:Name="Titolo" Text="{Binding Title}" HorizontalOptions="CenterAndExpand"/>
         <Label Text="Descrizione" Style="{StaticResource ListMainText}" HorizontalOptions="CenterAndExpand"/>
-        <Editor x:Name="Descrizione" Text="{Binding Description}" HorizontalOptions="CenterAndExpand" VerticalOptions="StartAndExpand"/>
+        <Entry x:Name="Descrizione" Text="{Binding Description}" HorizontalOptions="CenterAndExpand" VerticalOptions="StartAndExpand"/>
     </VerticalStackLayout>
 
         <CollectionView IsVisible="{Binding NewCategory, Converter={StaticResource BoolReverse}}" Grid.Row="1" HorizontalOptions="CenterAndExpand" VerticalOptions="StartAndExpand" ItemsSource="{Binding IngredientList}">
@@ -50,5 +50,6 @@
         </CollectionView>
     </Grid>
         <Button x:Name="Save" Margin="5"  Text=" Salva " HorizontalOptions="CenterAndExpand" IsVisible="{Binding NewCategory}" VerticalOptions="Center" Grid.Row="2" WidthRequest="100" Clicked="Save_Clicked"/>
+        <Button x:Name="Delete" Margin="5"  Text="Elimina" HorizontalOptions="CenterAndExpand" IsVisible="{Binding NewCategory, Converter={StaticResource BoolReverse}}" VerticalOptions="Center" Grid.Row="2" WidthRequest="100" Clicked="Delete_Clicked"/>
     </VerticalStackLayout>
 </ContentPage>

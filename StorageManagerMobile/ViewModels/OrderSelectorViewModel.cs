@@ -17,6 +17,13 @@ namespace StorageManagerMobile.ViewModels
         private static readonly StorageManagerDBContext context = DBService.Instance.DbContext;
         private static readonly CategoryIngredientListsRepository CategoryIngredientsRepository = new CategoryIngredientListsRepository(context);
 
+        private OrderCategory cat;
+        public OrderCategory Cat
+        {
+            get { return cat; }
+            set { cat = value; NotifyPropertyChanged(); }
+        }
+
         private List<CategoryIngredientList> allIngredientsList;
         public List<CategoryIngredientList> AllIngredientsList { get { return allIngredientsList; } set { allIngredientsList = value; NotifyPropertyChanged(); } }
 
@@ -28,6 +35,7 @@ namespace StorageManagerMobile.ViewModels
 
         public OrderSelectorViewModel() 
         {
+            Cat = new OrderCategory();
             AllIngredientsList = new List<CategoryIngredientList>();
             SelectedIngredients = new ObservableCollection<OrderIngredient>();
             SelectableIngredients=new ObservableCollection<OrderIngredient>();
@@ -35,6 +43,7 @@ namespace StorageManagerMobile.ViewModels
 
         public OrderSelectorViewModel(OrderCategory Current)
         {
+            Cat = Current;
             long CategoryId = Current.Id;
             List<CategoryIngredientList> CategoryIngredients = CategoryIngredientsRepository.GetFromCategory_Id(CategoryId).ToList();
             AllIngredientsList = new List<CategoryIngredientList>();

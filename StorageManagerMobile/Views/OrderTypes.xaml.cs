@@ -26,6 +26,7 @@ public partial class OrderTypes : ContentPage
     private void ImageButton_Clicked(object sender, EventArgs e)
     {
         OrderCategoryDetails newPage = new OrderCategoryDetails();
+        newPage.BindingContext = new OrderCategoryDetailsViewModel();
         Navigation.PushAsync(newPage);
     }
 
@@ -49,5 +50,10 @@ public partial class OrderTypes : ContentPage
         //OrderManagerViewModel VM = new OrderManagerViewModel(Currrent);
         //newPage.BindingContext = VM;
         //Navigation.PushAsync(newPage);
+    }
+
+    private void ContentPage_NavigatedTo(object sender, NavigatedToEventArgs e)
+    {
+        ((OrderTypesViewModel)BindingContext).RefreshList();
     }
 }

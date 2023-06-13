@@ -80,7 +80,15 @@
 	  <None Remove="Resources\Images\radiobuttonempty_lightmode.svg" />
 	  <None Remove="Resources\Images\radiobuttonfull_darkmode.svg" />
 	  <None Remove="Resources\Images\radiobuttonfull_lightmode.svg" />
+	  <None Remove="Resources\Raw\network_security_config.xml" />
 	  <None Remove="Resources\Raw\OpenSans-Regular.ttf" />
+	  <None Remove="Platforms\Android\Resources\Xml\network_security_config.xml" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Resource Include="Platforms\Android\Resources\Xml\network_security_config.xml">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Resource>
 	</ItemGroup>
 
 	<ItemGroup>
