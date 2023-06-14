@@ -21,6 +21,8 @@ namespace DataRepository.DataModel
         private List<IngredientViewer> UsedIngredientLists = new List<IngredientViewer>();
         private List<IngredientViewer> NotUsedIngredientLists = new List<IngredientViewer>();
 
+        private List<long> IsUsedValuesID;
+
         public static IngredientsDataModel Instance
         {
             get
@@ -39,10 +41,10 @@ namespace DataRepository.DataModel
         public IngredientsDataModel()
         {
             //UsedValuesList.AddRange(UsedValues.IsUsedValues.Where(x => !x.CorrespondsToUsed).Select(x => x.Description).ToList());
-            List<long> IsUsedID = isUsedValuesRepository.GetUsedId();
+            IsUsedValuesID = isUsedValuesRepository.GetUsedId();
             AllIngredients = IngredientsRepository.GetAll().ToList();
-            NotUsedIngredients = AllIngredients.Where(x => !IsUsedID.Contains(x.IsUsedValue)).ToList();
-            UsedIngredients = AllIngredients.Where(x => IsUsedID.Contains(x.IsUsedValue)).ToList();
+            NotUsedIngredients = AllIngredients.Where(x => !IsUsedValuesID.Contains(x.IsUsedValue)).ToList();
+            UsedIngredients = AllIngredients.Where(x => IsUsedValuesID.Contains(x.IsUsedValue)).ToList();
 
             foreach (Ingredient y in NotUsedIngredients)
             {
@@ -156,12 +158,64 @@ namespace DataRepository.DataModel
         public long AddIngredient(IngredientViewer ingredient)
         {
             long NewId = IngredientsRepository.Add(ingredient.Title);
+            ingredient.Title.Id = NewId;
             foreach(IngredientsFormat x in ingredient.Ingredients)
             {
+                x.IngredientId = NewId;
                 ingredient.AddFormat(x);
             }
-            context.SaveChanges();
+            if (IsUsedValuesID.Contains(ingredient.Title.IsUsedValue))
+            {
+                UsedIngredientLists.Add(ingredient);
+            }
+            else
+            {
+                NotUsedIngredientLists.Add(ingredient);
+            }
             return NewId;
+        }
+
+        private void Update(IngredientViewer OldIng, IngredientViewer ingredient)
+        {
+            if (IsUsedValuesID.Contains(OldIng.Title.IsUsedValue) && IsUsedValuesID.Contains(ingredient.Title.IsUsedValue))
+            {
+                //UsedIngredientLists.ElementAt(UsedIngredientLists.IndexOf(OldIng)) = ingredient;
+                UsedIngredientLists.Remove(OldIng);
+                UsedIngredientLists.Add(ingredient);
+                UsedIngredientLists.Sort((l, r) => l.Title.Name.CompareTo(r.Title.Name));
+            }
+            else if (!IsUsedValuesID.Contains(OldIng.Title.IsUsedValue) && !IsUsedValuesID.Contains(ingredient.Title.IsUsedValue))
+            {
+                NotUsedIngredientLists.Remove(OldIng);
+                NotUsedIngredientLists.Add(ingredient);
+                NotUsedIngredientLists.Sort((l, r) => l.Title.Name.CompareTo(r.Title.Name));
+            }
+            else
+            {
+                if (IsUsedValuesID.Contains(ingredient.Title.IsUsedValue))
+                {
+                    NotUsedIngredientLists.Remove(OldIng);
+                    UsedIngredientLists.Add(ingredient);
+                    UsedIngredientLists.Sort((l, r) => l.Title.Name.CompareTo(r.Title.Name));
+                }
+                else
+                {
+                    UsedIngredientLists.Remove(OldIng);
+                    NotUsedIngredientLists.Add(ingredient);
+                    NotUsedIngredientLists.Sort((l, r) => l.Title.Name.CompareTo(r.Title.Name));
+                }
+            }
+        }
+
+        public void UpdateIngredientViewer(IngredientViewer ing)
+        {
+            IngredientViewer OldIng = UsedIngredientLists.FirstOrDefault(x=>x.Title.Id== ing.Title.Id) ?? NotUsedIngredientLists.FirstOrDefault(x => x.Title.Id == ing.Title.Id);
+            Update(OldIng, ing);
+            IngredientsRepository.Update(ing.Title);
+            foreach(IngredientsFormat x in ing.Ingredients)
+            {
+                ing.UpdateFormat(x);
+            }
         }
     }
 
@@ -200,6 +254,10 @@ namespace DataRepository.DataModel
            return IngredientsFormatsRepository.Add(format);
         }
 
+        public void UpdateFormat(IngredientsFormat format)
+        {            
+            IngredientsFormatsRepository.Update(format);
+        }
     }
    
 }
