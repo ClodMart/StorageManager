@@ -23,7 +23,7 @@ namespace StorageManagerMobile.ViewModels.Groupings
         private static readonly StorageManagerDBContext context = DBService.Instance.DbContext;
         private static readonly IngredientsFormatsRepository IngredientsFormatsRepository = new IngredientsFormatsRepository(context);
 
-        private List<IngredientsFormat> AllFormats = new List<IngredientsFormat>();
+        public List<IngredientsFormat> AllFormats = new List<IngredientsFormat>();
 
         private bool isExpanded = false;
         public bool IsExpanded
@@ -67,6 +67,13 @@ namespace StorageManagerMobile.ViewModels.Groupings
             AllFormats.Reverse();
             Ingredients = new ObservableCollection<IngredientsFormat>(AllFormats);
         }
+
+
+        public IngredientViewerViewModel()
+        {
+            
+        }
+
 
         #region Commands
 

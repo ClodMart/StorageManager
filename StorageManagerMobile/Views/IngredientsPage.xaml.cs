@@ -63,7 +63,7 @@ public partial class IngredientsPage : ContentPage
 
     public void RefreshList()
     {
-        ((IngredientsViewModel)BindingContext).RefreshIngredientList();
+        ((IngredientsViewModel)BindingContext).RefreshIngredientList();        
     }
 
     private void ContentPage_NavigatedTo(object sender, NavigatedToEventArgs e)
@@ -152,7 +152,8 @@ public partial class IngredientsPage : ContentPage
         {
             ((IngredientsViewModel)BindingContext).DeleteIngredients(Current);
         }
-        RefreshList();
+        //RefreshList();
+        ((IngredientsViewModel)BindingContext).NotifyUIChange();
     }
 
     #endregion
@@ -209,7 +210,8 @@ public partial class IngredientsPage : ContentPage
         {
             ((IngredientsViewModel)BindingContext).DeleteIngredients(Current);
         }
-        RefreshUnusedList();
+        //RefreshUnusedList();
+        ((IngredientsViewModel)BindingContext).NotifyUIChange();
     }
 
     public void RefreshUnusedList()
@@ -244,6 +246,7 @@ public partial class IngredientsPage : ContentPage
             ((IngredientsViewModel)BindingContext).UpdateIngredientList(Current.Title);
             ((IngredientsViewModel)BindingContext).RefreshIngredientList();
             ((IngredientsViewModel)BindingContext).RefreshUnusedIngredientList();
+            //((IngredientsViewModel)BindingContext).NotifyUIChange();
             //    updated.Add(Current.Title);
 
             //Current.Title = new ObservableCollection<Ingredient>(updated);
@@ -268,6 +271,7 @@ public partial class IngredientsPage : ContentPage
         var result = await this.ShowPopupAsync(popup);
         RefreshList();
         RefreshUnusedList();
+        //((IngredientsViewModel)BindingContext).NotifyUIChange();
     }
 
     //private void Entry_TextChanged(object sender, TextChangedEventArgs e)

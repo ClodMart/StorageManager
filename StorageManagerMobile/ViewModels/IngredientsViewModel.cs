@@ -201,7 +201,17 @@ namespace StorageManagerMobile.ViewModels
             IngredientList = new ObservableCollection<IngredientViewerViewModel>(FilteredIngredients);
         }
 
-            public void FilterList(string Filter)
+
+        public void NotifyUIChange()
+        {
+            NotifyPropertyChanged(nameof(NotUsedIngredientList));
+            NotifyPropertyChanged(nameof(IngredientList));
+        }
+
+        
+
+
+        public void FilterList(string Filter)
         {
             LastFilter = Filter;
             switch (Filter)

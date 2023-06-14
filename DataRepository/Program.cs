@@ -1,3 +1,5 @@
+using DataRepository.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,6 +9,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DBManager.Models.StorageManagerDBContext>();
+builder.Services.AddSingleton<ApplicationCacheManager>(new ApplicationCacheManager());
 
 var app = builder.Build();
 //app.Urls.Add("https://10.147.18.219:5024"); //Ubuntu Ip
