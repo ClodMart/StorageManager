@@ -1,4 +1,9 @@
-﻿namespace DataRepository.DataModel
+﻿using DataRepository.Services;
+using DBManager.Interfacce;
+using DBManager.Models;
+using System.Collections.ObjectModel;
+
+namespace DataRepository.DataModel
 {
     public class IngredientsDataModel
     {
@@ -6,39 +11,36 @@
 
     }
 
-    private static readonly StorageManagerDBContext context = DBService.Instance.DbContext;
-    private static readonly IngredientsFormatsRepository IngredientsFormatsRepository = new IngredientsFormatsRepository(context);
-
-    private List<IngredientsFormat> AllFormats = new List<IngredientsFormat>();
-
-    private bool isExpanded = false;
-    public bool IsExpanded
+    public class IngredientViewer
     {
-        get { return isExpanded; }
-        set { isExpanded = value; NotifyPropertyChanged(); }
-    }
+        private static readonly StorageManagerDBContext context = DBService.Instance.DbContext;
+        private static readonly IngredientsFormatsRepository IngredientsFormatsRepository = new IngredientsFormatsRepository(context);
 
-    private Ingredient title;
-    public Ingredient Title
-    {
-        get { return title; }
-        set { title = value; NotifyPropertyChanged(); CalcQuantityDisplay(); }
-    }
-    private ObservableCollection<IngredientsFormat> ingredients;
-    public ObservableCollection<IngredientsFormat> Ingredients
-    {
-        get { return ingredients; }
-        set
+        private List<IngredientsFormat> AllFormats = new List<IngredientsFormat>();
+        private Ingredient Title;
+        private ObservableCollection<IngredientsFormat> Ingredients;
+        private string QuantityDisplay;
+
+        public IngredientViewer(Ingredient title)
         {
-            ingredients = value; NotifyPropertyChanged();
-            //    UpdateIngredientList();
+            Title = title;
+            AllFormats = IngredientsFormatsRepository.GetFormatsFromIngredientId(Title.Id);
+            AllFormats.Sort((l, r) =>
+            (l.LastOrderDate ?? DateOnly.MinValue).CompareTo(r.LastOrderDate ?? DateOnly.MinValue));
+            AllFormats.Reverse();
+            Ingredients = new ObservableCollection<IngredientsFormat>(AllFormats);
+            QuantityDisplay = title.ActualQuantity + "/" + title.QuantityNeeded;
         }
-    }
 
-    private string quantityDisplay;
-    public string QuantityDisplay
-    {
-        get { return quantityDisplay; }
-        set { quantityDisplay = value; NotifyPropertyChanged(); }
+        public void RefreshIngredientFormat()
+        {
+            AllFormats = IngredientsFormatsRepository.GetFormatsFromIngredientId(Title.Id);
+            AllFormats.Sort((l, r) =>
+            (l.LastOrderDate ?? DateOnly.MinValue).CompareTo(r.LastOrderDate ?? DateOnly.MinValue));
+            AllFormats.Reverse();
+            Ingredients = new ObservableCollection<IngredientsFormat>(AllFormats);
+        }
+
     }
+   
 }
