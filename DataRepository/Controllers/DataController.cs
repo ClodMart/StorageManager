@@ -78,5 +78,24 @@ namespace DataRepository.Controllers
 
             return IngredientsRepo.AddIngredient(Ingredient);                
         }
+
+        [HttpPost]
+        [Route("UpdateIngredient")]
+
+        public bool UpdateIngredient(IngredientViewer Ingredient)
+        {
+            if (!ModelState.IsValid)
+                return false;
+            try
+            {
+                IngredientsRepo.UpdateIngredientViewer(Ingredient);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+            
+        }
     }
 }

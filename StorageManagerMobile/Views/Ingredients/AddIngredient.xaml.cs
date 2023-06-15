@@ -1,8 +1,11 @@
 using CommunityToolkit.Maui.Views;
 using DBManager.Interfacce;
 using DBManager.Models;
+using StorageManagerMobile.DataModels;
+using StorageManagerMobile.Services;
 using StorageManagerMobile.ViewModels.Add;
 using StorageManagerMobile.ViewModels.Details;
+using StorageManagerMobile.ViewModels.Groupings;
 using StorageManagerMobile.ViewModels.Popup;
 using StorageManagerMobile.Views.Popup;
 
@@ -13,6 +16,7 @@ public partial class AddIngredient : ContentPage
 
 
     private SupplierSelectionViewModel VM = new SupplierSelectionViewModel();
+    DataApiIngredientsGateaway ApiIngredientsGateaway = new DataApiIngredientsGateaway();
 
     public AddIngredient()
 	{
@@ -65,6 +69,8 @@ public partial class AddIngredient : ContentPage
         }
         else
         {
+            IngredientViewerViewModel newIng = ((AddIngredientViewModel)BindingContext).GetIngredientViewer();
+            ApiIngredientsGateaway.AddIngredient(IngredientViewer.IngredientViewerFromViewModel(newIng));
             long ID = ((AddIngredientViewModel)BindingContext).SaveIngredient();
             ((AddIngredientViewModel)BindingContext).SaveFormats(ID);
         }

@@ -2,10 +2,12 @@
 using DBManager.Models;
 using StorageManagerMobile.Resources;
 using StorageManagerMobile.Services;
+using StorageManagerMobile.ViewModels.Groupings;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -130,6 +132,22 @@ namespace StorageManagerMobile.ViewModels.Add
         public void SaveChanges()
         {
             context.SaveChanges();
+        }
+
+        public IngredientViewerViewModel GetIngredientViewer()
+        {
+            IngredientViewerViewModel OUT = new IngredientViewerViewModel();
+            OUT.Title = new Ingredient();
+            OUT.Title.Name = IngredientName;
+            OUT.Title.Category = Category;
+            OUT.Title.QuantityNeeded = QtNeeded;
+            OUT.Title.IsUsedValue = IsUsed.Id;
+            OUT.Title.Notes = Notes;
+
+            OUT.Ingredients = Formats;
+            OUT.AllFormats = Formats.ToList();
+
+            return OUT;
         }
     }
 }

@@ -1,8 +1,12 @@
 ﻿using DBManager.Interfacce;
 using DBManager.Models;
+using Newtonsoft.Json;
 using StorageManagerMobile.Services;
 using StorageManagerMobile.ViewModels.Groupings;
 using System.Collections.ObjectModel;
+using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json.Serialization;
 
 namespace StorageManagerMobile.DataModels
 {
@@ -41,7 +45,7 @@ namespace StorageManagerMobile.DataModels
             return OUT;
         }
 
-        public IngredientViewer IngredientViewerFromViewModel(IngredientViewerViewModel ing)
+        public static IngredientViewer IngredientViewerFromViewModel(IngredientViewerViewModel ing)
         {
             IngredientViewer OUT = new IngredientViewer();
             OUT.Title = ing.Title;
@@ -49,6 +53,57 @@ namespace StorageManagerMobile.DataModels
             OUT.Ingredients = ing.Ingredients.ToList();
             OUT.QuantityDisplay = ing.QuantityDisplay;
             return OUT;
+        }
+
+        public string ConvertToJson()
+        {
+            try
+            {
+                //StringBuilder sb = new StringBuilder();
+                //sb.Append("{\"Title\":{");
+                //sb.Append(JsonConvert.SerializeObject(Title, Formatting.None, new JsonSerializerSettings
+                //{
+                //    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                //    NullValueHandling = NullValueHandling.Include,
+                //    PreserveReferencesHandling = PreserveReferencesHandling.None
+                //})+"}");
+                //sb.Append(",\"Ingredients\":[");
+                //foreach (IngredientsFormat x in Ingredients)
+                //{
+                //    sb.Append("{" + JsonConvert.SerializeObject(x, Formatting.None, new JsonSerializerSettings
+                //    {
+                //        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                //        NullValueHandling = NullValueHandling.Include,
+                //        PreserveReferencesHandling = PreserveReferencesHandling.None
+                //    }) + "},");
+                //}
+                //sb.Remove(sb.Length - 1, 1);
+                //sb.Append("], \"QuantityDisplay\":" + QuantityDisplay);
+                //sb.Append(",\"AllFormats\"" +":[");
+                //foreach (IngredientsFormat x in AllFormats)
+                //{
+                //    sb.Append("{" + JsonConvert.SerializeObject(x, Formatting.None, new JsonSerializerSettings
+                //    {
+                //        ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
+                //        NullValueHandling = NullValueHandling.Include,
+                //        PreserveReferencesHandling = PreserveReferencesHandling.None
+                //    }) + "},");
+                //}
+
+                //return sb.ToString();
+
+                return JsonConvert.SerializeObject(this, Formatting.None, new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
+                    NullValueHandling = NullValueHandling.Include,
+                    PreserveReferencesHandling = PreserveReferencesHandling.Arrays
+                });
+            }
+            catch(Exception ex)
+            {
+                return ex.Message;
+            }
+
         }
     }   
 }
