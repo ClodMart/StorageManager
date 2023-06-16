@@ -1,6 +1,7 @@
 ﻿using DataRepository.Services;
 using DBManager.Interfacce;
 using DBManager.Models;
+using DocumentFormat.OpenXml.Spreadsheet;
 using System.Collections.ObjectModel;
 
 namespace DataRepository.DataModel
@@ -12,6 +13,7 @@ namespace DataRepository.DataModel
 
         private static readonly StorageManagerDBContext context = DBService.Instance.DbContext;
         private static readonly IngredientsRepository IngredientsRepository = new IngredientsRepository(context);
+        private static readonly IngredientsFormatsRepository IngredientsFormatsRepository = new IngredientsFormatsRepository(context);
         private static readonly IsUsedValuesRepository isUsedValuesRepository = new IsUsedValuesRepository(context);
 
         private List<Ingredient> AllIngredients = new List<Ingredient>();
@@ -155,24 +157,69 @@ namespace DataRepository.DataModel
         }
         #endregion
 
-        public long AddIngredient(IngredientViewer ingredient)
+        #region AddMethods
+        public long AddIngredient(Ingredient ingredient)
         {
-            long NewId = IngredientsRepository.Add(ingredient.Title);
-            ingredient.Title.Id = NewId;
-            foreach(IngredientsFormat x in ingredient.Ingredients)
+            long NewId = IngredientsRepository.Add(ingredient);
+            ingredient.Id = NewId;
+            AllIngredients.Add(ingredient);
+
+            if (IsUsedValuesID.Contains(ingredient.IsUsedValue))
             {
-                x.IngredientId = NewId;
-                ingredient.AddFormat(x);
-            }
-            if (IsUsedValuesID.Contains(ingredient.Title.IsUsedValue))
-            {
-                UsedIngredientLists.Add(ingredient);
+                UsedIngredientLists.Add(new IngredientViewer(ingredient));
             }
             else
             {
-                NotUsedIngredientLists.Add(ingredient);
+                NotUsedIngredientLists.Add(new IngredientViewer(ingredient));
             }
             return NewId;
+        }
+
+        public long AddFormat(IngredientsFormat Format)
+        {
+            Ingredient ing = AllIngredients.FirstOrDefault(x => x.Id == Format.IngredientId);
+            if (ing != null) 
+            {
+                long NewID = IngredientsFormatsRepository.Add(Format);
+                if (IsUsedValuesID.Contains(ing.IsUsedValue))
+                {
+                    UsedIngredientLists.FirstOrDefault(x => x.Title == ing).Ingredients.Add(Format);
+                }
+                else
+                {
+                    UsedIngredientLists.FirstOrDefault(x => x.Title == ing).Ingredients.Add(Format);
+                }
+                return NewID;
+            }
+            else
+            {
+                return -1;
+            }
+        }
+        #endregion
+
+        #region UpdateMethods
+        public bool UpdateIngredient(Ingredient ing)
+        {
+            try
+            {
+                IngredientViewer OldIng = UsedIngredientLists.FirstOrDefault(x => x.Title.Id == ing.Id) ?? NotUsedIngredientLists.FirstOrDefault(x => x.Title.Id == ing.Id);
+                IngredientViewer NewIng = OldIng.Clone();
+                NewIng.Title = ing;
+                Update(OldIng, NewIng);
+                IngredientsRepository.Update(ing);
+                return true;
+            }
+            catch { return false; }
+            //if (IsUsedValuesID.Contains(ingredient.IsUsedValue))
+            //{
+            //   int index = UsedIngredientLists.IndexOf(UsedIngredientLists.FirstOrDefault(x=>x.Title.Id);
+            //}
+            //else
+            //{
+            //    NotUsedIngredientLists.Add(new IngredientViewer(ingredient));
+            //}
+
         }
 
         private void Update(IngredientViewer OldIng, IngredientViewer ingredient)
@@ -207,16 +254,21 @@ namespace DataRepository.DataModel
             }
         }
 
-        public void UpdateIngredientViewer(IngredientViewer ing)
+        public void UpdateFormat(IngredientsFormat form)
         {
-            IngredientViewer OldIng = UsedIngredientLists.FirstOrDefault(x=>x.Title.Id== ing.Title.Id) ?? NotUsedIngredientLists.FirstOrDefault(x => x.Title.Id == ing.Title.Id);
-            Update(OldIng, ing);
-            IngredientsRepository.Update(ing.Title);
-            foreach(IngredientsFormat x in ing.Ingredients)
-            {
-                ing.UpdateFormat(x);
-            }
+            IngredientViewer OldIng = UsedIngredientLists.FirstOrDefault(x => x.Title.Id == form.IngredientId) ?? NotUsedIngredientLists.FirstOrDefault(x => x.Title.Id == form.IngredientId);
+            int index = OldIng.Ingredients.IndexOf(OldIng.Ingredients.FirstOrDefault(x => x.Id == form.Id));
+            OldIng.Ingredients.RemoveAt(index);
+            OldIng.Ingredients.Add(form);
+            OldIng.Ingredients.Sort((l, r) =>
+            (l.LastOrderDate ?? DateOnly.MinValue).CompareTo(r.LastOrderDate ?? DateOnly.MinValue));
+            OldIng.Ingredients.Reverse();
         }
+        #endregion
+
+
+
+
     }
 
     public class IngredientViewer
@@ -229,7 +281,10 @@ namespace DataRepository.DataModel
         public List<IngredientsFormat> Ingredients;
         private string QuantityDisplay;
 
-        public IngredientViewer(Ingredient title)
+        public IngredientViewer()
+        { }
+
+            public IngredientViewer(Ingredient title)
         {
             Title = title;
             AllFormats = IngredientsFormatsRepository.GetFormatsFromIngredientId(Title.Id);
@@ -258,6 +313,15 @@ namespace DataRepository.DataModel
         {            
             IngredientsFormatsRepository.Update(format);
         }
-    }
-   
+
+        public IngredientViewer Clone()
+        {
+            IngredientViewer OUT = new IngredientViewer();
+            OUT.Title = Title;
+            OUT.Ingredients= Ingredients;
+            OUT.AllFormats = AllFormats;
+            OUT.QuantityDisplay = QuantityDisplay;
+            return OUT;
+        }
+    }   
 }

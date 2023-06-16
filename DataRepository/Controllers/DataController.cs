@@ -1,4 +1,5 @@
 ﻿using DataRepository.DataModel;
+using DataRepository.DataModel.DBDataModel;
 using DataRepository.Services;
 using DBManager.Interfacce;
 using DBManager.Models;
@@ -71,31 +72,63 @@ namespace DataRepository.Controllers
         [HttpPost]
         [Route("PostNewIngredient")]
 
-        public long PostNewIngredient(IngredientViewer Ingredient)
+        public long PostNewIngredient(IngredientTemplate Ingredient)
         {
             if (!ModelState.IsValid)
                 return -1;
 
-            return IngredientsRepo.AddIngredient(Ingredient);                
+            Ingredient NewIngredient = Ingredient.GetNewIngredient();
+            return IngredientsRepo.AddIngredient(NewIngredient);                
+        }
+
+        [HttpPost]
+        [Route("PostNewFormat")]
+
+        public long PostNewFormat(IngredientFormatTemplate Format)
+        {
+            if (!ModelState.IsValid)
+                return -1;
+
+            IngredientsFormat NewFormat = Format.GetNewIngredientFormat();
+            return IngredientsRepo.AddFormat(NewFormat);
         }
 
         [HttpPost]
         [Route("UpdateIngredient")]
 
-        public bool UpdateIngredient(IngredientViewer Ingredient)
+        public bool UpdateIngredient(IngredientTemplate Ingredient)
         {
             if (!ModelState.IsValid)
                 return false;
             try
             {
-                IngredientsRepo.UpdateIngredientViewer(Ingredient);
+                
+                IngredientsRepo.UpdateIngredient(Ingredient.GetNewIngredient());
+                return true;
+            }
+            catch
+            {
+                return false;
+            }            
+        }
+
+        [HttpPost]
+        [Route("UpdateFormat")]
+
+        public bool UpdateFormat(IngredientFormatTemplate Format)
+        {
+            if (!ModelState.IsValid)
+                return false;
+            try
+            {
+
+                IngredientsRepo.UpdateFormat(Format.GetNewIngredientFormat());
                 return true;
             }
             catch
             {
                 return false;
             }
-            
         }
     }
 }

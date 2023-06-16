@@ -69,13 +69,16 @@ public partial class AddIngredient : ContentPage
         }
         else
         {
-            IngredientViewerViewModel newIng = ((AddIngredientViewModel)BindingContext).GetIngredientViewer();
-            ApiIngredientsGateaway.AddIngredient(IngredientViewer.IngredientViewerFromViewModel(newIng));
+            //Per porting su API
+            //IngredientViewerViewModel newIng = ((AddIngredientViewModel)BindingContext).GetIngredientViewer();
+            //ApiIngredientsGateaway.AddIngredient(IngredientViewer.IngredientViewerFromViewModel(newIng));
+
+            //Accesso Diretto al db
             long ID = ((AddIngredientViewModel)BindingContext).SaveIngredient();
             ((AddIngredientViewModel)BindingContext).SaveFormats(ID);
         }
             ((AddIngredientViewModel)BindingContext).SaveChanges();
-            
+
     }
 
     private void DeleteFormat_Clicked(object sender, EventArgs e)

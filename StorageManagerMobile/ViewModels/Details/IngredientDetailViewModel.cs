@@ -21,6 +21,8 @@ namespace StorageManagerMobile.ViewModels.Details
         private static readonly StorageManagerDBContext context = DBService.Instance.DbContext;
         private static readonly IngredientsRepository IngredientsRepository = new IngredientsRepository(context);
         private static readonly IngredientsFormatsRepository IngredientsFormatsRepository = new IngredientsFormatsRepository(context);
+        private IngredientViewerViewModel IV;
+
 
         private List<IsUsedValue> isUsedValues;
         public List<IsUsedValue> IsUsedValues
@@ -61,6 +63,7 @@ namespace StorageManagerMobile.ViewModels.Details
 
         public IngredientDetailViewModel(IngredientViewerViewModel vm)
         {
+            IV = vm;
             IsUsedValues = UsedValues.IsUsedValues.ToList();
             Title = vm.Title;
             Ingredients = vm.Ingredients;
@@ -125,6 +128,11 @@ namespace StorageManagerMobile.ViewModels.Details
 
         public void SaveIngredientFormat(IngredientsFormat Ingredient)
         {
+            //Per porting su webAPI
+            //Ingredients.Add(Ingredient);
+            //IV.Ingredients.Add(Ingredient);
+
+            //Accesso diretto al db
             IngredientsFormatsRepository.Add(Ingredient);
             context.SaveChanges();
             Ingredients = new ObservableCollection<IngredientsFormat>(IngredientsFormatsRepository.GetFormatsFromIngredientId(Title.Id));
@@ -132,9 +140,11 @@ namespace StorageManagerMobile.ViewModels.Details
 
         public void RemoveIngredientFormat(IngredientsFormat Ingredient)
         {
+            //Per porting su webApi
+
+            //Per AccessoDiretto al db
             IngredientsFormatsRepository.Delete(Ingredient);
             context.SaveChanges();
-            //Ingredients = new ObservableCollection<IngredientsFormat>(IngredientsFormatsRepository.GetFormatsFromIngredientId(Title.Id));
         }
 
         public void ChangePrice(double val)

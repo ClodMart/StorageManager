@@ -1,7 +1,9 @@
 ﻿using CommunityToolkit.Maui.Storage;
+using DBManager.Models;
 using DevExpress.Data.Helpers;
 using Newtonsoft.Json;
 using StorageManagerMobile.DataModels;
+using StorageManagerMobile.DataModels.DBDataModel;
 using StorageManagerMobile.Interface;
 using StorageManagerMobile.ViewModels.Groupings;
 using System;
@@ -81,12 +83,24 @@ namespace StorageManagerMobile.Services
             using var writer = new Utf8JsonWriter(stream, options);
             HttpClient client = new HttpClient();
             Uri uri = new Uri(string.Format("https://10.147.18.219:5024/api/DataController/{0}/{1}/PostNewIngredient", Username, Password));
-            //jsonconverter.Write(writer, Ingredient, null);
-            string json = Ingredient.ConvertToJson();
+            IngredientTemplate Ing = new IngredientTemplate(Ingredient.Title);
+            string json = Ing.ConvertToJson();
             var HTTPContent = new StringContent(json, Encoding.UTF8, "application/json");
             var HttpResponse = await client.PostAsync(uri, HTTPContent);
             long newId = 0; 
             bool succeded = long.TryParse(HttpResponse.Content.ReadAsStringAsync().Result,out newId);
+            uri = new Uri(string.Format("https://10.147.18.219:5024/api/DataController/{0}/{1}/PostNewFormat", Username, Password));
+            foreach (IngredientsFormat x in Ingredient.Ingredients)
+            {
+                x.IngredientId = newId;
+                IngredientFormatTemplate New = new IngredientFormatTemplate(x);
+                json = New.ConvertToJson();
+                HTTPContent = new StringContent(json, Encoding.UTF8, "application/json");
+                HttpResponse = await client.PostAsync(uri, HTTPContent);
+                long FormatID = 0;
+                succeded = long.TryParse(HttpResponse.Content.ReadAsStringAsync().Result, out FormatID);
+            }
+
             if (succeded)
             {
                 return newId;
@@ -108,18 +122,24 @@ namespace StorageManagerMobile.Services
             using var writer = new Utf8JsonWriter(stream, options);
             HttpClient client = new HttpClient();
             Uri uri = new Uri(string.Format("https://10.147.18.219:5024/api/DataController/{0}/{1}/UpdateIngredient", Username, Password));
-            string json = Ingredient.ConvertToJson();
+            IngredientTemplate Ing = new IngredientTemplate(Ingredient.Title);
+            string json = Ing.ConvertToJson();
             var HTTPContent = new StringContent(json, Encoding.UTF8, "application/json");
             var HttpResponse = await client.PostAsync(uri, HTTPContent);
-            bool succeded = HttpResponse.IsSuccessStatusCode;
-            if (succeded)
+            bool succeded = true;
+            bool a = bool.TryParse(HttpResponse.Content.ReadAsStringAsync().Result, out succeded);
+            uri = new Uri(string.Format("https://10.147.18.219:5024/api/DataController/{0}/{1}/UpdateFormat", Username, Password));
+            foreach (IngredientsFormat x in Ingredient.Ingredients)
             {
-                return true;
+               // x.IngredientId = newId;
+                IngredientFormatTemplate New = new IngredientFormatTemplate(x);
+                json = New.ConvertToJson();
+                HTTPContent = new StringContent(json, Encoding.UTF8, "application/json");
+                HttpResponse = await client.PostAsync(uri, HTTPContent);
+                //bool FormatID = true;
+                a = bool.TryParse(HttpResponse.Content.ReadAsStringAsync().Result, out succeded);
             }
-            else
-            {
-                return false;
-            }
+            return succeded;
         }
     }
 }

@@ -57,46 +57,14 @@ namespace StorageManagerMobile.DataModels
 
         public string ConvertToJson()
         {
-            try
-            {
-                //StringBuilder sb = new StringBuilder();
-                //sb.Append("{\"Title\":{");
-                //sb.Append(JsonConvert.SerializeObject(Title, Formatting.None, new JsonSerializerSettings
-                //{
-                //    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                //    NullValueHandling = NullValueHandling.Include,
-                //    PreserveReferencesHandling = PreserveReferencesHandling.None
-                //})+"}");
-                //sb.Append(",\"Ingredients\":[");
-                //foreach (IngredientsFormat x in Ingredients)
-                //{
-                //    sb.Append("{" + JsonConvert.SerializeObject(x, Formatting.None, new JsonSerializerSettings
-                //    {
-                //        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                //        NullValueHandling = NullValueHandling.Include,
-                //        PreserveReferencesHandling = PreserveReferencesHandling.None
-                //    }) + "},");
-                //}
-                //sb.Remove(sb.Length - 1, 1);
-                //sb.Append("], \"QuantityDisplay\":" + QuantityDisplay);
-                //sb.Append(",\"AllFormats\"" +":[");
-                //foreach (IngredientsFormat x in AllFormats)
-                //{
-                //    sb.Append("{" + JsonConvert.SerializeObject(x, Formatting.None, new JsonSerializerSettings
-                //    {
-                //        ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
-                //        NullValueHandling = NullValueHandling.Include,
-                //        PreserveReferencesHandling = PreserveReferencesHandling.None
-                //    }) + "},");
-                //}
+            try { 
 
-                //return sb.ToString();
 
                 return JsonConvert.SerializeObject(this, Formatting.None, new JsonSerializerSettings
                 {
                     ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
                     NullValueHandling = NullValueHandling.Include,
-                    PreserveReferencesHandling = PreserveReferencesHandling.Arrays
+                    PreserveReferencesHandling = PreserveReferencesHandling.None
                 });
             }
             catch(Exception ex)
