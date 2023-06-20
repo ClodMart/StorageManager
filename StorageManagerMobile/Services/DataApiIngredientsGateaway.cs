@@ -43,7 +43,7 @@ namespace StorageManagerMobile.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(@"\tERROR {0}", ex.Message);
+                Console.WriteLine(@"\tERROR {0}", ex.Message);
                 return null;
             }
         }

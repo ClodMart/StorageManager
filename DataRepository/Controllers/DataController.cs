@@ -26,7 +26,7 @@ namespace DataRepository.Controllers
         [HttpGet]
         [Route("GetUsedIngredients/{filter?}/{query?}")]
 
-        public IEnumerable<IngredientViewer> GetUsedIngredients(string Username, string Password, string? filter = "Tutti", string? query = "NoQuery")
+        public List<IngredientViewer> GetUsedIngredients(string Username, string Password, string? filter = "Tutti", string? query = "NoQuery")
         {
             User CurrentUser;
             try
@@ -39,8 +39,7 @@ namespace DataRepository.Controllers
             }
             if (CurrentUser.Password == Password)
             {
-                IEnumerable<IngredientViewer> OUT = IngredientsRepo.GetUsedIngredients(filter, query);
-                return OUT;
+                return IngredientsRepo.GetUsedIngredients(filter, query);
                 //return IngredientsRepo.GetUsedIngredients(filter, query);
             }
             return null;
@@ -50,7 +49,7 @@ namespace DataRepository.Controllers
         [HttpGet]
         [Route("GetUnUsedIngredients/{filter?}/{query?}")]
 
-        public IEnumerable<IngredientViewer> GetUnUsedIngredients(string Username, string Password, string? filter = "Tutti", string? query = "NoQuery")
+        public List<IngredientViewer> GetUnUsedIngredients(string Username, string Password, string? filter = "Tutti", string? query = "NoQuery")
         {
             User CurrentUser;
             try
@@ -89,8 +88,8 @@ namespace DataRepository.Controllers
             if (!ModelState.IsValid)
                 return -1;
 
-            IngredientsFormat NewFormat = Format.GetNewIngredientFormat();
-            return IngredientsRepo.AddFormat(NewFormat);
+            //IngredientFormatTemplate NewFormat = Format.GetNewIngredientFormat();
+            return IngredientsRepo.AddFormat(Format);
         }
 
         [HttpPost]
@@ -103,7 +102,7 @@ namespace DataRepository.Controllers
             try
             {
                 
-                IngredientsRepo.UpdateIngredient(Ingredient.GetNewIngredient());
+                IngredientsRepo.UpdateIngredient(Ingredient);
                 return true;
             }
             catch
@@ -122,7 +121,7 @@ namespace DataRepository.Controllers
             try
             {
 
-                IngredientsRepo.UpdateFormat(Format.GetNewIngredientFormat());
+                IngredientsRepo.UpdateFormat(Format);
                 return true;
             }
             catch

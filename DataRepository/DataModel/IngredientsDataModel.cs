@@ -1,4 +1,5 @@
-﻿using DataRepository.Services;
+﻿using DataRepository.DataModel.DBDataModel;
+using DataRepository.Services;
 using DBManager.Interfacce;
 using DBManager.Models;
 using DocumentFormat.OpenXml.Spreadsheet;
@@ -16,9 +17,9 @@ namespace DataRepository.DataModel
         private static readonly IngredientsFormatsRepository IngredientsFormatsRepository = new IngredientsFormatsRepository(context);
         private static readonly IsUsedValuesRepository isUsedValuesRepository = new IsUsedValuesRepository(context);
 
-        private List<Ingredient> AllIngredients = new List<Ingredient>();
-        private List<Ingredient> NotUsedIngredients = new List<Ingredient>();
-        private List<Ingredient> UsedIngredients = new List<Ingredient>();
+        private List<IngredientTemplate> AllIngredients = new List<IngredientTemplate>();
+        private List<IngredientTemplate> NotUsedIngredients = new List<IngredientTemplate>();
+        private List<IngredientTemplate> UsedIngredients = new List<IngredientTemplate>();
 
         private List<IngredientViewer> UsedIngredientLists = new List<IngredientViewer>();
         private List<IngredientViewer> NotUsedIngredientLists = new List<IngredientViewer>();
@@ -44,24 +45,28 @@ namespace DataRepository.DataModel
         {
             //UsedValuesList.AddRange(UsedValues.IsUsedValues.Where(x => !x.CorrespondsToUsed).Select(x => x.Description).ToList());
             IsUsedValuesID = isUsedValuesRepository.GetUsedId();
-            AllIngredients = IngredientsRepository.GetAll().ToList();
-            NotUsedIngredients = AllIngredients.Where(x => !IsUsedValuesID.Contains(x.IsUsedValue)).ToList();
-            UsedIngredients = AllIngredients.Where(x => IsUsedValuesID.Contains(x.IsUsedValue)).ToList();
+            List<Ingredient> Ingredients = IngredientsRepository.GetAll().ToList();
+            foreach(Ingredient x in Ingredients)
+            {
+                AllIngredients.Add(new IngredientTemplate(x));
+            }
+            NotUsedIngredients = AllIngredients.Where(x => !IsUsedValuesID.Contains(x.isUsedValue)).ToList();
+            UsedIngredients = AllIngredients.Where(x => IsUsedValuesID.Contains(x.isUsedValue)).ToList();
 
-            foreach (Ingredient y in NotUsedIngredients)
+            foreach (IngredientTemplate y in NotUsedIngredients)
             {
                 IngredientViewer New = new IngredientViewer(y);
                 NotUsedIngredientLists.Add(New);
 
             }
-            foreach (Ingredient x in UsedIngredients)
+            foreach (IngredientTemplate x in UsedIngredients)
             {
                 IngredientViewer New = new IngredientViewer(x);
                 UsedIngredientLists.Add(New);
             }
 
-            UsedIngredientLists.Sort((l, r) => l.Title.Name.CompareTo(r.Title.Name));
-            NotUsedIngredientLists.Sort((l, r) => l.Title.Name.CompareTo(r.Title.Name));
+            UsedIngredientLists.Sort((l, r) => l.Title.name.CompareTo(r.Title.name));
+            NotUsedIngredientLists.Sort((l, r) => l.Title.name.CompareTo(r.Title.name));
         }
 
         public List<IngredientViewer> GetUsedIngredients(string filter, string query)
@@ -87,20 +92,20 @@ namespace DataRepository.DataModel
                     ////SearchDefault();
                     
                 case "FilterEnough":
-                    return  UsedIngredientLists.FindAll(x => x.Title.IsEnough == true);
+                    return  UsedIngredientLists.FindAll(x => x.Title.isEnough == true);
                     //SearchDefault();
                     
                 case "NotEnough":
-                    return  UsedIngredientLists.FindAll(x => x.Title.IsEnough == false);
+                    return  UsedIngredientLists.FindAll(x => x.Title.isEnough == false);
                     //SearchDefault();
                     
                 case "FilterPriceRising":                    
                     //FilteredIngredients.Clear();
                     foreach (IngredientViewer x in UsedIngredientLists)
                     {
-                        if (x.Ingredients.Any(x => x.IsDefault))
+                        if (x.Ingredients.Any(x => x.isDefault))
                         {
-                            if (x.Ingredients.FirstOrDefault(x => x.IsDefault).CostDifference > 0)
+                            if (x.Ingredients.FirstOrDefault(x => x.isDefault).costDifference > 0)
                             {
                                 OUT.Add(x);
                             }
@@ -112,9 +117,9 @@ namespace DataRepository.DataModel
                 case "FilterPriceLowering":                    
                     foreach (IngredientViewer x in UsedIngredientLists)
                     {
-                        if (x.Ingredients.Any(x => x.IsDefault))
+                        if (x.Ingredients.Any(x => x.isDefault))
                         {
-                            if (x.Ingredients.FirstOrDefault(x => x.IsDefault).CostDifference < 0)
+                            if (x.Ingredients.FirstOrDefault(x => x.isDefault).costDifference < 0)
                             {
                                 OUT.Add(x);
                             }
@@ -131,12 +136,12 @@ namespace DataRepository.DataModel
             if (filter != "Tutti")
             {
                 long UsedId = isUsedValuesRepository.GetAll().FirstOrDefault(x => x.Description == filter).Id;
-                return NotUsedIngredientLists.Where(x => x.Title.IsUsedValue.Equals(UsedId)).ToList();
+                return NotUsedIngredientLists.Where(x => x.Title.isUsedValue.Equals(UsedId)).ToList();
             }
             else
             {
                 List<long> UsedId = isUsedValuesRepository.GetUsedId();
-                return NotUsedIngredientLists.Where(x => !UsedId.Contains(x.Title.IsUsedValue)).ToList();
+                return NotUsedIngredientLists.Where(x => !UsedId.Contains(x.Title.isUsedValue)).ToList();
             }
         }
         
@@ -146,8 +151,8 @@ namespace DataRepository.DataModel
             List<IngredientViewer> results = new List<IngredientViewer>();
             if (query != "NoQuery")
             {
-                results = list.Where(x => x.Title.Name.Contains(query, StringComparison.OrdinalIgnoreCase) || x.Title.Category.Contains(query, StringComparison.OrdinalIgnoreCase)).ToList();
-                results.Sort((l, r) => l.Title.Name.CompareTo(r.Title.Name));
+                results = list.Where(x => x.Title.name.Contains(query, StringComparison.OrdinalIgnoreCase) || x.Title.category.Contains(query, StringComparison.OrdinalIgnoreCase)).ToList();
+                results.Sort((l, r) => l.Title.name.CompareTo(r.Title.name));
             }
             else
             {
@@ -162,26 +167,27 @@ namespace DataRepository.DataModel
         {
             long NewId = IngredientsRepository.Add(ingredient);
             ingredient.Id = NewId;
-            AllIngredients.Add(ingredient);
+            IngredientTemplate NewIng = new IngredientTemplate(ingredient);
+            AllIngredients.Add(NewIng);
 
             if (IsUsedValuesID.Contains(ingredient.IsUsedValue))
             {
-                UsedIngredientLists.Add(new IngredientViewer(ingredient));
+                UsedIngredientLists.Add(new IngredientViewer(NewIng));
             }
             else
             {
-                NotUsedIngredientLists.Add(new IngredientViewer(ingredient));
+                NotUsedIngredientLists.Add(new IngredientViewer(NewIng));
             }
             return NewId;
         }
 
-        public long AddFormat(IngredientsFormat Format)
+        public long AddFormat(IngredientFormatTemplate Format)
         {
-            Ingredient ing = AllIngredients.FirstOrDefault(x => x.Id == Format.IngredientId);
+            IngredientTemplate ing = AllIngredients.FirstOrDefault(x => x.id == Format.ingredientId);
             if (ing != null) 
             {
-                long NewID = IngredientsFormatsRepository.Add(Format);
-                if (IsUsedValuesID.Contains(ing.IsUsedValue))
+                long NewID = IngredientsFormatsRepository.Add(Format.GetNewIngredientFormat());
+                if (IsUsedValuesID.Contains(ing.isUsedValue))
                 {
                     UsedIngredientLists.FirstOrDefault(x => x.Title == ing).Ingredients.Add(Format);
                 }
@@ -199,15 +205,15 @@ namespace DataRepository.DataModel
         #endregion
 
         #region UpdateMethods
-        public bool UpdateIngredient(Ingredient ing)
+        public bool UpdateIngredient(IngredientTemplate ing)
         {
             try
             {
-                IngredientViewer OldIng = UsedIngredientLists.FirstOrDefault(x => x.Title.Id == ing.Id) ?? NotUsedIngredientLists.FirstOrDefault(x => x.Title.Id == ing.Id);
+                IngredientViewer OldIng = UsedIngredientLists.FirstOrDefault(x => x.Title.id == ing.id) ?? NotUsedIngredientLists.FirstOrDefault(x => x.Title.id == ing.id);
                 IngredientViewer NewIng = OldIng.Clone();
                 NewIng.Title = ing;
                 Update(OldIng, NewIng);
-                IngredientsRepository.Update(ing);
+                IngredientsRepository.Update(ing.GetNewIngredient());
                 return true;
             }
             catch { return false; }
@@ -224,44 +230,44 @@ namespace DataRepository.DataModel
 
         private void Update(IngredientViewer OldIng, IngredientViewer ingredient)
         {
-            if (IsUsedValuesID.Contains(OldIng.Title.IsUsedValue) && IsUsedValuesID.Contains(ingredient.Title.IsUsedValue))
+            if (IsUsedValuesID.Contains(OldIng.Title.isUsedValue) && IsUsedValuesID.Contains(ingredient.Title.isUsedValue))
             {
                 //UsedIngredientLists.ElementAt(UsedIngredientLists.IndexOf(OldIng)) = ingredient;
                 UsedIngredientLists.Remove(OldIng);
                 UsedIngredientLists.Add(ingredient);
-                UsedIngredientLists.Sort((l, r) => l.Title.Name.CompareTo(r.Title.Name));
+                UsedIngredientLists.Sort((l, r) => l.Title.name.CompareTo(r.Title.name));
             }
-            else if (!IsUsedValuesID.Contains(OldIng.Title.IsUsedValue) && !IsUsedValuesID.Contains(ingredient.Title.IsUsedValue))
+            else if (!IsUsedValuesID.Contains(OldIng.Title.isUsedValue) && !IsUsedValuesID.Contains(ingredient.Title.isUsedValue))
             {
                 NotUsedIngredientLists.Remove(OldIng);
                 NotUsedIngredientLists.Add(ingredient);
-                NotUsedIngredientLists.Sort((l, r) => l.Title.Name.CompareTo(r.Title.Name));
+                NotUsedIngredientLists.Sort((l, r) => l.Title.name.CompareTo(r.Title.name));
             }
             else
             {
-                if (IsUsedValuesID.Contains(ingredient.Title.IsUsedValue))
+                if (IsUsedValuesID.Contains(ingredient.Title.isUsedValue))
                 {
                     NotUsedIngredientLists.Remove(OldIng);
                     UsedIngredientLists.Add(ingredient);
-                    UsedIngredientLists.Sort((l, r) => l.Title.Name.CompareTo(r.Title.Name));
+                    UsedIngredientLists.Sort((l, r) => l.Title.name.CompareTo(r.Title.name));
                 }
                 else
                 {
                     UsedIngredientLists.Remove(OldIng);
                     NotUsedIngredientLists.Add(ingredient);
-                    NotUsedIngredientLists.Sort((l, r) => l.Title.Name.CompareTo(r.Title.Name));
+                    NotUsedIngredientLists.Sort((l, r) => l.Title.name.CompareTo(r.Title.name));
                 }
             }
         }
 
-        public void UpdateFormat(IngredientsFormat form)
+        public void UpdateFormat(IngredientFormatTemplate form)
         {
-            IngredientViewer OldIng = UsedIngredientLists.FirstOrDefault(x => x.Title.Id == form.IngredientId) ?? NotUsedIngredientLists.FirstOrDefault(x => x.Title.Id == form.IngredientId);
-            int index = OldIng.Ingredients.IndexOf(OldIng.Ingredients.FirstOrDefault(x => x.Id == form.Id));
+            IngredientViewer OldIng = UsedIngredientLists.FirstOrDefault(x => x.Title.id == form.ingredientId) ?? NotUsedIngredientLists.FirstOrDefault(x => x.Title.id == form.ingredientId);
+            int index = OldIng.Ingredients.IndexOf(OldIng.Ingredients.FirstOrDefault(x => x.id == form.id));
             OldIng.Ingredients.RemoveAt(index);
             OldIng.Ingredients.Add(form);
             OldIng.Ingredients.Sort((l, r) =>
-            (l.LastOrderDate ?? DateOnly.MinValue).CompareTo(r.LastOrderDate ?? DateOnly.MinValue));
+            (l.lastOrderDate ?? DateOnly.MinValue).CompareTo(r.lastOrderDate ?? DateOnly.MinValue));
             OldIng.Ingredients.Reverse();
         }
         #endregion
@@ -276,30 +282,50 @@ namespace DataRepository.DataModel
         private static readonly StorageManagerDBContext context = DBService.Instance.DbContext;
         private static readonly IngredientsFormatsRepository IngredientsFormatsRepository = new IngredientsFormatsRepository(context);
 
-        private List<IngredientsFormat> AllFormats = new List<IngredientsFormat>();
-        public Ingredient Title;
-        public List<IngredientsFormat> Ingredients;
+        private List<IngredientFormatTemplate> AllFormats = new List<IngredientFormatTemplate>();
+        public IngredientTemplate Title;
+        public List<IngredientFormatTemplate> Ingredients;
         private string QuantityDisplay;
 
         public IngredientViewer()
         { }
 
-            public IngredientViewer(Ingredient title)
+        public IngredientViewer(IngredientTemplate title)
         {
             Title = title;
-            AllFormats = IngredientsFormatsRepository.GetFormatsFromIngredientId(Title.Id);
+            List<IngredientsFormat> forms = IngredientsFormatsRepository.GetFormatsFromIngredientId(Title.id).ToList();
+            foreach(IngredientsFormat x in forms)
+            {
+                AllFormats.Add(new IngredientFormatTemplate(x));
+            }
+            //AllFormats = IngredientsFormatsRepository.GetFormatsFromIngredientId(Title.id);
             AllFormats.Sort((l, r) =>
-            (l.LastOrderDate ?? DateOnly.MinValue).CompareTo(r.LastOrderDate ?? DateOnly.MinValue));
+            (l.lastOrderDate ?? DateOnly.MinValue).CompareTo(r.lastOrderDate ?? DateOnly.MinValue));
             AllFormats.Reverse();
             Ingredients = AllFormats;
-            QuantityDisplay = title.ActualQuantity + "/" + title.QuantityNeeded;
+            QuantityDisplay = title.actualQuantity + "/" + title.quantityNeeded;
         }
+
+        //public IngredientViewer(Ingredient title)
+        //{
+        //    Title = title;
+        //    AllFormats = IngredientsFormatsRepository.GetFormatsFromIngredientId(Title.Id);
+        //    AllFormats.Sort((l, r) =>
+        //    (l.LastOrderDate ?? DateOnly.MinValue).CompareTo(r.LastOrderDate ?? DateOnly.MinValue));
+        //    AllFormats.Reverse();
+        //    Ingredients = AllFormats;
+        //    QuantityDisplay = title.ActualQuantity + "/" + title.QuantityNeeded;
+        //}
 
         public void RefreshIngredientFormat()
         {
-            AllFormats = IngredientsFormatsRepository.GetFormatsFromIngredientId(Title.Id);
+            List<IngredientsFormat> forms = IngredientsFormatsRepository.GetFormatsFromIngredientId(Title.id).ToList();
+            foreach (IngredientsFormat x in forms)
+            {
+                AllFormats.Add(new IngredientFormatTemplate(x));
+            }
             AllFormats.Sort((l, r) =>
-            (l.LastOrderDate ?? DateOnly.MinValue).CompareTo(r.LastOrderDate ?? DateOnly.MinValue));
+            (l.lastOrderDate ?? DateOnly.MinValue).CompareTo(r.lastOrderDate ?? DateOnly.MinValue));
             AllFormats.Reverse();
             Ingredients = AllFormats;
         }
