@@ -28,7 +28,7 @@ namespace DataRepository.Controllers
         [HttpGet]
         [Route("GetUsedIngredients/{filter?}/{query?}")]
 
-        public IActionResult GetUsedIngredients(string Username, string Password, string? filter = "Tutti", string? query = "NoQuery")
+        public async Task<IActionResult> GetUsedIngredients(string Username, string Password, string? filter = "Tutti", string? query = "NoQuery")
         {
 
             User CurrentUser;
@@ -38,7 +38,7 @@ namespace DataRepository.Controllers
             }
             catch (Exception ex)
             {
-                return Unauthorized() ;
+                return Unauthorized();
             }
             if (CurrentUser.Password == Password)
             {
@@ -67,7 +67,7 @@ namespace DataRepository.Controllers
         [HttpGet]
         [Route("GetUnUsedIngredients/{filter?}/{query?}")]
 
-        public IActionResult GetUnUsedIngredients(string Username, string Password, string? filter = "Tutti", string? query = "NoQuery")
+        public async Task<IActionResult> GetUnUsedIngredients(string Username, string Password, string? filter = "Tutti", string? query = "NoQuery")
         {
             User CurrentUser;
             try
@@ -76,7 +76,7 @@ namespace DataRepository.Controllers
             }
             catch (Exception ex)
             {
-                return null;
+                return Unauthorized();
             }
             if (CurrentUser.Password == Password)
             {
@@ -96,7 +96,7 @@ namespace DataRepository.Controllers
                 json.Append("]");
                 return Ok(json.ToString());
             }
-            return null;
+            return Unauthorized();
 
         }
 

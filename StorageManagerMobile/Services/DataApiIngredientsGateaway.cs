@@ -31,7 +31,7 @@ namespace StorageManagerMobile.Services
             try
             {
                 List<IngredientViewerViewModel> OUT = new List<IngredientViewerViewModel>();
-                HttpResponseMessage response = await client.GetAsync(uri);
+                HttpResponseMessage response = await client.GetAsync(uri).ConfigureAwait(false);
                 //string SavePath = FolderPicker.PickAsync();
                 var stream = response.Content.ReadFromJsonAsync<List<IngredientViewer>>();
                 foreach (IngredientViewer ingredient in stream.Result)
@@ -83,17 +83,17 @@ namespace StorageManagerMobile.Services
             using var writer = new Utf8JsonWriter(stream, options);
             HttpClient client = new HttpClient();
             Uri uri = new Uri(string.Format("https://10.147.18.219:5024/api/DataController/{0}/{1}/PostNewIngredient", Username, Password));
-            IngredientTemplate Ing = new IngredientTemplate(Ingredient.Title);
+            IngredientTemplate Ing = Ingredient.Title;
             string json = Ing.ConvertToJson();
             var HTTPContent = new StringContent(json, Encoding.UTF8, "application/json");
             var HttpResponse = await client.PostAsync(uri, HTTPContent);
             long newId = 0; 
             bool succeded = long.TryParse(HttpResponse.Content.ReadAsStringAsync().Result,out newId);
             uri = new Uri(string.Format("https://10.147.18.219:5024/api/DataController/{0}/{1}/PostNewFormat", Username, Password));
-            foreach (IngredientsFormat x in Ingredient.Ingredients)
+            foreach (IngredientFormatTemplate x in Ingredient.Ingredients)
             {
-                x.IngredientId = newId;
-                IngredientFormatTemplate New = new IngredientFormatTemplate(x);
+                x.ingredientId = newId;
+                IngredientFormatTemplate New = x;
                 json = New.ConvertToJson();
                 HTTPContent = new StringContent(json, Encoding.UTF8, "application/json");
                 HttpResponse = await client.PostAsync(uri, HTTPContent);
@@ -122,17 +122,17 @@ namespace StorageManagerMobile.Services
             using var writer = new Utf8JsonWriter(stream, options);
             HttpClient client = new HttpClient();
             Uri uri = new Uri(string.Format("https://10.147.18.219:5024/api/DataController/{0}/{1}/UpdateIngredient", Username, Password));
-            IngredientTemplate Ing = new IngredientTemplate(Ingredient.Title);
+            IngredientTemplate Ing = Ingredient.Title;
             string json = Ing.ConvertToJson();
             var HTTPContent = new StringContent(json, Encoding.UTF8, "application/json");
             var HttpResponse = await client.PostAsync(uri, HTTPContent);
             bool succeded = true;
             bool a = bool.TryParse(HttpResponse.Content.ReadAsStringAsync().Result, out succeded);
             uri = new Uri(string.Format("https://10.147.18.219:5024/api/DataController/{0}/{1}/UpdateFormat", Username, Password));
-            foreach (IngredientsFormat x in Ingredient.Ingredients)
+            foreach (IngredientFormatTemplate x in Ingredient.Ingredients)
             {
                // x.IngredientId = newId;
-                IngredientFormatTemplate New = new IngredientFormatTemplate(x);
+                IngredientFormatTemplate New = x;
                 json = New.ConvertToJson();
                 HTTPContent = new StringContent(json, Encoding.UTF8, "application/json");
                 HttpResponse = await client.PostAsync(uri, HTTPContent);

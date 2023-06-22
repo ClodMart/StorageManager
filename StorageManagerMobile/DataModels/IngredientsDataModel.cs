@@ -1,6 +1,7 @@
 ﻿using DBManager.Interfacce;
 using DBManager.Models;
 using Newtonsoft.Json;
+using StorageManagerMobile.DataModels.DBDataModel;
 using StorageManagerMobile.Services;
 using StorageManagerMobile.ViewModels.Groupings;
 using System.Collections.ObjectModel;
@@ -15,42 +16,62 @@ namespace StorageManagerMobile.DataModels
         private static readonly StorageManagerDBContext context = DBService.Instance.DbContext;
         private static readonly IngredientsFormatsRepository IngredientsFormatsRepository = new IngredientsFormatsRepository(context);
 
-        private List<IngredientsFormat> AllFormats = new List<IngredientsFormat>();
-        public Ingredient Title;
-        public List<IngredientsFormat> Ingredients;
+        private List<IngredientFormatTemplate> AllFormats = new List<IngredientFormatTemplate>();
+        public IngredientTemplate Title;
+        public List<IngredientFormatTemplate> Ingredients;
         private string QuantityDisplay;
 
-        public IngredientViewer(Ingredient title)
+        public IngredientViewer(IngredientTemplate title)
         {
             Title = title;
-            AllFormats = IngredientsFormatsRepository.GetFormatsFromIngredientId(Title.Id);
+            List<IngredientsFormat> List = IngredientsFormatsRepository.GetFormatsFromIngredientId(Title.id);
+            foreach(IngredientsFormat x in List)
+            {
+                AllFormats.Add(new IngredientFormatTemplate(x));
+            }
             AllFormats.Sort((l, r) =>
-            (l.LastOrderDate ?? DateOnly.MinValue).CompareTo(r.LastOrderDate ?? DateOnly.MinValue));
+            (l.lastOrderDate ?? DateOnly.MinValue).CompareTo(r.lastOrderDate ?? DateOnly.MinValue));
             AllFormats.Reverse();
             Ingredients = AllFormats;
-            QuantityDisplay = title.ActualQuantity + "/" + title.QuantityNeeded;
+            QuantityDisplay = title.actualQuantity + "/" + title.quantityNeeded;
         }
 
         public IngredientViewer()
         { }
 
             public IngredientViewerViewModel IngredientViewerToViewmodel()
-        {
+            {
             IngredientViewerViewModel OUT = new IngredientViewerViewModel();
-            OUT.Title = this.Title;
-            OUT.Ingredients = new ObservableCollection<IngredientsFormat>(this.Ingredients);
+            OUT.Title = this.Title.GetNewIngredient();
+            //OUT.Ingredients = new ObservableCollection<IngredientsFormat>(this.Ingredients);
+            foreach (IngredientFormatTemplate x in AllFormats)
+            {
+                OUT.AllFormats.Add(x.GetNewIngredientFormat());
+            }
+            foreach (IngredientFormatTemplate x in Ingredients)
+            {
+                OUT.Ingredients.Add(x.GetNewIngredientFormat());
+            }
             OUT.QuantityDisplay = this.QuantityDisplay;
-            OUT.AllFormats= this.AllFormats;
+            //OUT.AllFormats= this.AllFormats;
             OUT.IsExpanded = false;
             return OUT;
-        }
+            }
 
         public static IngredientViewer IngredientViewerFromViewModel(IngredientViewerViewModel ing)
         {
             IngredientViewer OUT = new IngredientViewer();
-            OUT.Title = ing.Title;
-            OUT.AllFormats = ing.AllFormats;
-            OUT.Ingredients = ing.Ingredients.ToList();
+            OUT.Title = new IngredientTemplate(ing.Title);
+            foreach (IngredientsFormat x in ing.AllFormats)
+            {
+                OUT.AllFormats.Add(new IngredientFormatTemplate(x));
+            }
+            foreach (IngredientsFormat x in ing.Ingredients)
+            {
+                OUT.Ingredients.Add(new IngredientFormatTemplate(x));
+            }
+            //OUT.AllFormats = ing.AllFormats;
+            //OUT.Ingredients = ing.Ingredients.ToList();
             OUT.QuantityDisplay = ing.QuantityDisplay;
             return OUT;
         }

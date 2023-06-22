@@ -75,8 +75,8 @@ namespace StorageManagerMobile.ViewModels
         public IngredientsViewModel()
         {
 
-            //DataApiIngredientsGateaway test = new DataApiIngredientsGateaway();
-            //List<IngredientViewerViewModel> Out = test.GetUsedIngredientsAsync("Tutti", "NoQuery").Result;
+            DataApiIngredientsGateaway test = new DataApiIngredientsGateaway();
+            List<IngredientViewerViewModel> Out = test.GetUsedIngredientsAsync("Tutti", "NoQuery").Result;
             UsedValuesList.AddRange(UsedValues.IsUsedValues.Where(x => !x.CorrespondsToUsed).Select(x => x.Description).ToList());
             List<long> IsUsedID = isUsedValuesRepository.GetUsedId();
             AllIngredients = IngredientsRepository.GetAll().ToList();

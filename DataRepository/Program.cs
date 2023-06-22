@@ -12,8 +12,8 @@ builder.Services.AddDbContext<DBManager.Models.StorageManagerDBContext>();
 builder.Services.AddSingleton<ApplicationCacheManager>(new ApplicationCacheManager());
 
 var app = builder.Build();
-//app.Urls.Add("https://10.147.18.219:5024"); //Ubuntu Ip
-app.Urls.Add("https://localhost:5024"); // Local Host
+app.Urls.Add("https://10.147.18.219:5024"); //Ubuntu Ip
+//app.Urls.Add("https://localhost:5024"); // Local Host
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
