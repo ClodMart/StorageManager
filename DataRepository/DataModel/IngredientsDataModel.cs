@@ -3,6 +3,7 @@ using DataRepository.Services;
 using DBManager.Interfacce;
 using DBManager.Models;
 using DocumentFormat.OpenXml.Spreadsheet;
+using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 
 namespace DataRepository.DataModel
@@ -348,6 +349,25 @@ namespace DataRepository.DataModel
             OUT.AllFormats = AllFormats;
             OUT.QuantityDisplay = QuantityDisplay;
             return OUT;
+        }
+
+        public string ConvertToJson()
+        {
+            try
+            {
+
+
+                return JsonConvert.SerializeObject(this, Formatting.Indented, new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
+                    NullValueHandling = NullValueHandling.Include,
+                    PreserveReferencesHandling = PreserveReferencesHandling.None
+                });
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
         }
     }   
 }

@@ -34,7 +34,7 @@ namespace StorageManagerMobile.Services
                 HttpResponseMessage response = await client.GetAsync(uri);
                 //string SavePath = FolderPicker.PickAsync();
                 var stream = response.Content.ReadFromJsonAsync<List<IngredientViewer>>();
-                foreach (var ingredient in stream.Result)
+                foreach (IngredientViewer ingredient in stream.Result)
                 {
                     OUT.Add(ingredient.IngredientViewerToViewmodel());
                 }

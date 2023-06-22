@@ -1,4 +1,5 @@
 ﻿using DBManager.Models;
+using Newtonsoft.Json;
 
 namespace DataRepository.DataModel.DBDataModel
 {
@@ -41,6 +42,26 @@ namespace DataRepository.DataModel.DBDataModel
             OUT.IsEnough = isEnough;
 
             return OUT;
+        }
+
+        public string ConvertToJson()
+        {
+            try
+            {
+
+
+                return JsonConvert.SerializeObject(this, Formatting.Indented, new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
+                    NullValueHandling = NullValueHandling.Include,
+                    PreserveReferencesHandling = PreserveReferencesHandling.None
+                });
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+
         }
     }
 }
