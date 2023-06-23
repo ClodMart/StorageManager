@@ -8,8 +8,10 @@ using StorageManagerMobile.Interface;
 using StorageManagerMobile.ViewModels.Groupings;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Objects;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
@@ -31,10 +33,11 @@ namespace StorageManagerMobile.Services
             try
             {
                 List<IngredientViewerViewModel> OUT = new List<IngredientViewerViewModel>();
-                HttpResponseMessage response = await client.GetAsync(uri).ConfigureAwait(false);
-                //string SavePath = FolderPicker.PickAsync();
-                var stream = response.Content.ReadFromJsonAsync<List<IngredientViewer>>();
-                foreach (IngredientViewer ingredient in stream.Result)
+                var response = await client.GetAsync(uri).ConfigureAwait(false);
+                var stringResponse = await response.Content.ReadAsStringAsync();
+                List<IngredientViewer> stream = JsonConvert.DeserializeObject<List<IngredientViewer>>(stringResponse);
+
+                foreach (IngredientViewer ingredient in stream)
                 {
                     OUT.Add(ingredient.IngredientViewerToViewmodel());
                 }
@@ -55,10 +58,10 @@ namespace StorageManagerMobile.Services
             try
             {
                 List<IngredientViewerViewModel> OUT = new List<IngredientViewerViewModel>();
-                HttpResponseMessage response = await client.GetAsync(uri);
-                //string SavePath = FolderPicker.PickAsync();
-                var stream = response.Content.ReadFromJsonAsync<List<IngredientViewer>>();
-                foreach (var ingredient in stream.Result)
+                var response = await client.GetAsync(uri).ConfigureAwait(false);
+                var stringResponse = await response.Content.ReadAsStringAsync();
+                List<IngredientViewer> stream = JsonConvert.DeserializeObject<List<IngredientViewer>>(stringResponse);
+                foreach (IngredientViewer ingredient in stream)
                 {
                     OUT.Add(ingredient.IngredientViewerToViewmodel());
                 }

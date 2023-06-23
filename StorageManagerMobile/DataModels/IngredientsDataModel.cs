@@ -16,10 +16,10 @@ namespace StorageManagerMobile.DataModels
         private static readonly StorageManagerDBContext context = DBService.Instance.DbContext;
         private static readonly IngredientsFormatsRepository IngredientsFormatsRepository = new IngredientsFormatsRepository(context);
 
-        private List<IngredientFormatTemplate> AllFormats = new List<IngredientFormatTemplate>();
+        public List<IngredientFormatTemplate> AllFormats = new List<IngredientFormatTemplate>();
         public IngredientTemplate Title;
         public List<IngredientFormatTemplate> Ingredients;
-        private string QuantityDisplay;
+        public string QuantityDisplay;
 
         public IngredientViewer(IngredientTemplate title)
         {
@@ -39,7 +39,15 @@ namespace StorageManagerMobile.DataModels
         public IngredientViewer()
         { }
 
-            public IngredientViewerViewModel IngredientViewerToViewmodel()
+        public IngredientViewer(List<IngredientFormatTemplate> allformat, IngredientTemplate title, List<IngredientFormatTemplate> ingredients, string quantityDisplay)
+        {
+            Title=title;
+            AllFormats= allformat;
+            Ingredients = ingredients;
+            QuantityDisplay = quantityDisplay;
+        }
+
+        public IngredientViewerViewModel IngredientViewerToViewmodel()
             {
             IngredientViewerViewModel OUT = new IngredientViewerViewModel();
             OUT.Title = this.Title.GetNewIngredient();

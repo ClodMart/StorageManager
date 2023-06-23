@@ -283,10 +283,10 @@ namespace DataRepository.DataModel
         private static readonly StorageManagerDBContext context = DBService.Instance.DbContext;
         private static readonly IngredientsFormatsRepository IngredientsFormatsRepository = new IngredientsFormatsRepository(context);
 
-        private List<IngredientFormatTemplate> AllFormats = new List<IngredientFormatTemplate>();
+        public List<IngredientFormatTemplate> AllFormats = new List<IngredientFormatTemplate>();
         public IngredientTemplate Title;
         public List<IngredientFormatTemplate> Ingredients;
-        private string QuantityDisplay;
+        public string QuantityDisplay;
 
         public IngredientViewer()
         { }

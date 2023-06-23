@@ -34,7 +34,7 @@ namespace StorageManagerMobile.ViewModels
         private List<Ingredient> UsedIngredients = new List<Ingredient>();
         private List<IngredientViewerViewModel> UsedIngredientLists = new List<IngredientViewerViewModel>();
         private List<IngredientViewerViewModel> NotUsedIngredientLists = new List<IngredientViewerViewModel>();
-        private List<IngredientViewerViewModel> FullIngredients { get; set; }
+        //private List<IngredientViewerViewModel> FullIngredients { get; set; }
         private List<IngredientViewerViewModel> FilteredIngredients { get; set; }
 
         private List<string> usedValuesList = new List<string>() { "Tutti" };
@@ -74,32 +74,39 @@ namespace StorageManagerMobile.ViewModels
 
         public IngredientsViewModel()
         {
-
+            //Using WebApi
             DataApiIngredientsGateaway test = new DataApiIngredientsGateaway();
-            List<IngredientViewerViewModel> Out = test.GetUsedIngredientsAsync("Tutti", "NoQuery").Result;
-            UsedValuesList.AddRange(UsedValues.IsUsedValues.Where(x => !x.CorrespondsToUsed).Select(x => x.Description).ToList());
-            List<long> IsUsedID = isUsedValuesRepository.GetUsedId();
-            AllIngredients = IngredientsRepository.GetAll().ToList();
-            NotUsedIngredients = AllIngredients.Where(x => !IsUsedID.Contains(x.IsUsedValue)).ToList();
-            UsedIngredients = AllIngredients.Where(x => IsUsedID.Contains(x.IsUsedValue)).ToList();
-
-            foreach (Ingredient y in NotUsedIngredients)
-            {
-                IngredientViewerViewModel New = new IngredientViewerViewModel(y);
-                NotUsedIngredientLists.Add(New);
-
-            }
-            foreach (Ingredient x in UsedIngredients)
-            { 
-                IngredientViewerViewModel New = new IngredientViewerViewModel(x);
-                UsedIngredientLists.Add(New);
-            }
-
-            UsedIngredientLists.Sort((l, r) => l.Title.Name.CompareTo(r.Title.Name));
-            NotUsedIngredientLists.Sort((l, r) => l.Title.Name.CompareTo(r.Title.Name));
+            UsedIngredientLists = test.GetUsedIngredientsAsync("Tutti", "NoQuery").Result;
             FilteredIngredients = UsedIngredientLists;
             IngredientList = new ObservableCollection<IngredientViewerViewModel>(FilteredIngredients);
+            NotUsedIngredientLists = test.GetUnUsedIngredientsAsync("Tutti", "NoQuery").Result;
             NotUsedIngredientList = new ObservableCollection<IngredientViewerViewModel>(NotUsedIngredientLists);
+            
+
+            //Using direct access to db
+            //UsedValuesList.AddRange(UsedValues.IsUsedValues.Where(x => !x.CorrespondsToUsed).Select(x => x.Description).ToList());
+            //List<long> IsUsedID = isUsedValuesRepository.GetUsedId();
+            //AllIngredients = IngredientsRepository.GetAll().ToList();
+            //NotUsedIngredients = AllIngredients.Where(x => !IsUsedID.Contains(x.IsUsedValue)).ToList();
+            //UsedIngredients = AllIngredients.Where(x => IsUsedID.Contains(x.IsUsedValue)).ToList();
+
+            //foreach (Ingredient y in NotUsedIngredients)
+            //{
+            //    IngredientViewerViewModel New = new IngredientViewerViewModel(y);
+            //    NotUsedIngredientLists.Add(New);
+
+            //}
+            //foreach (Ingredient x in UsedIngredients)
+            //{ 
+            //    IngredientViewerViewModel New = new IngredientViewerViewModel(x);
+            //    UsedIngredientLists.Add(New);
+            //}
+
+            //UsedIngredientLists.Sort((l, r) => l.Title.Name.CompareTo(r.Title.Name));
+            //NotUsedIngredientLists.Sort((l, r) => l.Title.Name.CompareTo(r.Title.Name));
+            //FilteredIngredients = UsedIngredientLists;
+            //IngredientList = new ObservableCollection<IngredientViewerViewModel>(FilteredIngredients);
+            //NotUsedIngredientList = new ObservableCollection<IngredientViewerViewModel>(NotUsedIngredientLists);
         }
 
         private void UpdateVisualUnusedIngredientViewer(object sender, EventArgs e)

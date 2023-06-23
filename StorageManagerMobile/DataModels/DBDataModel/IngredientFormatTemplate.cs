@@ -26,6 +26,8 @@ namespace StorageManagerMobile.DataModels.DBDataModel
         public bool isDefault { get; set; }
         public DateOnly? lastPriceChange { get; set; }
 
+        public IngredientFormatTemplate() { }
+
         public IngredientFormatTemplate(IngredientsFormat Ing)
         {
             id = Ing.Id;

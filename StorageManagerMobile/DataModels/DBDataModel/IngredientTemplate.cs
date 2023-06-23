@@ -19,6 +19,8 @@ namespace StorageManagerMobile.DataModels.DBDataModel
         public decimal actualQuantity { get; set; }
         public bool isEnough { get; set; }
 
+        public IngredientTemplate() { }
+
         public IngredientTemplate(Ingredient ing)
         {
             id = ing.Id;
@@ -50,8 +52,6 @@ namespace StorageManagerMobile.DataModels.DBDataModel
         {
             try
             {
-
-
                 return JsonConvert.SerializeObject(this, Formatting.Indented, new JsonSerializerSettings
                 {
                     ReferenceLoopHandling = ReferenceLoopHandling.Serialize,

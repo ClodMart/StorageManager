@@ -38,7 +38,7 @@ namespace StorageManagerMobile.ViewModels.Groupings
             get { return title; }
             set { title = value; NotifyPropertyChanged(); CalcQuantityDisplay(); }
         }
-        private ObservableCollection<IngredientsFormat> ingredients;
+        private ObservableCollection<IngredientsFormat> ingredients = new ObservableCollection<IngredientsFormat>();
         public ObservableCollection<IngredientsFormat> Ingredients
         {
             get { return ingredients; }

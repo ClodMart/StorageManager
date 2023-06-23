@@ -4,6 +4,7 @@ using DataRepository.Services;
 using DBManager.Interfacce;
 using DBManager.Models;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Data;
 using System.Text;
 using System.Text.Json;
@@ -28,7 +29,7 @@ namespace DataRepository.Controllers
         [HttpGet]
         [Route("GetUsedIngredients/{filter?}/{query?}")]
 
-        public async Task<IActionResult> GetUsedIngredients(string Username, string Password, string? filter = "Tutti", string? query = "NoQuery")
+        public ActionResult<List<IngredientViewer>> GetUsedIngredients(string Username, string Password, string? filter = "Tutti", string? query = "NoQuery")
         {
 
             User CurrentUser;
@@ -43,22 +44,7 @@ namespace DataRepository.Controllers
             if (CurrentUser.Password == Password)
             {
                 List<IngredientViewer> OUT = IngredientsRepo.GetUsedIngredients(filter, query);
-                int i = 0;
-                StringBuilder json = new StringBuilder();
-                json.Append("[");
-                foreach (IngredientViewer item in OUT) 
-                {
-                   i++;
-                   json.AppendLine(item.ConvertToJson());
-                    if (i < OUT.Count())
-                    {
-                        json.Append(",");
-                    }
-                }
-                json.Append("]");
-                return Ok(json.ToString());
-                   
-                //return IngredientsRepo.GetUsedIngredients(filter, query);
+                return Ok(JsonConvert.SerializeObject(OUT));                  
             }
             return Unauthorized();
 
@@ -67,7 +53,7 @@ namespace DataRepository.Controllers
         [HttpGet]
         [Route("GetUnUsedIngredients/{filter?}/{query?}")]
 
-        public async Task<IActionResult> GetUnUsedIngredients(string Username, string Password, string? filter = "Tutti", string? query = "NoQuery")
+        public ActionResult<List<IngredientViewer>> GetUnUsedIngredients(string Username, string Password, string? filter = "Tutti", string? query = "NoQuery")
         {
             User CurrentUser;
             try
@@ -81,20 +67,7 @@ namespace DataRepository.Controllers
             if (CurrentUser.Password == Password)
             {
                 List<IngredientViewer> OUT = IngredientsRepo.GetUnUsedIngredients(filter, query);
-                int i = 0;
-                StringBuilder json = new StringBuilder();
-                json.Append("[");
-                foreach (IngredientViewer item in OUT)
-                {
-                    i++;
-                    json.AppendLine(item.ConvertToJson());
-                    if (i < OUT.Count())
-                    {
-                        json.Append(",");
-                    }
-                }
-                json.Append("]");
-                return Ok(json.ToString());
+                return Ok(JsonConvert.SerializeObject(OUT));
             }
             return Unauthorized();
 
