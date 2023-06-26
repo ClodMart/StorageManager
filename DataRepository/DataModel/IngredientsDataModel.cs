@@ -274,6 +274,27 @@ namespace DataRepository.DataModel
         #endregion
 
 
+        public void DeleteFormat(IngredientFormatTemplate format)
+        {
+            IngredientViewer Ingredient = UsedIngredientLists.FirstOrDefault(x => x.Title.id == format.ingredientId) ?? NotUsedIngredientLists.FirstOrDefault(x => x.Title.id == format.ingredientId);
+            IngredientFormatTemplate actformat = Ingredient.AllFormats.FirstOrDefault(x => x.id == format.id);
+            Ingredient.AllFormats.Remove(actformat);
+            Ingredient.Ingredients.Remove(actformat);
+            IngredientsFormatsRepository.Delete(actformat.GetNewIngredientFormat());
+        }
+
+        public void DeleteIngredient(long Id)
+        {
+            IngredientViewer ingredient = UsedIngredientLists.FirstOrDefault(x=>x.Title.id == Id) ?? NotUsedIngredientLists.FirstOrDefault(x => x.Title.id == Id); 
+            foreach(IngredientFormatTemplate f in ingredient.Ingredients)
+            {
+                DeleteFormat(f);
+            }
+            IngredientsRepository.Delete(ingredient.Title.GetNewIngredient());
+            UsedIngredientLists.Remove(ingredient);
+            NotUsedIngredientLists.Remove(ingredient);
+        }
+
 
 
     }

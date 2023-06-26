@@ -3,6 +3,7 @@ using DBManager.Interfacce;
 using DBManager.Models;
 using GemBox.Spreadsheet;
 using Microsoft.EntityFrameworkCore;
+using StorageManagerMobile.DataModels;
 using StorageManagerMobile.Resources;
 using StorageManagerMobile.Services;
 using StorageManagerMobile.ViewModels.Groupings;
@@ -27,7 +28,8 @@ namespace StorageManagerMobile.ViewModels
 
         private string LastSearch = "";
         private string LastSearchUnused = "";
-        private string LastFilter = "FilterAll";
+        private string LastFilter = "Tutti";
+        private string LastFilterUnused = "Tutti";
 
         private List<Ingredient> AllIngredients = new List<Ingredient>();
         private List<Ingredient> NotUsedIngredients = new List<Ingredient>();
@@ -72,18 +74,20 @@ namespace StorageManagerMobile.ViewModels
             set { showNotUsed = value; NotifyPropertyChanged(); }
         }
 
+        private DataApiIngredientsGateaway APIGateaway = new DataApiIngredientsGateaway();
+
         public IngredientsViewModel()
         {
-            //Using WebApi
-            DataApiIngredientsGateaway test = new DataApiIngredientsGateaway();
-            UsedIngredientLists = test.GetUsedIngredientsAsync("Tutti", "NoQuery").Result;
+
+            #region UsingWebAPI           
+            UsedIngredientLists = APIGateaway.GetUsedIngredientsAsync("Tutti", "NoQuery").Result;
             FilteredIngredients = UsedIngredientLists;
             IngredientList = new ObservableCollection<IngredientViewerViewModel>(FilteredIngredients);
-            NotUsedIngredientLists = test.GetUnUsedIngredientsAsync("Tutti", "NoQuery").Result;
+            NotUsedIngredientLists = APIGateaway.GetUnUsedIngredientsAsync("Tutti", "NoQuery").Result;
             NotUsedIngredientList = new ObservableCollection<IngredientViewerViewModel>(NotUsedIngredientLists);
-            
+            #endregion
 
-            //Using direct access to db
+            #region Using direct access to db
             //UsedValuesList.AddRange(UsedValues.IsUsedValues.Where(x => !x.CorrespondsToUsed).Select(x => x.Description).ToList());
             //List<long> IsUsedID = isUsedValuesRepository.GetUsedId();
             //AllIngredients = IngredientsRepository.GetAll().ToList();
@@ -107,6 +111,7 @@ namespace StorageManagerMobile.ViewModels
             //FilteredIngredients = UsedIngredientLists;
             //IngredientList = new ObservableCollection<IngredientViewerViewModel>(FilteredIngredients);
             //NotUsedIngredientList = new ObservableCollection<IngredientViewerViewModel>(NotUsedIngredientLists);
+            #endregion
         }
 
         private void UpdateVisualUnusedIngredientViewer(object sender, EventArgs e)
@@ -129,6 +134,12 @@ namespace StorageManagerMobile.ViewModels
 
         public void Search(string query)
         {
+            #region Using WebAPI
+            //LastSearch = query;
+            //IngredientList = new ObservableCollection<IngredientViewerViewModel>(APIGateaway.GetUsedIngredientsAsync(LastFilter, LastSearch).Result);
+            #endregion
+
+            #region Direct Access To DB
             LastSearch = query;
             List<IngredientViewerViewModel> results = new List<IngredientViewerViewModel>();
             if (query == "")
@@ -144,6 +155,7 @@ namespace StorageManagerMobile.ViewModels
             results.Sort((l, r) => l.Title.Name.CompareTo(r.Title.Name));
             IngredientList = new ObservableCollection<IngredientViewerViewModel>(results);
             CollapseExpanders();
+            #endregion
         }
 
         public ICommand ExportListUsed => new Command(() =>
@@ -163,6 +175,11 @@ namespace StorageManagerMobile.ViewModels
 
         private void SearchDefault()
         {
+            #region Usinf WebAPI
+            //IngredientList = new ObservableCollection<IngredientViewerViewModel>(APIGateaway.GetUsedIngredientsAsync(LastFilter, LastSearch).Result);
+            #endregion
+
+            #region Direct access to DB
             List<IngredientViewerViewModel> results = new List<IngredientViewerViewModel>();
             if (LastSearch == "")
             {
@@ -174,6 +191,7 @@ namespace StorageManagerMobile.ViewModels
             }
             results.Sort((l, r) => l.Title.Name.CompareTo(r.Title.Name));
             IngredientList = new ObservableCollection<IngredientViewerViewModel>(results);
+            #endregion
         }
 
         public ICommand Filters => new Command(() =>
@@ -198,6 +216,11 @@ namespace StorageManagerMobile.ViewModels
 
         public void RefreshIngredientList()
         {
+            #region Using WebAPI
+            //IngredientList = new ObservableCollection<IngredientViewerViewModel>(APIGateaway.GetUsedIngredientsAsync(LastFilter, LastSearch).Result);
+            #endregion
+
+            #region Using direct db connection
             List<long> IsUsedID = isUsedValuesRepository.GetUsedId();
             AllIngredients = IngredientsRepository.GetAll().ToList();
             UsedIngredients = AllIngredients.Where(x => IsUsedID.Contains(x.IsUsedValue)).ToList();
@@ -209,6 +232,7 @@ namespace StorageManagerMobile.ViewModels
             UsedIngredientLists.Sort((l, r) => l.Title.Name.CompareTo(r.Title.Name));
             FilteredIngredients = UsedIngredientLists;
             IngredientList = new ObservableCollection<IngredientViewerViewModel>(FilteredIngredients);
+            #endregion
         }
 
 
@@ -223,6 +247,12 @@ namespace StorageManagerMobile.ViewModels
 
         public void FilterList(string Filter)
         {
+            #region Using WebAPI
+            //LastFilter = Filter;
+            //IngredientList = new ObservableCollection<IngredientViewerViewModel>(APIGateaway.GetUsedIngredientsAsync(LastFilter, LastSearch).Result);
+            #endregion
+
+            #region Direct access to db
             LastFilter = Filter;
             switch (Filter)
             {
@@ -251,7 +281,7 @@ namespace StorageManagerMobile.ViewModels
                             }
                         }
 
-                    }                    
+                    }
                     SearchDefault();
                     break;
                 case "FilterPriceLowering":
@@ -265,63 +295,20 @@ namespace StorageManagerMobile.ViewModels
                             }
                         }
 
-                    }                    
+                    }
                     SearchDefault();
                     break;
             }
             CollapseExpanders();
+            #endregion
         }
 
-        private void FilterDefault()
+        public void UpdateIngredientList(IngredientViewerViewModel In)
         {
-            switch (LastFilter)
-            {
-                case "FilterAll":
-                    FilteredIngredients = UsedIngredientLists;
-                    SearchDefault();
-                    break;
-                case "FilterEnough":
-                    FilteredIngredients = UsedIngredientLists.FindAll(x => x.Title.IsEnough == true);
-                    SearchDefault();
-                    break;
-                case "NotEnough":
-                    FilteredIngredients = UsedIngredientLists.FindAll(x => x.Title.IsEnough == false);
-                    SearchDefault();
-                    break;
-                case "FilterPriceRising":
-                    List<IngredientsFormat> Default = new List<IngredientsFormat>();
-                    FilteredIngredients.Clear();
-                    foreach (IngredientViewerViewModel x in UsedIngredientLists)
-                    {
-                        if (x.Ingredients.Any(x => x.IsDefault))
-                        {
-                            if (x.Ingredients.FirstOrDefault(x => x.IsDefault).CostDifference > 0)
-                            {
-                                FilteredIngredients.Add(x);
-                            }
-                        }
-                    }                   
-                    SearchDefault();
-                    break;
-                case "FilterPriceLowering":
-                    foreach (IngredientViewerViewModel x in UsedIngredientLists)
-                    {
-                        if (x.Ingredients.Any(x => x.IsDefault))
-                        {
-                            if (x.Ingredients.FirstOrDefault(x => x.IsDefault).CostDifference < 0)
-                            {
-                                FilteredIngredients.Add(x);
-                            }
-                        }
-                    }           
-                    SearchDefault();
-                    break;
-            }
-        }
 
-        public void UpdateIngredientList(Ingredient In)
-        {
-            IngredientsRepository.Update(In);
+            //IngredientViewer ing = IngredientViewer.IngredientViewerFromViewModel(In);
+            //APIGateaway.UpdateIngredient(ing);
+            IngredientsRepository.Update(In.Title);
             context.SaveChanges();
         }
 
@@ -344,6 +331,12 @@ namespace StorageManagerMobile.ViewModels
 
         public void SearchUnused(string query)
         {
+            #region Using WebAPI
+            //LastSearchUnused = query;
+            //NotUsedIngredientList = new ObservableCollection<IngredientViewerViewModel>(APIGateaway.GetUnUsedIngredientsAsync(LastFilterUnused, LastSearchUnused).Result);
+            #endregion
+
+            #region Direct access to DB
             LastSearchUnused = query;
             List<IngredientViewerViewModel> results = new List<IngredientViewerViewModel>();
             if (query == "")
@@ -359,24 +352,8 @@ namespace StorageManagerMobile.ViewModels
             results.Sort((l, r) => l.Title.Name.CompareTo(r.Title.Name));
             NotUsedIngredientList = new ObservableCollection<IngredientViewerViewModel>(results);
             CollapseUnusedExpanders();
+            #endregion
         }
-
-        private void SearchUnusedDefault()
-        {
-            List<IngredientViewerViewModel> results = new List<IngredientViewerViewModel>();
-            if (LastSearch == "")
-            {
-                results = FilteredIngredients;
-            }
-            else
-            {
-                results = FilteredIngredients.Where(x => x.Title.Name.Contains(LastSearch, StringComparison.OrdinalIgnoreCase) || x.Title.Category.Contains(LastSearch, StringComparison.OrdinalIgnoreCase)).ToList();
-            }
-            results.Sort((l, r) => l.Title.Name.CompareTo(r.Title.Name));
-            IngredientList = new ObservableCollection<IngredientViewerViewModel>(results);
-        }
-
-
 
         public void CollapseUnusedExpanders()
         {
@@ -388,6 +365,13 @@ namespace StorageManagerMobile.ViewModels
 
         public void FilterListUnused(string Filter)
         {
+            LastFilterUnused= Filter;
+
+            #region Using WebAPI
+            //NotUsedIngredientList = new ObservableCollection<IngredientViewerViewModel>(APIGateaway.GetUnUsedIngredientsAsync(LastFilterUnused, LastSearchUnused).Result);
+            #endregion
+
+            #region DirectAccess to DB
             if (Filter != "Tutti")
             {
                 long UsedId = isUsedValuesRepository.GetAll().FirstOrDefault(x => x.Description == Filter).Id;
@@ -398,10 +382,16 @@ namespace StorageManagerMobile.ViewModels
                 List<long> UsedId = isUsedValuesRepository.GetUsedId();
                 NotUsedIngredientList = new ObservableCollection<IngredientViewerViewModel>(NotUsedIngredientLists.Where(x => !UsedId.Contains(x.Title.IsUsedValue)));
             }
+            #endregion
         }
 
         public void RefreshUnusedIngredientList()
         {
+            #region Using WebAPI
+            //NotUsedIngredientList = new ObservableCollection<IngredientViewerViewModel>(APIGateaway.GetUnUsedIngredientsAsync(LastFilterUnused, LastSearchUnused).Result);
+            #endregion
+
+            #region Direct Access To DB
             List<long> IsUsedID = isUsedValuesRepository.GetUsedId();
             AllIngredients = IngredientsRepository.GetAll().ToList();
             List<Ingredient> NotUsed = AllIngredients.Where(x => !IsUsedID.Contains(x.IsUsedValue)).ToList();
@@ -412,52 +402,11 @@ namespace StorageManagerMobile.ViewModels
             }
             NotUsedIngredientLists.Sort((l, r) => l.Title.Name.CompareTo(r.Title.Name));
             NotUsedIngredientList = new ObservableCollection<IngredientViewerViewModel>(NotUsedIngredientLists);
+            #endregion
         }
 
         #endregion
 
-        #endregion      
-
-        //public void RefreshIngredientList()
-        //{
-        //    long IsUsedID = isUsedValuesRepository.GetUsedId();
-        //    AllIngredients = IngredientsRepository.GetAll().ToList();
-
-        //    NotUsedIngredients = AllIngredients.Where(x => x.IsUsedValue != IsUsedID).ToList();
-        //    UsedIngredients = AllIngredients.Where(x => x.IsUsedValue == IsUsedID).ToList();
-        //    UsedIngredientLists = new List<IngredientViewerViewModel>();
-
-        //    foreach (Ingredient y in NotUsedIngredients)
-        //    {
-        //        NotUsedIngredientLists.Add(new IngredientViewerViewModel(y));
-        //    }
-        //    foreach (Ingredient x in UsedIngredients)
-        //    {
-        //        UsedIngredientLists.Add(new IngredientViewerViewModel(x));
-        //    }
-        //    if (ShowNotUsed)
-        //    {
-        //        FilteredIngredients = UsedIngredientLists;
-        //        FilteredIngredients.AddRange(NotUsedIngredientLists);
-        //    }
-
-        //    UsedIngredientLists.Sort((l, r) => l.Title.Name.CompareTo(r.Title.Name));
-        //    FilteredIngredients = UsedIngredientLists;
-        //    IngredientList = new ObservableCollection<IngredientViewerViewModel>(FilteredIngredients);
-        //}
-
-        //public void AddNotUsed()
-        //{
-        //    UsedIngredientLists.AddRange(NotUsedIngredientLists);
-        //    FilterDefault();
-        //    SearchDefault();
-        //}
-
-        //public void RemoveNotUsed()
-        //{
-        //    UsedIngredientLists.RemoveAll(NotUsedIngredientLists.Contains);
-        //    FilterDefault();
-        //    SearchDefault();
-        //}
+        #endregion       
     }
 }

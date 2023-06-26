@@ -28,6 +28,10 @@ namespace StorageManagerMobile.Services
 
         public async Task<List<IngredientViewerViewModel>> GetUsedIngredientsAsync(string filter, string query)
         {
+            if(query == "")
+            {
+                query = "NoQuery";
+            }
             HttpClient client = new HttpClient();
             Uri uri = new Uri(string.Format("https://10.147.18.219:5024/api/DataController/{0}/{1}/GetUsedIngredients/{2}/{3}", Username, Password, filter, query));
             try
@@ -36,7 +40,10 @@ namespace StorageManagerMobile.Services
                 var response = await client.GetAsync(uri).ConfigureAwait(false);
                 var stringResponse = await response.Content.ReadAsStringAsync();
                 List<IngredientViewer> stream = JsonConvert.DeserializeObject<List<IngredientViewer>>(stringResponse);
-
+                if (stream == null)
+                {
+                    return OUT;
+                }
                 foreach (IngredientViewer ingredient in stream)
                 {
                     OUT.Add(ingredient.IngredientViewerToViewmodel());
@@ -53,6 +60,10 @@ namespace StorageManagerMobile.Services
 
         public async Task<List<IngredientViewerViewModel>> GetUnUsedIngredientsAsync(string filter, string query)
         {
+            if (query == "")
+            {
+                query = "NoQuery";
+            }
             HttpClient client = new HttpClient();
             Uri uri = new Uri(string.Format("https://10.147.18.219:5024/api/DataController/{0}/{1}/GetUnUsedIngredients/{2}/{3}", Username, Password, filter, query));
             try
@@ -61,6 +72,10 @@ namespace StorageManagerMobile.Services
                 var response = await client.GetAsync(uri).ConfigureAwait(false);
                 var stringResponse = await response.Content.ReadAsStringAsync();
                 List<IngredientViewer> stream = JsonConvert.DeserializeObject<List<IngredientViewer>>(stringResponse);
+                if(stream == null)
+                {
+                    return OUT;
+                }
                 foreach (IngredientViewer ingredient in stream)
                 {
                     OUT.Add(ingredient.IngredientViewerToViewmodel());

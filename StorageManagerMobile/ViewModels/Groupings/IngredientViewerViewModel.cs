@@ -114,11 +114,14 @@ namespace StorageManagerMobile.ViewModels.Groupings
 
         public void RefreshIngredientList()
         {
+
+            #region Using DB connection
             AllFormats = IngredientsFormatsRepository.GetFormatsFromIngredientId(Title.Id);
             AllFormats.Sort((l, r) =>
             (l.LastOrderDate ?? DateOnly.MinValue).CompareTo(r.LastOrderDate ?? DateOnly.MinValue));
             AllFormats.Reverse();
             Ingredients = new ObservableCollection<IngredientsFormat>(AllFormats);
+            #endregion
         }
 
         private void CalcQuantityDisplay()
@@ -134,11 +137,15 @@ namespace StorageManagerMobile.ViewModels.Groupings
         #region DataMethods
         public void SaveIngredients()
         {
-            foreach (IngredientsFormat x in Ingredients)
-            {
-                IngredientsFormatsRepository.Update(x);
-            }
-            RefreshIngredientList();
+            #region Using WebAPI
+            #endregion
+            #region Using direct DB connection
+            //foreach (IngredientsFormat x in Ingredients)
+            //{
+            //    IngredientsFormatsRepository.Update(x);
+            //}
+            //RefreshIngredientList();
+            #endregion
         }
 
         public int DeleteIngredient(IngredientsFormat ig)

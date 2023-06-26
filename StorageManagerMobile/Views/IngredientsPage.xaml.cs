@@ -96,7 +96,7 @@ public partial class IngredientsPage : ContentPage
 
             Current.Title.QuantityNeeded = ((QuantityObject)result).QuantityNeeded;
             Current.Title.ActualQuantity = ((QuantityObject)result).ActualQuantity;
-            ((IngredientsViewModel)BindingContext).UpdateIngredientList(Current.Title);
+            ((IngredientsViewModel)BindingContext).UpdateIngredientList(Current);
             ((IngredientsViewModel)BindingContext).RefreshIngredientList();
             //    updated.Add(Current.Title);
 
@@ -243,7 +243,7 @@ public partial class IngredientsPage : ContentPage
         if (result != null)
         {
             Current.UpdateIsUsedValues((IsUsedValue)result);
-            ((IngredientsViewModel)BindingContext).UpdateIngredientList(Current.Title);
+            ((IngredientsViewModel)BindingContext).UpdateIngredientList(Current);
             ((IngredientsViewModel)BindingContext).RefreshIngredientList();
             ((IngredientsViewModel)BindingContext).RefreshUnusedIngredientList();
             //((IngredientsViewModel)BindingContext).NotifyUIChange();

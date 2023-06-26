@@ -7,7 +7,7 @@
              x:DataType="viewmodels:CostChangeViewModel"
              x:Class="StorageManagerMobile.Views.Ingredients.Popup.CostChange">
     <VerticalStackLayout>
-        <Entry HorizontalOptions="FillAndExpand" Margin="0" Text="{Binding NewCost, Mode=TwoWay}"/>
+        <Entry HorizontalOptions="FillAndExpand" Margin="0" Text="{Binding NewCost, Mode=TwoWay}" Keyboard="Numeric"/>
         <Button Text="Conferma" HorizontalOptions="CenterAndExpand" Command="{Binding SaveModifications}" Clicked="Button_Clicked" Margin="10"/>
     </VerticalStackLayout>
 </toolkit:Popup>
