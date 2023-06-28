@@ -13,25 +13,26 @@ namespace DataRepository.Controllers
 {
     [Route("api/DataController/{Username}/{Password}")]
     [ApiController]
-    public class DataController : ControllerBase
+    public class IngredientDataController : ControllerBase
     {
         private static readonly StorageManagerDBContext context = DBService.Instance.DbContext;
         private static readonly CategoryIngredientListsRepository CategoryIngredientsRepository = new CategoryIngredientListsRepository(context);
         private static readonly UsersRepository UsersRepository = new UsersRepository(context);
         private static IngredientsDataModel IngredientsRepo = IngredientsDataModel.Instance; 
 
-        public DataController()
+        public IngredientDataController()
         {
 
 
         }
+
+        #region GetRoutes
 
         [HttpGet]
         [Route("GetUsedIngredients/{filter?}/{query?}")]
 
         public ActionResult<List<IngredientViewer>> GetUsedIngredients(string Username, string Password, string? filter = "Tutti", string? query = "NoQuery")
         {
-
             User CurrentUser;
             try
             {
@@ -70,13 +71,36 @@ namespace DataRepository.Controllers
                 return Ok(JsonConvert.SerializeObject(OUT));
             }
             return Unauthorized();
-
         }
 
+        [HttpGet]
+        [Route("GetFormatsFromIngredientId/{id}")]
+        public ActionResult<List<IngredientFormatTemplate>> GetFormatsFromIngredientId(string Username, string Password, long id)
+        {
+            User CurrentUser;
+            try
+            {
+                CurrentUser = UsersRepository.GetByName(Username);
+            }
+            catch (Exception ex)
+            {
+                return Unauthorized();
+            }
+            if (CurrentUser.Password == Password)
+            {
+                List<IngredientFormatTemplate> OUT = IngredientsRepo.GetFormatsByIngredientID(id);
+                return Ok(JsonConvert.SerializeObject(OUT));
+            }
+            return Unauthorized();
+
+        }
+        #endregion
+
+        #region Post Add routes
         [HttpPost]
         [Route("PostNewIngredient")]
 
-        public long PostNewIngredient(IngredientTemplate Ingredient)
+        public long PostNewIngredient(string Username, string Password, IngredientTemplate Ingredient)
         {
             if (!ModelState.IsValid)
                 return -1;
@@ -88,7 +112,7 @@ namespace DataRepository.Controllers
         [HttpPost]
         [Route("PostNewFormat")]
 
-        public long PostNewFormat(IngredientFormatTemplate Format)
+        public long PostNewFormat(string Username, string Password, IngredientFormatTemplate Format)
         {
             if (!ModelState.IsValid)
                 return -1;
@@ -97,10 +121,13 @@ namespace DataRepository.Controllers
             return IngredientsRepo.AddFormat(Format);
         }
 
+        #endregion
+        
+        #region Post Update
         [HttpPost]
         [Route("UpdateIngredient")]
 
-        public bool UpdateIngredient(IngredientTemplate Ingredient)
+        public bool UpdateIngredient(string Username, string Password, IngredientTemplate Ingredient)
         {
             if (!ModelState.IsValid)
                 return false;
@@ -119,7 +146,7 @@ namespace DataRepository.Controllers
         [HttpPost]
         [Route("UpdateFormat")]
 
-        public bool UpdateFormat(IngredientFormatTemplate Format)
+        public bool UpdateFormat(string Username, string Password, IngredientFormatTemplate Format)
         {
             if (!ModelState.IsValid)
                 return false;
@@ -134,5 +161,39 @@ namespace DataRepository.Controllers
                 return false;
             }
         }
+        #endregion
+
+        #region Post Delete
+        [HttpPost]
+        [Route("DeleteFormat/{id}")]
+
+        public bool DeleteFormat(long id)
+        {
+            try
+            {
+                IngredientsRepo.DeleteFormat(new IngredientFormatTemplate(IngredientsRepo.GetFormatFromId(id)));
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        [HttpPost]
+        [Route("DeleteIngredient/{id}")]
+        public bool DeleteIngredient(long id)
+        {
+            try
+            {
+                IngredientsRepo.DeleteIngredient(id);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        #endregion
     }
 }

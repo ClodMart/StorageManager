@@ -16,7 +16,7 @@ namespace StorageManagerMobile.Interface
 
         public Task<long> AddIngredient(IngredientViewer Ingredient);
 
-        public Task<bool> UpdateIngredient(IngredientViewer Ingredient);
+        public Task<bool> UpdateIngredientViewer(IngredientViewer Ingredient);
 
     }
 }

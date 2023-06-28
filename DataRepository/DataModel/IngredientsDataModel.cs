@@ -161,6 +161,16 @@ namespace DataRepository.DataModel
             }
             return results;
         }
+
+        public IngredientsFormat GetFormatFromId(long id)
+        {
+           return IngredientsFormatsRepository.GetById(id);
+        }
+
+        public Ingredient GetIngredientFromId(long id)
+        {
+            return IngredientsRepository.GetById(id);
+        }
         #endregion
 
         #region AddMethods
@@ -295,6 +305,19 @@ namespace DataRepository.DataModel
             NotUsedIngredientLists.Remove(ingredient);
         }
 
+        public List<IngredientFormatTemplate> GetFormatsByIngredientID(long id)
+        {
+            IngredientViewer Ing = UsedIngredientLists.FirstOrDefault(x => x.Title.id == id) ?? NotUsedIngredientLists.FirstOrDefault(x => x.Title.id == id);
+            if (Ing != null)
+            {
+                return Ing.Ingredients;
+            }
+            else
+            {
+                return null;
+            }
+            
+        }
 
 
     }

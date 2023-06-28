@@ -1,5 +1,6 @@
 ﻿using DBManager.Interfacce;
 using DBManager.Models;
+using StorageManagerMobile.DataModels.DBDataModel;
 using StorageManagerMobile.Resources;
 using StorageManagerMobile.Services;
 using StorageManagerMobile.ViewModels.Popup;
@@ -22,6 +23,7 @@ namespace StorageManagerMobile.ViewModels.Groupings
 
         private static readonly StorageManagerDBContext context = DBService.Instance.DbContext;
         private static readonly IngredientsFormatsRepository IngredientsFormatsRepository = new IngredientsFormatsRepository(context);
+        private static readonly DataApiIngredientsGateaway IngredientGateway = new DataApiIngredientsGateaway();
 
         public List<IngredientsFormat> AllFormats = new List<IngredientsFormat>();
 
@@ -107,14 +109,11 @@ namespace StorageManagerMobile.ViewModels.Groupings
 
         #region UImethods
 
-        //private void UpdateIngredientList()
-        //{
-        //    Title = Ingredients.FirstOrDefault();
-        //}
-
         public void RefreshIngredientList()
         {
-
+            #region UsingWebAPI
+            //Ingredients = new ObservableCollection<IngredientsFormat>(IngredientGateway.GetFormatsFromIngredientIdAsync(Title.Id).Result);
+            #endregion
             #region Using DB connection
             AllFormats = IngredientsFormatsRepository.GetFormatsFromIngredientId(Title.Id);
             AllFormats.Sort((l, r) =>
@@ -138,13 +137,18 @@ namespace StorageManagerMobile.ViewModels.Groupings
         public void SaveIngredients()
         {
             #region Using WebAPI
-            #endregion
-            #region Using direct DB connection
             //foreach (IngredientsFormat x in Ingredients)
             //{
-            //    IngredientsFormatsRepository.Update(x);
+            //    IngredientGateway.UpdateFormat(new IngredientFormatTemplate(x));
             //}
             //RefreshIngredientList();
+            #endregion
+            #region Using direct DB connection
+            foreach (IngredientsFormat x in Ingredients)
+            {
+                IngredientsFormatsRepository.Update(x);
+            }
+            RefreshIngredientList();
             #endregion
         }
 
