@@ -19,7 +19,6 @@ namespace StorageManagerMobile.Views;
 public partial class IngredientsPage : ContentPage
 {
     private static readonly StorageManagerDBContext context = DBService.Instance.DbContext;
-    private static readonly IngredientsFormatsRepository IngredientsFormatsRepository = new IngredientsFormatsRepository(context);
     private bool refreshView = false;
     private bool IsChanging = false;
 
@@ -68,8 +67,8 @@ public partial class IngredientsPage : ContentPage
 
     private void ContentPage_NavigatedTo(object sender, NavigatedToEventArgs e)
     {
-        Refresher.IsRefreshing = true;
-        RefresherUnused.IsRefreshing = true;
+        RefreshList();
+        RefreshUnusedList();
     }
 
     #endregion
@@ -168,10 +167,10 @@ public partial class IngredientsPage : ContentPage
         Navigation.PushAsync(NewPage);
     }
     #endregion
-    private void Expander_ExpandedChanged(object sender, CommunityToolkit.Maui.Core.ExpandedChangedEventArgs e)
-    {
-        InvalidateMeasure();
-    }
+    //private void Expander_ExpandedChanged(object sender, CommunityToolkit.Maui.Core.ExpandedChangedEventArgs e)
+    //{
+    //    InvalidateMeasure();
+    //}
 
     #region UnusedList
 
@@ -180,26 +179,34 @@ public partial class IngredientsPage : ContentPage
         ((IngredientsViewModel)BindingContext).FilterListUnused(((RadioButton)sender).Content.ToString());
     }
 
-    private void SetDefaultUnused_Clicked(object sender, CheckedChangedEventArgs e)
+    private async void SetDefaultUnused_Clicked(object sender, CheckedChangedEventArgs e)
     {
-        IngredientsFormat Selected = (IngredientsFormat)((RadioButton)sender).BindingContext;
-        IngredientViewerViewModel Current = ((IngredientsViewModel)BindingContext).NotUsedIngredientList.FirstOrDefault(x => x.Title.Id == Selected.IngredientId);
-        if (refreshView)
-        {
-            foreach (IngredientsFormat x in Current.Ingredients)
+            IngredientsFormat Selected = (IngredientsFormat)((RadioButton)sender).BindingContext;
+            IngredientViewerViewModel Current = ((IngredientsViewModel)BindingContext).NotUsedIngredientList.FirstOrDefault(x => x.Title.Id == Selected.IngredientId);
+            Current.ModelChanged += Current_ModelChanged;
+            if (refreshView)
             {
-                if (x.Id != Selected.Id)
+                foreach (IngredientsFormat x in Current.Ingredients)
                 {
-                    x.IsDefault = false;
+                    if (x.Id != Selected.Id)
+                    {
+                        x.IsDefault = false;
+                    }
                 }
+                Current.SaveIngredients();
+                refreshView = false;
             }
-            Current.SaveIngredients();
-            refreshView = false;
-        }
-        else
-        {
-            refreshView = true;
-        }
+            else
+            {
+                refreshView = true;
+            }      
+    }
+
+    private void Current_ModelChanged(object sender, EventArgs e)
+    {
+        //((IngredientsViewModel)BindingContext).RefreshIngredientList();
+        //((IngredientsViewModel)BindingContext).RefreshUnusedIngredientList();
+        ((IngredientViewerViewModel)sender).ModelChanged-= Current_ModelChanged;
     }
 
     private void DeleteUnused_Clicked(object sender, EventArgs e)

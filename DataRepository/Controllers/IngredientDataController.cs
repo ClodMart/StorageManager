@@ -15,7 +15,7 @@ namespace DataRepository.Controllers
     [ApiController]
     public class IngredientDataController : ControllerBase
     {
-        private static readonly StorageManagerDBContext context = DBService.Instance.DbContext;
+        private static readonly StorageManagerDBContext context = new StorageManagerDBContext();
         private static readonly CategoryIngredientListsRepository CategoryIngredientsRepository = new CategoryIngredientListsRepository(context);
         private static readonly UsersRepository UsersRepository = new UsersRepository(context);
         private static IngredientsDataModel IngredientsRepo = IngredientsDataModel.Instance; 
@@ -68,6 +68,27 @@ namespace DataRepository.Controllers
             if (CurrentUser.Password == Password)
             {
                 List<IngredientViewer> OUT = IngredientsRepo.GetUnUsedIngredients(filter, query);
+                return Ok(JsonConvert.SerializeObject(OUT));
+            }
+            return Unauthorized();
+        }
+
+        [HttpGet]
+        [Route("GetIngredientByName/{name}")]
+        public ActionResult<IngredientTemplate> GetIngredientByName(string Username, string Password, string name)
+        {
+            User CurrentUser;
+            try
+            {
+                CurrentUser = UsersRepository.GetByName(Username);
+            }
+            catch (Exception ex)
+            {
+                return Unauthorized();
+            }
+            if (CurrentUser.Password == Password)
+            {
+                IngredientTemplate OUT = IngredientsRepo.GetIngredientByName(name);
                 return Ok(JsonConvert.SerializeObject(OUT));
             }
             return Unauthorized();

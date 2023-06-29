@@ -1,5 +1,6 @@
 ﻿using DBManager.Interfacce;
 using DBManager.Models;
+using StorageManagerMobile.DataModels.DBDataModel;
 using StorageManagerMobile.Services;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,8 @@ namespace StorageManagerMobile.ViewModels.Popup
     public class CostChangeViewModel : BaseViewModel
     {
         private static readonly StorageManagerDBContext context = DBService.Instance.DbContext;
-        private static readonly IngredientsFormatsRepository ingredientsFormatsRepository = new IngredientsFormatsRepository(context);
+        //private static readonly IngredientsFormatsRepository ingredientsFormatsRepository = new IngredientsFormatsRepository(context);
+        private static readonly DataApiIngredientsGateaway IngredientsGateway = new DataApiIngredientsGateaway();
 
         private IngredientsFormat format;
         public IngredientsFormat Format { get { return format; } set { format = value; NotifyPropertyChanged(); } }
@@ -40,7 +42,8 @@ namespace StorageManagerMobile.ViewModels.Popup
         public void SaveModificationsMethod()
         {
             UpdateCost();
-            ingredientsFormatsRepository.Update(Format);
+            IngredientsGateway.UpdateFormat(new IngredientFormatTemplate(Format));
+            //ingredientsFormatsRepository.Update(Format);
         }
     }
 }

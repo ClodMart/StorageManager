@@ -120,8 +120,51 @@ namespace StorageManagerMobile.Services
             }
         }
 
-        #endregion
-        public async Task<long> AddIngredient(IngredientViewer Ingredient)
+        public async Task<IngredientTemplate> GetIngredientByName(string name)
+        {
+            HttpClient client = new HttpClient();
+            Uri uri = new Uri(string.Format("https://10.147.18.219:5024/api/DataController/{0}/{1}/GetIngredientByName/{2}", Username, Password, name));
+            try
+            {
+                var response = await client.GetAsync(uri).ConfigureAwait(false);
+                var stringResponse = await response.Content.ReadAsStringAsync();
+                IngredientTemplate stream = JsonConvert.DeserializeObject<IngredientTemplate>(stringResponse);
+                if (stream == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    return stream;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(@"\tERROR {0}", ex.Message);
+                return null;
+            }
+        }
+            #endregion
+
+            #region AddMrthods
+            public async Task<long> AddIngredientViewer(IngredientViewer Ingredient)
+        {
+            var options = new JsonWriterOptions
+            {
+                Indented = true
+            };
+            IngredientTemplate Ing = Ingredient.Title;
+            long NewId = await AddIngredient(Ing);
+            foreach (IngredientFormatTemplate x in Ingredient.Ingredients)
+            {
+                x.ingredientId= NewId;
+                await AddFormat(x);
+            }
+
+            return NewId;
+        }
+
+        public async Task<long> AddIngredient(IngredientTemplate Ing)
         {
             var options = new JsonWriterOptions
             {
@@ -132,24 +175,11 @@ namespace StorageManagerMobile.Services
             using var writer = new Utf8JsonWriter(stream, options);
             HttpClient client = new HttpClient();
             Uri uri = new Uri(string.Format("https://10.147.18.219:5024/api/DataController/{0}/{1}/PostNewIngredient", Username, Password));
-            IngredientTemplate Ing = Ingredient.Title;
             string json = Ing.ConvertToJson();
             var HTTPContent = new StringContent(json, Encoding.UTF8, "application/json");
             var HttpResponse = await client.PostAsync(uri, HTTPContent);
-            long newId = 0; 
-            bool succeded = long.TryParse(HttpResponse.Content.ReadAsStringAsync().Result,out newId);
-            uri = new Uri(string.Format("https://10.147.18.219:5024/api/DataController/{0}/{1}/PostNewFormat", Username, Password));
-            foreach (IngredientFormatTemplate x in Ingredient.Ingredients)
-            {
-                x.ingredientId = newId;
-                IngredientFormatTemplate New = x;
-                json = New.ConvertToJson();
-                HTTPContent = new StringContent(json, Encoding.UTF8, "application/json");
-                HttpResponse = await client.PostAsync(uri, HTTPContent);
-                long FormatID = 0;
-                succeded = long.TryParse(HttpResponse.Content.ReadAsStringAsync().Result, out FormatID);
-            }
-
+            long newId = 0;
+            bool succeded = long.TryParse(HttpResponse.Content.ReadAsStringAsync().Result, out newId);
             if (succeded)
             {
                 return newId;
@@ -157,12 +187,31 @@ namespace StorageManagerMobile.Services
             else
             {
                 return -1;
-            }          
+            }
         }
 
+        public async Task<long> AddFormat(IngredientFormatTemplate format)
+        {
+            var options = new JsonWriterOptions
+            {
+                Indented = true
+            };
 
-        #region Updates
-        public async Task<bool> UpdateIngredientViewer(IngredientViewer Ingredient)
+            using var stream = new MemoryStream();
+            using var writer = new Utf8JsonWriter(stream, options);
+            HttpClient client = new HttpClient();
+            Uri uri = new Uri(string.Format("https://10.147.18.219:5024/api/DataController/{0}/{1}/PostNewFormat", Username, Password));
+            string json = format.ConvertToJson();
+            var HTTPContent = new StringContent(json, Encoding.UTF8, "application/json");
+            var HttpResponse = await client.PostAsync(uri, HTTPContent);
+            long FormatID = 0;
+            bool succeded = long.TryParse(HttpResponse.Content.ReadAsStringAsync().Result, out FormatID);
+            return FormatID;
+        }
+            #endregion
+
+            #region Updates
+            public async Task<bool> UpdateIngredientViewer(IngredientViewer Ingredient)
         {
             IngredientTemplate Ing = Ingredient.Title;
             bool succeded = UpdateIngredient(Ing).Result;
@@ -188,7 +237,7 @@ namespace StorageManagerMobile.Services
         public async Task<bool> UpdateIngredient(IngredientTemplate Ingredient)
         {
             HttpClient client = new HttpClient();
-            Uri uri = new Uri(string.Format("https://10.147.18.219:5024/api/DataController/{0}/{1}/UpdateIngredientViewer", Username, Password));
+            Uri uri = new Uri(string.Format("https://10.147.18.219:5024/api/DataController/{0}/{1}/UpdateIngredient", Username, Password));
             string json = Ingredient.ConvertToJson();
             var HTTPContent = new StringContent(json, Encoding.UTF8, "application/json");
             var HttpResponse = await client.PostAsync(uri, HTTPContent);

@@ -1,5 +1,6 @@
 ﻿using DBManager.Interfacce;
 using DBManager.Models;
+using StorageManagerMobile.DataModels.DBDataModel;
 using StorageManagerMobile.Resources;
 using StorageManagerMobile.Services;
 using StorageManagerMobile.ViewModels.Groupings;
@@ -26,8 +27,7 @@ namespace StorageManagerMobile.ViewModels.Add
     {
         #region Properties
         private static readonly StorageManagerDBContext context = DBService.Instance.DbContext;
-        private static readonly IngredientsRepository IngredientsRepository = new IngredientsRepository(context);
-        private static readonly IngredientsFormatsRepository IngredientsFormatsRepository = new IngredientsFormatsRepository(context);
+        private static readonly DataApiIngredientsGateaway IngredientsGateway = new DataApiIngredientsGateaway();
 
         private List<IsUsedValue> isUsedValues;
         public List<IsUsedValue> IsUsedValues
@@ -98,9 +98,10 @@ namespace StorageManagerMobile.ViewModels.Add
 
         public long CheckIfExists()
         {
-            if (IngredientsRepository.Exists(IngredientName))
+            IngredientTemplate Ing = IngredientsGateway.GetIngredientByName(IngredientName).Result;
+            if (Ing != null)
             {
-                return IngredientsRepository.GetByName(IngredientName).Id;
+                return Ing.id;
             }
             else
             {
@@ -110,11 +111,21 @@ namespace StorageManagerMobile.ViewModels.Add
 
         public void SaveFormats(long IngredientId)
         {
+            #region Using WebAPI
             foreach (IngredientsFormat x in Formats)
             {
                 x.IngredientId = IngredientId;
+                IngredientsGateway.AddFormat(new IngredientFormatTemplate(x));
             }
-            IngredientsFormatsRepository.AddAll(Formats.ToList());
+
+            #endregion
+            #region Direct DB access
+            //foreach (IngredientsFormat x in Formats)
+            //{
+            //    x.IngredientId = IngredientId;
+            //}
+            //IngredientsFormatsRepository.AddAll(Formats.ToList());
+            #endregion
         }
 
         public long SaveIngredient()
@@ -126,12 +137,16 @@ namespace StorageManagerMobile.ViewModels.Add
             ing.IsUsedValue = IsUsed.Id;
             ing.Notes = Notes;
 
-            return IngredientsRepository.Add(ing);
+            return IngredientsGateway.AddIngredient(new IngredientTemplate(ing)).Result;
+
+            #region Using Direct DB access
+            //return IngredientsRepository.Add(ing);
+            #endregion
         }
 
         public void SaveChanges()
         {
-            context.SaveChanges();
+            //context.SaveChanges();
         }
 
         public IngredientViewerViewModel GetIngredientViewer()

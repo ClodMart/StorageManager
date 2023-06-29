@@ -13,10 +13,7 @@ namespace DataRepository.DataModel
         private static IngredientsDataModel instance;
         private static readonly object padlock = new object();
 
-        private static readonly StorageManagerDBContext context = DBService.Instance.DbContext;
-        private static readonly IngredientsRepository IngredientsRepository = new IngredientsRepository(context);
-        private static readonly IngredientsFormatsRepository IngredientsFormatsRepository = new IngredientsFormatsRepository(context);
-        private static readonly IsUsedValuesRepository isUsedValuesRepository = new IsUsedValuesRepository(context);
+        private StorageManagerDBContext context = new StorageManagerDBContext();
 
         private List<IngredientTemplate> AllIngredients = new List<IngredientTemplate>();
         private List<IngredientTemplate> NotUsedIngredients = new List<IngredientTemplate>();
@@ -44,6 +41,11 @@ namespace DataRepository.DataModel
 
         public IngredientsDataModel()
         {
+            context = new StorageManagerDBContext();
+            IngredientsRepository IngredientsRepository = new IngredientsRepository(context);
+            IngredientsFormatsRepository IngredientsFormatsRepository = new IngredientsFormatsRepository(context);
+            IsUsedValuesRepository isUsedValuesRepository = new IsUsedValuesRepository(context);
+
             //UsedValuesList.AddRange(UsedValues.IsUsedValues.Where(x => !x.CorrespondsToUsed).Select(x => x.Description).ToList());
             IsUsedValuesID = isUsedValuesRepository.GetUsedId();
             List<Ingredient> Ingredients = IngredientsRepository.GetAll().ToList();
@@ -134,6 +136,10 @@ namespace DataRepository.DataModel
 
         private List<IngredientViewer> FilterUnUsedList(string filter)
         {
+            context = new StorageManagerDBContext();
+            IngredientsRepository IngredientsRepository = new IngredientsRepository(context);
+            IngredientsFormatsRepository IngredientsFormatsRepository = new IngredientsFormatsRepository(context);
+            IsUsedValuesRepository isUsedValuesRepository = new IsUsedValuesRepository(context);
             if (filter != "Tutti")
             {
                 long UsedId = isUsedValuesRepository.GetAll().FirstOrDefault(x => x.Description == filter).Id;
@@ -164,11 +170,19 @@ namespace DataRepository.DataModel
 
         public IngredientsFormat GetFormatFromId(long id)
         {
-           return IngredientsFormatsRepository.GetById(id);
+            context = new StorageManagerDBContext();
+            IngredientsRepository IngredientsRepository = new IngredientsRepository(context);
+            IngredientsFormatsRepository IngredientsFormatsRepository = new IngredientsFormatsRepository(context);
+            IsUsedValuesRepository isUsedValuesRepository = new IsUsedValuesRepository(context);
+            return IngredientsFormatsRepository.GetById(id);
         }
 
         public Ingredient GetIngredientFromId(long id)
         {
+            context = new StorageManagerDBContext();
+            IngredientsRepository IngredientsRepository = new IngredientsRepository(context);
+            IngredientsFormatsRepository IngredientsFormatsRepository = new IngredientsFormatsRepository(context);
+            IsUsedValuesRepository isUsedValuesRepository = new IsUsedValuesRepository(context);
             return IngredientsRepository.GetById(id);
         }
         #endregion
@@ -176,6 +190,10 @@ namespace DataRepository.DataModel
         #region AddMethods
         public long AddIngredient(Ingredient ingredient)
         {
+            context = new StorageManagerDBContext();
+            IngredientsRepository IngredientsRepository = new IngredientsRepository(context);
+            IngredientsFormatsRepository IngredientsFormatsRepository = new IngredientsFormatsRepository(context);
+            IsUsedValuesRepository isUsedValuesRepository = new IsUsedValuesRepository(context);
             long NewId = IngredientsRepository.Add(ingredient);
             ingredient.Id = NewId;
             IngredientTemplate NewIng = new IngredientTemplate(ingredient);
@@ -194,6 +212,10 @@ namespace DataRepository.DataModel
 
         public long AddFormat(IngredientFormatTemplate Format)
         {
+            context = new StorageManagerDBContext();
+            IngredientsRepository IngredientsRepository = new IngredientsRepository(context);
+            IngredientsFormatsRepository IngredientsFormatsRepository = new IngredientsFormatsRepository(context);
+            IsUsedValuesRepository isUsedValuesRepository = new IsUsedValuesRepository(context);
             IngredientTemplate ing = AllIngredients.FirstOrDefault(x => x.id == Format.ingredientId);
             if (ing != null) 
             {
@@ -213,18 +235,36 @@ namespace DataRepository.DataModel
                 return -1;
             }
         }
+
+        public IngredientTemplate GetIngredientByName(string Name)
+        {
+            IngredientViewer Ing = UsedIngredientLists.FirstOrDefault(x=>x.Title.name== Name) ?? NotUsedIngredientLists.FirstOrDefault(x => x.Title.name == Name);
+            if(Ing == null)
+            {
+                return null;
+            }
+            else
+            {
+                return Ing.Title;
+            }
+        }
         #endregion
 
         #region UpdateMethods
         public bool UpdateIngredient(IngredientTemplate ing)
         {
+            context = new StorageManagerDBContext();
+            IngredientsRepository IngredientsRepository = new IngredientsRepository(context);
+            IngredientsFormatsRepository IngredientsFormatsRepository = new IngredientsFormatsRepository(context);
+            IsUsedValuesRepository isUsedValuesRepository = new IsUsedValuesRepository(context);
             try
             {
                 IngredientViewer OldIng = UsedIngredientLists.FirstOrDefault(x => x.Title.id == ing.id) ?? NotUsedIngredientLists.FirstOrDefault(x => x.Title.id == ing.id);
                 IngredientViewer NewIng = OldIng.Clone();
                 NewIng.Title = ing;
                 Update(OldIng, NewIng);
-                IngredientsRepository.Update(ing.GetNewIngredient());
+                Ingredient Updated = ing.GetNewIngredient();
+                IngredientsRepository.Update(Updated);
                 return true;
             }
             catch { return false; }
@@ -286,6 +326,11 @@ namespace DataRepository.DataModel
 
         public void DeleteFormat(IngredientFormatTemplate format)
         {
+            context = new StorageManagerDBContext();
+            IngredientsRepository IngredientsRepository = new IngredientsRepository(context);
+            IngredientsFormatsRepository IngredientsFormatsRepository = new IngredientsFormatsRepository(context);
+            IsUsedValuesRepository isUsedValuesRepository = new IsUsedValuesRepository(context);
+
             IngredientViewer Ingredient = UsedIngredientLists.FirstOrDefault(x => x.Title.id == format.ingredientId) ?? NotUsedIngredientLists.FirstOrDefault(x => x.Title.id == format.ingredientId);
             IngredientFormatTemplate actformat = Ingredient.AllFormats.FirstOrDefault(x => x.id == format.id);
             Ingredient.AllFormats.Remove(actformat);
@@ -295,6 +340,11 @@ namespace DataRepository.DataModel
 
         public void DeleteIngredient(long Id)
         {
+            context = new StorageManagerDBContext();
+            IngredientsRepository IngredientsRepository = new IngredientsRepository(context);
+            IngredientsFormatsRepository IngredientsFormatsRepository = new IngredientsFormatsRepository(context);
+            IsUsedValuesRepository isUsedValuesRepository = new IsUsedValuesRepository(context);
+
             IngredientViewer ingredient = UsedIngredientLists.FirstOrDefault(x=>x.Title.id == Id) ?? NotUsedIngredientLists.FirstOrDefault(x => x.Title.id == Id); 
             foreach(IngredientFormatTemplate f in ingredient.Ingredients)
             {
@@ -324,8 +374,7 @@ namespace DataRepository.DataModel
 
     public class IngredientViewer
     {
-        private static readonly StorageManagerDBContext context = DBService.Instance.DbContext;
-        private static readonly IngredientsFormatsRepository IngredientsFormatsRepository = new IngredientsFormatsRepository(context);
+        private StorageManagerDBContext context = new StorageManagerDBContext();
 
         public List<IngredientFormatTemplate> AllFormats = new List<IngredientFormatTemplate>();
         public IngredientTemplate Title;
@@ -337,6 +386,9 @@ namespace DataRepository.DataModel
 
         public IngredientViewer(IngredientTemplate title)
         {
+            context = new StorageManagerDBContext();
+            IngredientsFormatsRepository IngredientsFormatsRepository = new IngredientsFormatsRepository(context);
+
             Title = title;
             List<IngredientsFormat> forms = IngredientsFormatsRepository.GetFormatsFromIngredientId(Title.id).ToList();
             foreach(IngredientsFormat x in forms)
@@ -364,6 +416,9 @@ namespace DataRepository.DataModel
 
         public void RefreshIngredientFormat()
         {
+            context = new StorageManagerDBContext();
+            IngredientsFormatsRepository IngredientsFormatsRepository = new IngredientsFormatsRepository(context);
+
             List<IngredientsFormat> forms = IngredientsFormatsRepository.GetFormatsFromIngredientId(Title.id).ToList();
             foreach (IngredientsFormat x in forms)
             {
@@ -377,11 +432,17 @@ namespace DataRepository.DataModel
 
         public long AddFormat(IngredientsFormat format)
         {
-           return IngredientsFormatsRepository.Add(format);
+            context = new StorageManagerDBContext();
+            IngredientsFormatsRepository IngredientsFormatsRepository = new IngredientsFormatsRepository(context);
+
+            return IngredientsFormatsRepository.Add(format);
         }
 
         public void UpdateFormat(IngredientsFormat format)
-        {            
+        {
+            context = new StorageManagerDBContext();
+            IngredientsFormatsRepository IngredientsFormatsRepository = new IngredientsFormatsRepository(context);
+
             IngredientsFormatsRepository.Update(format);
         }
 

@@ -15,7 +15,7 @@ namespace DataRepository.Controllers
     [ApiController]
     public class OrderExport : ControllerBase
     {
-        private static readonly StorageManagerDBContext context = DBService.Instance.DbContext;
+        private static readonly StorageManagerDBContext context = new StorageManagerDBContext();
         private static readonly CategoryIngredientListsRepository CategoryIngredientsRepository = new CategoryIngredientListsRepository(context);
         private static readonly UsersRepository UsersRepository = new UsersRepository(context);
 

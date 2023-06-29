@@ -8,7 +8,7 @@ namespace DataRepository.Services
 {
     public class ExcelCreator
     {
-        private static readonly StorageManagerDBContext context = DBService.Instance.DbContext;
+        private static readonly StorageManagerDBContext context = new StorageManagerDBContext();
         private static readonly IngredientsFormatsRepository FormatRepository = new IngredientsFormatsRepository(context);
         private static readonly SuppliersRepository SuppliersRepository = new SuppliersRepository(context);
         private static readonly IngredientsRepository Ingredients = new IngredientsRepository(context);

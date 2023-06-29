@@ -70,7 +70,7 @@
             </VerticalStackLayout>
 
             <Border Grid.Row="3" StrokeThickness="3" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="10,0,10,0" Padding="5,0,0,5" StrokeShape="RoundRectangle 20">
-                <toolkit:Expander IsExpanded="False" ExpandedChanged="Expander_ExpandedChanged">
+                <toolkit:Expander IsExpanded="False">
                     <toolkit:Expander.Header>
                         <Grid Padding="0" HeightRequest="60"  Margin="5">
                             <Grid.ColumnDefinitions>
@@ -117,7 +117,7 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Border Grid.Row="2" StrokeThickness="2" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="10,5,10,0" StrokeShape="RoundRectangle 20">
-                                <toolkit:Expander x:Name="GroupHeader" BindingContext="{Binding}" x:DataType="customvievmodels:IngredientViewerViewModel" IsExpanded="{Binding IsExpanded, Mode=TwoWay}" ExpandedChanged="Expander_ExpandedChanged" Margin="0,0,0,5">
+                                <toolkit:Expander x:Name="GroupHeader" BindingContext="{Binding}" x:DataType="customvievmodels:IngredientViewerViewModel" IsExpanded="{Binding IsExpanded, Mode=OneWayToSource}" Margin="0,0,0,5">
                                     <toolkit:Expander.Header>
                                         <Grid Padding="0"  Margin="5" x:Name="ExpanderHeader" HeightRequest="55">
                                             <Grid.ColumnDefinitions>
@@ -217,7 +217,7 @@
             </VerticalStackLayout>
 
             <Border Grid.Row="3" StrokeThickness="3" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="10,0,10,0" Padding="5,0,0,5" StrokeShape="RoundRectangle 20">
-                <toolkit:Expander IsExpanded="False" ExpandedChanged="Expander_ExpandedChanged">
+                <toolkit:Expander IsExpanded="False">
                     <toolkit:Expander.Header>
                         <Grid Padding="0" HeightRequest="60"  Margin="5">
                             <Grid.ColumnDefinitions>
@@ -261,11 +261,11 @@
 
 
             <RefreshView x:Name="RefresherUnused" Grid.Row="4" Refreshing="RefresherUnusing_Refreshing">
-                <CollectionView x:Name="NotUsedListUnused" ItemsSource="{Binding NotUsedIngredientList, Mode=TwoWay}" Grid.Row="3" VerticalScrollBarVisibility="Always">
+                <CollectionView x:Name="NotUsedListUnused" ItemsSource="{Binding NotUsedIngredientList, Mode=OneWay}" Grid.Row="3" VerticalScrollBarVisibility="Always">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Border Grid.Row="2" StrokeThickness="2" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="10,5,10,0" StrokeShape="RoundRectangle 20">
-                                <toolkit:Expander x:Name="GroupHeaderUnused" BindingContext="{Binding}" x:DataType="customvievmodels:IngredientViewerViewModel" IsExpanded="{Binding IsExpanded, Mode=TwoWay}" ExpandedChanged="Expander_ExpandedChanged" Margin="0,0,0,5">
+                                <toolkit:Expander x:Name="GroupHeaderUnused" BindingContext="{Binding}" x:DataType="customvievmodels:IngredientViewerViewModel" IsExpanded="{Binding IsExpanded, Mode=TwoWay}" Margin="0,0,0,5">
                                     <toolkit:Expander.Header>
                                         <Grid Padding="0"  Margin="5" x:Name="ExpanderHeaderUnused" HeightRequest="55">
                                             <Grid.ColumnDefinitions>

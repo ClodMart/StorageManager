@@ -28,10 +28,10 @@ namespace StorageManagerMobile.Resources
         public int QuantityNeeded { get; set; }
         public int ActualQuantity { get; set; }
 
-        public QuantityObject(int quantityNeeded, int actualQuantity) 
+        public QuantityObject(decimal quantityNeeded, decimal actualQuantity) 
         {
-            QuantityNeeded = quantityNeeded;
-            ActualQuantity = actualQuantity;
+            QuantityNeeded = (int)quantityNeeded;
+            ActualQuantity = (int)actualQuantity;
         }
     }
 

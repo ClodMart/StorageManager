@@ -18,7 +18,7 @@ namespace StorageManagerMobile.DataModels
 
         public List<IngredientFormatTemplate> AllFormats = new List<IngredientFormatTemplate>();
         public IngredientTemplate Title;
-        public List<IngredientFormatTemplate> Ingredients;
+        public List<IngredientFormatTemplate> Ingredients = new List<IngredientFormatTemplate>();
         public string QuantityDisplay;
 
         public IngredientViewer(IngredientTemplate title)

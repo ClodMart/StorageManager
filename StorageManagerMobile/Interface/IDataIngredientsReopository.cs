@@ -1,4 +1,5 @@
 ﻿using StorageManagerMobile.DataModels;
+using StorageManagerMobile.DataModels.DBDataModel;
 using StorageManagerMobile.ViewModels.Groupings;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace StorageManagerMobile.Interface
 
         public Task<List<IngredientViewerViewModel>> GetUnUsedIngredientsAsync(string filter, string query);
 
-        public Task<long> AddIngredient(IngredientViewer Ingredient);
+        public Task<long> AddIngredient(IngredientTemplate Ing);
 
         public Task<bool> UpdateIngredientViewer(IngredientViewer Ingredient);
 

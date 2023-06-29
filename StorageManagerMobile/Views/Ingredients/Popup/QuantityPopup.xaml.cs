@@ -11,14 +11,14 @@ public partial class QuantityPopup : Popup
 
     private void Save_Clicked(object sender, EventArgs e)
     {
-		int QNeeded = -1;
-		int ActualQ = -1;
+		decimal QNeeded = -1;
+        decimal ActualQ = -1;
 
 		if(QuantityNeeded.Text != null)
 		{
 			try
 			{
-				QNeeded = int.Parse(QuantityNeeded.Text);
+				QNeeded = decimal.Parse(QuantityNeeded.Text);
 			}
 			catch 
 			{
@@ -29,7 +29,7 @@ public partial class QuantityPopup : Popup
 		{
             try
             {
-                QNeeded = int.Parse(QuantityNeeded.Placeholder);
+                QNeeded = decimal.Parse(QuantityNeeded.Placeholder);
             }
             catch
             {
@@ -40,7 +40,7 @@ public partial class QuantityPopup : Popup
         {
             try
             {
-                ActualQ = int.Parse(ActualQuantity.Text);
+                ActualQ = decimal.Parse(ActualQuantity.Text);
             }
             catch
             {
@@ -51,7 +51,7 @@ public partial class QuantityPopup : Popup
         {
             try
             {
-                ActualQ = int.Parse(ActualQuantity.Placeholder);
+                ActualQ = decimal.Parse(ActualQuantity.Placeholder);
             }
             catch
             {

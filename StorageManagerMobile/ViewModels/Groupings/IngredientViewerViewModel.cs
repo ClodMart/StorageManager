@@ -22,7 +22,6 @@ namespace StorageManagerMobile.ViewModels.Groupings
         #region Parameters
 
         private static readonly StorageManagerDBContext context = DBService.Instance.DbContext;
-        private static readonly IngredientsFormatsRepository IngredientsFormatsRepository = new IngredientsFormatsRepository(context);
         private static readonly DataApiIngredientsGateaway IngredientGateway = new DataApiIngredientsGateaway();
 
         public List<IngredientsFormat> AllFormats = new List<IngredientsFormat>();
@@ -58,16 +57,17 @@ namespace StorageManagerMobile.ViewModels.Groupings
             set { quantityDisplay = value; NotifyPropertyChanged(); }
         }
 
+        public event EventHandler ModelChanged;
         #endregion
 
         public IngredientViewerViewModel(Ingredient title)
         {
-            Title = title;
-            AllFormats = IngredientsFormatsRepository.GetFormatsFromIngredientId(Title.Id);
-            AllFormats.Sort((l, r) =>
-            (l.LastOrderDate ?? DateOnly.MinValue).CompareTo(r.LastOrderDate ?? DateOnly.MinValue));
-            AllFormats.Reverse();
-            Ingredients = new ObservableCollection<IngredientsFormat>(AllFormats);
+            //Title = title;
+            //AllFormats = IngredientsFormatsRepository.GetFormatsFromIngredientId(Title.Id);
+            //AllFormats.Sort((l, r) =>
+            //(l.LastOrderDate ?? DateOnly.MinValue).CompareTo(r.LastOrderDate ?? DateOnly.MinValue));
+            //AllFormats.Reverse();
+            //Ingredients = new ObservableCollection<IngredientsFormat>(AllFormats);
         }
 
 
@@ -79,31 +79,26 @@ namespace StorageManagerMobile.ViewModels.Groupings
 
         #region Commands
 
-        public ICommand Expand => new Command(() =>
-        {
-            ExpandMethod();
-        });
+        //public ICommand PerformDeletion => new Command<int>((Id) =>
+        //{
+        //    DeleteIngredienti(Id);
+        //});
 
-        private void ExpandMethod()
-        {
-            IsExpanded = !IsExpanded;
-        }
+        //public void DeleteIngredienti(int Id)
+        //{
+        //    #region Using WebAPI
+        //    //bool succeded = IngredientGateway.DeleteFormat().Result;
+        //    #endregion
+        //    #region Using direct DB access
+        //    IngredientsFormat Ingredient = Ingredients.FirstOrDefault(x => x.Id == Id);
 
-        public ICommand PerformDeletion => new Command<int>((Id) =>
-        {
-            DeleteIngredienti(Id);
-        });
-
-        public void DeleteIngredienti(int Id)
-        {
-            IngredientsFormat Ingredient = Ingredients.FirstOrDefault(x => x.Id == Id);
-
-            if (Ingredient != null)
-            {
-                Ingredients.Remove(Ingredient);
-                IngredientsFormatsRepository.Delete(Ingredient);
-            }
-        }
+        //    if (Ingredient != null)
+        //    {
+        //        Ingredients.Remove(Ingredient);
+        //        IngredientsFormatsRepository.Delete(Ingredient);
+        //    }
+        //    #endregion
+        //}
 
         #endregion
 
@@ -112,14 +107,14 @@ namespace StorageManagerMobile.ViewModels.Groupings
         public void RefreshIngredientList()
         {
             #region UsingWebAPI
-            //Ingredients = new ObservableCollection<IngredientsFormat>(IngredientGateway.GetFormatsFromIngredientIdAsync(Title.Id).Result);
+            Ingredients = new ObservableCollection<IngredientsFormat>(IngredientGateway.GetFormatsFromIngredientIdAsync(Title.Id).Result);
             #endregion
             #region Using DB connection
-            AllFormats = IngredientsFormatsRepository.GetFormatsFromIngredientId(Title.Id);
-            AllFormats.Sort((l, r) =>
-            (l.LastOrderDate ?? DateOnly.MinValue).CompareTo(r.LastOrderDate ?? DateOnly.MinValue));
-            AllFormats.Reverse();
-            Ingredients = new ObservableCollection<IngredientsFormat>(AllFormats);
+            //AllFormats = IngredientsFormatsRepository.GetFormatsFromIngredientId(Title.Id);
+            //AllFormats.Sort((l, r) =>
+            //(l.LastOrderDate ?? DateOnly.MinValue).CompareTo(r.LastOrderDate ?? DateOnly.MinValue));
+            //AllFormats.Reverse();
+            //Ingredients = new ObservableCollection<IngredientsFormat>(AllFormats);
             #endregion
         }
 
@@ -134,30 +129,48 @@ namespace StorageManagerMobile.ViewModels.Groupings
         #endregion
 
         #region DataMethods
-        public void SaveIngredients()
+        public async void SaveIngredients()
         {
             #region Using WebAPI
-            //foreach (IngredientsFormat x in Ingredients)
-            //{
-            //    IngredientGateway.UpdateFormat(new IngredientFormatTemplate(x));
-            //}
-            //RefreshIngredientList();
-            #endregion
-            #region Using direct DB connection
+            bool result = false;
             foreach (IngredientsFormat x in Ingredients)
             {
-                IngredientsFormatsRepository.Update(x);
+                result = await IngredientGateway.UpdateFormat(new IngredientFormatTemplate(x));
             }
-            RefreshIngredientList();
+            if (result)
+            {
+                RefreshIngredientList();
+                ModelChanged?.Invoke(this,new EventArgs());
+            }           
+            #endregion
+            #region Using direct DB connection
+            //foreach (IngredientsFormat x in Ingredients)
+            //{
+            //    IngredientsFormatsRepository.Update(x);
+            //}
+            //RefreshIngredientList();
             #endregion
         }
 
         public int DeleteIngredient(IngredientsFormat ig)
         {
-            Ingredients.Remove(ig);
-            IngredientsFormatsRepository.Delete(ig);
-            context.SaveChanges();
-            return Ingredients.Count;
+            #region Using WebAPI
+            bool succeded = IngredientGateway.DeleteFormat(new IngredientFormatTemplate(ig)).Result;
+            if (succeded)
+            {
+                return 1;
+            }
+            else
+            {
+                return -1;
+            }
+            #endregion
+            #region With direct access to DB
+            //Ingredients.Remove(ig);
+            //IngredientsFormatsRepository.Delete(ig);
+            //context.SaveChanges();
+            //return Ingredients.Count;
+            #endregion
         }
         #endregion
 

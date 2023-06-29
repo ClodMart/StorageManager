@@ -16,7 +16,6 @@ public partial class AddIngredient : ContentPage
 
 
     private SupplierSelectionViewModel VM = new SupplierSelectionViewModel();
-    DataApiIngredientsGateaway ApiIngredientsGateaway = new DataApiIngredientsGateaway();
 
     public AddIngredient()
 	{
@@ -69,11 +68,6 @@ public partial class AddIngredient : ContentPage
         }
         else
         {
-            //Per porting su API
-            //IngredientViewerViewModel newIng = ((AddIngredientViewModel)BindingContext).GetIngredientViewer();
-            //ApiIngredientsGateaway.AddIngredient(IngredientViewer.IngredientViewerFromViewModel(newIng));
-
-            //Accesso Diretto al db
             long ID = ((AddIngredientViewModel)BindingContext).SaveIngredient();
             ((AddIngredientViewModel)BindingContext).SaveFormats(ID);
         }

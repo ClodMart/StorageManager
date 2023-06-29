@@ -1,4 +1,5 @@
 using DataRepository.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,8 +9,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<DBManager.Models.StorageManagerDBContext>();
 builder.Services.AddSingleton<ApplicationCacheManager>(new ApplicationCacheManager());
+//builder.Services.AddScoped<DBManager.Models.StorageManagerDBContext>();
 
 var app = builder.Build();
 //app.Urls.Add("https://10.147.18.219:5024"); //Ubuntu Ip
