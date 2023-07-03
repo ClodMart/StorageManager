@@ -169,7 +169,18 @@ namespace StorageManagerMobile.ViewModels
 
         public void SearchEmpty()
         {
-            IngredientList = new ObservableCollection<IngredientViewerViewModel>(FilteredIngredients);
+            LastSearch = "";
+            IngredientList = new ObservableCollection<IngredientViewerViewModel>(APIGateaway.GetUsedIngredientsAsync(LastFilter, LastSearch).Result);
+
+            //IngredientList = new ObservableCollection<IngredientViewerViewModel>(FilteredIngredients);
+        }
+
+        public void UnusedSearchEmpty()
+        {
+            LastSearchUnused = "";
+            IngredientList = new ObservableCollection<IngredientViewerViewModel>(APIGateaway.GetUnUsedIngredientsAsync(LastFilterUnused, LastSearchUnused).Result);
+
+            //IngredientList = new ObservableCollection<IngredientViewerViewModel>(FilteredIngredients);
         }
 
         private void SearchDefault()

@@ -121,25 +121,25 @@ namespace DataRepository.Controllers
         [HttpPost]
         [Route("PostNewIngredient")]
 
-        public long PostNewIngredient(string Username, string Password, IngredientTemplate Ingredient)
+        public ActionResult PostNewIngredient(string Username, string Password, IngredientTemplate Ingredient)
         {
             if (!ModelState.IsValid)
-                return -1;
+                return BadRequest();
 
             Ingredient NewIngredient = Ingredient.GetNewIngredient();
-            return IngredientsRepo.AddIngredient(NewIngredient);                
+            return Ok(IngredientsRepo.AddIngredient(NewIngredient));                
         }
 
         [HttpPost]
         [Route("PostNewFormat")]
 
-        public long PostNewFormat(string Username, string Password, IngredientFormatTemplate Format)
+        public ActionResult PostNewFormat(string Username, string Password, IngredientFormatTemplate Format)
         {
             if (!ModelState.IsValid)
-                return -1;
+                return BadRequest();
 
             //IngredientFormatTemplate NewFormat = Format.GetNewIngredientFormat();
-            return IngredientsRepo.AddFormat(Format);
+            return Ok(IngredientsRepo.AddFormat(Format));
         }
 
         #endregion
@@ -148,38 +148,38 @@ namespace DataRepository.Controllers
         [HttpPost]
         [Route("UpdateIngredient")]
 
-        public bool UpdateIngredient(string Username, string Password, IngredientTemplate Ingredient)
+        public ActionResult UpdateIngredient(string Username, string Password, IngredientTemplate Ingredient)
         {
             if (!ModelState.IsValid)
-                return false;
+                return BadRequest();
             try
             {
                 
                 IngredientsRepo.UpdateIngredient(Ingredient);
-                return true;
+                return Ok();
             }
             catch
             {
-                return false;
+                return BadRequest();
             }            
         }
 
         [HttpPost]
         [Route("UpdateFormat")]
 
-        public bool UpdateFormat(string Username, string Password, IngredientFormatTemplate Format)
+        public ActionResult UpdateFormat(string Username, string Password, IngredientFormatTemplate Format)
         {
             if (!ModelState.IsValid)
-                return false;
+                return BadRequest();
             try
             {
 
                 IngredientsRepo.UpdateFormat(Format);
-                return true;
+                return Ok();
             }
             catch
             {
-                return false;
+                return BadRequest();
             }
         }
         #endregion
@@ -188,31 +188,31 @@ namespace DataRepository.Controllers
         [HttpPost]
         [Route("DeleteFormat/{id}")]
 
-        public bool DeleteFormat(long id)
+        public ActionResult DeleteFormat(long id)
         {
             try
             {
                 IngredientsRepo.DeleteFormat(new IngredientFormatTemplate(IngredientsRepo.GetFormatFromId(id)));
-                return true;
+                return Ok();
             }
             catch
             {
-                return false;
+                return BadRequest();
             }
         }
 
         [HttpPost]
         [Route("DeleteIngredient/{id}")]
-        public bool DeleteIngredient(long id)
+        public ActionResult DeleteIngredient(long id)
         {
             try
             {
                 IngredientsRepo.DeleteIngredient(id);
-                return true;
+                return Ok();
             }
             catch
             {
-                return false;
+                return BadRequest();
             }
         }
         #endregion

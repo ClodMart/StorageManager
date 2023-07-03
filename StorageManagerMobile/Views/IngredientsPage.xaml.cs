@@ -281,6 +281,14 @@ public partial class IngredientsPage : ContentPage
         //((IngredientsViewModel)BindingContext).NotifyUIChange();
     }
 
+    private void searchBarNotUsed_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        if (e.NewTextValue == "")
+        {
+            ((IngredientsViewModel)BindingContext).UnusedSearchEmpty();
+        }
+    }
+
     //private void Entry_TextChanged(object sender, TextChangedEventArgs e)
     //{
     //    if (e.OldTextValue != null)

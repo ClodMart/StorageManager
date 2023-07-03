@@ -146,8 +146,8 @@ namespace StorageManagerMobile.Services
         }
             #endregion
 
-            #region AddMrthods
-            public async Task<long> AddIngredientViewer(IngredientViewer Ingredient)
+        #region AddMrthods
+        public async Task<long> AddIngredientViewer(IngredientViewer Ingredient)
         {
             var options = new JsonWriterOptions
             {
@@ -177,11 +177,10 @@ namespace StorageManagerMobile.Services
             Uri uri = new Uri(string.Format("https://10.147.18.219:5024/api/DataController/{0}/{1}/PostNewIngredient", Username, Password));
             string json = Ing.ConvertToJson();
             var HTTPContent = new StringContent(json, Encoding.UTF8, "application/json");
-            var HttpResponse = await client.PostAsync(uri, HTTPContent);
-            long newId = 0;
-            bool succeded = long.TryParse(HttpResponse.Content.ReadAsStringAsync().Result, out newId);
-            if (succeded)
+            var HttpResponse = await client.PostAsync(uri, HTTPContent).ConfigureAwait(false);
+            if(HttpResponse.IsSuccessStatusCode)
             {
+                long.TryParse(HttpResponse.Content.ReadAsStringAsync().Result, out long newId);
                 return newId;
             }
             else
@@ -203,15 +202,21 @@ namespace StorageManagerMobile.Services
             Uri uri = new Uri(string.Format("https://10.147.18.219:5024/api/DataController/{0}/{1}/PostNewFormat", Username, Password));
             string json = format.ConvertToJson();
             var HTTPContent = new StringContent(json, Encoding.UTF8, "application/json");
-            var HttpResponse = await client.PostAsync(uri, HTTPContent);
-            long FormatID = 0;
-            bool succeded = long.TryParse(HttpResponse.Content.ReadAsStringAsync().Result, out FormatID);
-            return FormatID;
+            var HttpResponse = await client.PostAsync(uri, HTTPContent).ConfigureAwait(false);
+            if (HttpResponse.IsSuccessStatusCode)
+            {
+                long.TryParse(HttpResponse.Content.ReadAsStringAsync().Result, out long newId);
+                return newId;
+            }
+            else
+            {
+                return -1;
+            }
         }
             #endregion
 
-            #region Updates
-            public async Task<bool> UpdateIngredientViewer(IngredientViewer Ingredient)
+        #region Updates
+        public async Task<bool> UpdateIngredientViewer(IngredientViewer Ingredient)
         {
             IngredientTemplate Ing = Ingredient.Title;
             bool succeded = UpdateIngredient(Ing).Result;
@@ -228,10 +233,18 @@ namespace StorageManagerMobile.Services
             Uri uri = new Uri(string.Format("https://10.147.18.219:5024/api/DataController/{0}/{1}/UpdateFormat", Username, Password));
             string json = format.ConvertToJson();
             var HTTPContent = new StringContent(json, Encoding.UTF8, "application/json");
-            var HttpResponse = await client.PostAsync(uri, HTTPContent);
-            bool succeded = true;
-            bool.TryParse(HttpResponse.Content.ReadAsStringAsync().Result, out succeded);
-            return succeded;
+            var HttpResponse = await client.PostAsync(uri, HTTPContent).ConfigureAwait(false);
+            if (HttpResponse.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+            //bool succeded = true;
+            //bool.TryParse(HttpResponse.Content.ReadAsStringAsync().Result, out succeded);
+            //return succeded;
         }
 
         public async Task<bool> UpdateIngredient(IngredientTemplate Ingredient)
@@ -240,10 +253,15 @@ namespace StorageManagerMobile.Services
             Uri uri = new Uri(string.Format("https://10.147.18.219:5024/api/DataController/{0}/{1}/UpdateIngredient", Username, Password));
             string json = Ingredient.ConvertToJson();
             var HTTPContent = new StringContent(json, Encoding.UTF8, "application/json");
-            var HttpResponse = await client.PostAsync(uri, HTTPContent);
-            bool succeded = true;
-            bool.TryParse(HttpResponse.Content.ReadAsStringAsync().Result, out succeded);
-            return succeded;
+            var HttpResponse = await client.PostAsync(uri, HTTPContent).ConfigureAwait(false);
+            if (HttpResponse.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         #endregion
 
@@ -255,10 +273,15 @@ namespace StorageManagerMobile.Services
             Uri uri = new Uri(string.Format("https://10.147.18.219:5024/api/DataController/{0}/{1}/DeleteIngredient/{2}", Username, Password, Ingredient.id));
             string json = Ingredient.ConvertToJson();
             var HTTPContent = new StringContent(json, Encoding.UTF8, "application/json");
-            var HttpResponse = await client.PostAsync(uri, HTTPContent);
-            bool succeded = true;
-            bool.TryParse(HttpResponse.Content.ReadAsStringAsync().Result, out succeded);
-            return succeded;
+            var HttpResponse = await client.PostAsync(uri, HTTPContent).ConfigureAwait(false);
+            if (HttpResponse.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public async Task<bool> DeleteFormat(IngredientFormatTemplate Format)
@@ -267,10 +290,15 @@ namespace StorageManagerMobile.Services
             Uri uri = new Uri(string.Format("https://10.147.18.219:5024/api/DataController/{0}/{1}/DeleteFormat/{2}", Username, Password, Format.id));
             string json = Format.ConvertToJson();
             var HTTPContent = new StringContent(json, Encoding.UTF8, "application/json");
-            var HttpResponse = await client.PostAsync(uri, HTTPContent);
-            bool succeded = true;
-            bool.TryParse(HttpResponse.Content.ReadAsStringAsync().Result, out succeded);
-            return succeded;
+            var HttpResponse = await client.PostAsync(uri, HTTPContent).ConfigureAwait(false);
+            if (HttpResponse.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         #endregion
     }

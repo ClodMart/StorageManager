@@ -196,7 +196,8 @@
 
             <SearchBar x:Name="searchBarNotUsed" Grid.Row="0" Placeholder="Cerca Materiale..."
                    SearchCommand="{Binding PerformUnusedSearch}"
-                   SearchCommandParameter="{Binding Text, Source={x:Reference searchBarNotUsed}}"/>
+                   SearchCommandParameter="{Binding Text, Source={x:Reference searchBarNotUsed}}"
+                   TextChanged="searchBarNotUsed_TextChanged"/>
 
             <Button Text="Export List" Margin="0,5,0,0" Grid.Row="1" HorizontalOptions="Center"/>
 
