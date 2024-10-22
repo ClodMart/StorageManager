@@ -1,5 +1,4 @@
 ﻿using PdfSharp.Maui.Contracts;
-using PdfSharpCore.Fonts;
 using System;
 using System.Collections.Generic;
 using System.Linq;

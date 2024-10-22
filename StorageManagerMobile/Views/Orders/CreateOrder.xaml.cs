@@ -2,16 +2,14 @@ using DBManager.Models;
 using PdfSharp.Maui;
 using StorageManagerMobile.ViewModels;
 using System.Text;
-using PdfSharpCore;
 using CommunityToolkit.Maui.Storage;
 using System.IO;
 using System.Threading;
-using PdfSharpCore.Pdf;
-using PdfSharpCore.Drawing;
 using Microsoft.EntityFrameworkCore.Migrations.Internal;
 using Microsoft.Maui.Controls.PlatformConfiguration;
 using CommunityToolkit.Maui.Alerts;
 using StorageManagerMobile.ViewModels.Groupings;
+using Didstopia.PDFSharp.Pdf;
 
 namespace StorageManagerMobile.Views.Orders;
 

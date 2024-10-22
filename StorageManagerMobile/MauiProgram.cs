@@ -8,8 +8,8 @@ namespace StorageManagerMobile
     {
         public static MauiApp CreateMauiApp()
         {
-            Platforms.Android.DangerousAndroidMessageHandlerEmitter.Register();
-            Platforms.Android.DangerousTrustProvider.Register();    
+            //Platforms.Android.DangerousAndroidMessageHandlerEmitter.Register();
+            //Platforms.Android.DangerousTrustProvider.Register();
             var builder = MauiApp.CreateBuilder();
             builder.UseMauiApp<App>().ConfigureFonts(fonts =>
             {

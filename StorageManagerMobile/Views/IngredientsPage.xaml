@@ -119,7 +119,7 @@
                             <Border Grid.Row="2" StrokeThickness="2" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="10,5,10,0" StrokeShape="RoundRectangle 20">
                                 <toolkit:Expander x:Name="GroupHeader" BindingContext="{Binding}" x:DataType="customvievmodels:IngredientViewerViewModel" IsExpanded="{Binding IsExpanded, Mode=OneWayToSource}" Margin="0,0,0,5">
                                     <toolkit:Expander.Header>
-                                        <Grid Padding="0"  Margin="5" x:Name="ExpanderHeader" HeightRequest="55">
+                                        <Grid Padding="0"  Margin="5" x:Name="ExpanderHeader">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="auto"/>
                                                 <ColumnDefinition Width="3*"/>
@@ -150,7 +150,7 @@
                                     <CollectionView x:Name="ExpanderContent" ItemsSource="{Binding Ingredients}">
                                         <CollectionView.ItemTemplate>
                                             <DataTemplate  x:DataType="db:IngredientsFormat">
-                                                <Grid Padding="0" HeightRequest="50" WidthRequest="350" Margin="5" BindingContext="{Binding}">
+                                                <Grid Padding="5" Margin="5" VerticalOptions="StartAndExpand" BindingContext="{Binding}">
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="auto"/>
                                                         <ColumnDefinition Width="3*"/>

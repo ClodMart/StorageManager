@@ -36,7 +36,7 @@ namespace StorageManagerMobile.Services
                 query = "NoQuery";
             }
             HttpClient client = new HttpClient();
-            Uri uri = new Uri(string.Format("https://10.147.18.219:5024/api/DataController/{0}/{1}/GetUsedIngredients/{2}/{3}", Username, Password, filter, query));
+            Uri uri = new Uri(string.Format("https://localhost:5024/api/DataController/{0}/{1}/GetUsedIngredients/{2}/{3}", Username, Password, filter, query));
             try
             {
                 List<IngredientViewerViewModel> OUT = new List<IngredientViewerViewModel>();
@@ -68,7 +68,7 @@ namespace StorageManagerMobile.Services
                 query = "NoQuery";
             }
             HttpClient client = new HttpClient();
-            Uri uri = new Uri(string.Format("https://10.147.18.219:5024/api/DataController/{0}/{1}/GetUnUsedIngredients/{2}/{3}", Username, Password, filter, query));
+            Uri uri = new Uri(string.Format("https://localhost:5024/api/DataController/{0}/{1}/GetUnUsedIngredients/{2}/{3}", Username, Password, filter, query));
             try
             {
                 List<IngredientViewerViewModel> OUT = new List<IngredientViewerViewModel>();
@@ -96,7 +96,7 @@ namespace StorageManagerMobile.Services
         public async Task<List<IngredientsFormat>> GetFormatsFromIngredientIdAsync(long id)
         {
             HttpClient client = new HttpClient();
-            Uri uri = new Uri(string.Format("https://10.147.18.219:5024/api/DataController/{0}/{1}/GetFormatsFromIngredientId/{2}", Username, Password, id));
+            Uri uri = new Uri(string.Format("https://localhost:5024/api/DataController/{0}/{1}/GetFormatsFromIngredientId/{2}", Username, Password, id));
             try
             {
                 List<IngredientsFormat> OUT = new List<IngredientsFormat>();
@@ -123,7 +123,7 @@ namespace StorageManagerMobile.Services
         public async Task<IngredientTemplate> GetIngredientByName(string name)
         {
             HttpClient client = new HttpClient();
-            Uri uri = new Uri(string.Format("https://10.147.18.219:5024/api/DataController/{0}/{1}/GetIngredientByName/{2}", Username, Password, name));
+            Uri uri = new Uri(string.Format("https://localhost:5024/api/DataController/{0}/{1}/GetIngredientByName/{2}", Username, Password, name));
             try
             {
                 var response = await client.GetAsync(uri).ConfigureAwait(false);
@@ -174,7 +174,7 @@ namespace StorageManagerMobile.Services
             using var stream = new MemoryStream();
             using var writer = new Utf8JsonWriter(stream, options);
             HttpClient client = new HttpClient();
-            Uri uri = new Uri(string.Format("https://10.147.18.219:5024/api/DataController/{0}/{1}/PostNewIngredient", Username, Password));
+            Uri uri = new Uri(string.Format("https://localhost:5024/api/DataController/{0}/{1}/PostNewIngredient", Username, Password));
             string json = Ing.ConvertToJson();
             var HTTPContent = new StringContent(json, Encoding.UTF8, "application/json");
             var HttpResponse = await client.PostAsync(uri, HTTPContent).ConfigureAwait(false);
@@ -199,7 +199,7 @@ namespace StorageManagerMobile.Services
             using var stream = new MemoryStream();
             using var writer = new Utf8JsonWriter(stream, options);
             HttpClient client = new HttpClient();
-            Uri uri = new Uri(string.Format("https://10.147.18.219:5024/api/DataController/{0}/{1}/PostNewFormat", Username, Password));
+            Uri uri = new Uri(string.Format("https://localhost:5024/api/DataController/{0}/{1}/PostNewFormat", Username, Password));
             string json = format.ConvertToJson();
             var HTTPContent = new StringContent(json, Encoding.UTF8, "application/json");
             var HttpResponse = await client.PostAsync(uri, HTTPContent).ConfigureAwait(false);
@@ -230,7 +230,7 @@ namespace StorageManagerMobile.Services
         public async Task<bool> UpdateFormat(IngredientFormatTemplate format)
         {
             HttpClient client = new HttpClient();
-            Uri uri = new Uri(string.Format("https://10.147.18.219:5024/api/DataController/{0}/{1}/UpdateFormat", Username, Password));
+            Uri uri = new Uri(string.Format("https://localhost:5024/api/DataController/{0}/{1}/UpdateFormat", Username, Password));
             string json = format.ConvertToJson();
             var HTTPContent = new StringContent(json, Encoding.UTF8, "application/json");
             var HttpResponse = await client.PostAsync(uri, HTTPContent).ConfigureAwait(false);
@@ -250,7 +250,7 @@ namespace StorageManagerMobile.Services
         public async Task<bool> UpdateIngredient(IngredientTemplate Ingredient)
         {
             HttpClient client = new HttpClient();
-            Uri uri = new Uri(string.Format("https://10.147.18.219:5024/api/DataController/{0}/{1}/UpdateIngredient", Username, Password));
+            Uri uri = new Uri(string.Format("https://localhost:5024/api/DataController/{0}/{1}/UpdateIngredient", Username, Password));
             string json = Ingredient.ConvertToJson();
             var HTTPContent = new StringContent(json, Encoding.UTF8, "application/json");
             var HttpResponse = await client.PostAsync(uri, HTTPContent).ConfigureAwait(false);
@@ -270,7 +270,7 @@ namespace StorageManagerMobile.Services
         public async Task<bool> DeleteIngredient(IngredientTemplate Ingredient)
         {
             HttpClient client = new HttpClient();
-            Uri uri = new Uri(string.Format("https://10.147.18.219:5024/api/DataController/{0}/{1}/DeleteIngredient/{2}", Username, Password, Ingredient.id));
+            Uri uri = new Uri(string.Format("https://localhost:5024/api/DataController/{0}/{1}/DeleteIngredient/{2}", Username, Password, Ingredient.id));
             string json = Ingredient.ConvertToJson();
             var HTTPContent = new StringContent(json, Encoding.UTF8, "application/json");
             var HttpResponse = await client.PostAsync(uri, HTTPContent).ConfigureAwait(false);
@@ -287,7 +287,7 @@ namespace StorageManagerMobile.Services
         public async Task<bool> DeleteFormat(IngredientFormatTemplate Format)
         {
             HttpClient client = new HttpClient();
-            Uri uri = new Uri(string.Format("https://10.147.18.219:5024/api/DataController/{0}/{1}/DeleteFormat/{2}", Username, Password, Format.id));
+            Uri uri = new Uri(string.Format("https://localhost:5024/api/DataController/{0}/{1}/DeleteFormat/{2}", Username, Password, Format.id));
             string json = Format.ConvertToJson();
             var HTTPContent = new StringContent(json, Encoding.UTF8, "application/json");
             var HttpResponse = await client.PostAsync(uri, HTTPContent).ConfigureAwait(false);

@@ -1,5 +1,5 @@
-﻿using PdfSharpCore.Drawing;
-using PdfSharpCore.Fonts;
+﻿using Didstopia.PDFSharp.Drawing;
+using Didstopia.PDFSharp.Fonts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
