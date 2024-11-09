@@ -10,7 +10,7 @@
              x:Class="StorageManagerMobile.Views.OrderTypes"
              Title="NewOrder"
              NavigatedTo="ContentPage_NavigatedTo">
-    <CollectionView ItemsSource="{Binding Categories}" HorizontalOptions="CenterAndExpand" VerticalOptions="StartAndExpand" Margin="0,20,0,0">
+    <CollectionView ItemsSource="{Binding Categories}" HorizontalOptions="CenterAndExpand" VerticalOptions="StartAndExpand" Margin="10,20,10,0">
         <CollectionView.Header>
             <HorizontalStackLayout HorizontalOptions="CenterAndExpand">
                 <Label Text="Crea nuova categoria" Style="{StaticResource ListMainText}" FontSize="Large" HorizontalOptions="CenterAndExpand" VerticalOptions="StartAndExpand" Margin="0,3,15,0"/>

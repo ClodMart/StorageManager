@@ -13,43 +13,44 @@
         <res:IdToIngredientConverter x:Key="IdToIngredient"/>
         <res:BoolReverse x:Key="BoolReverse"/>
     </ContentPage.Resources>
-    <VerticalStackLayout>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="0.5*"/>
         </Grid.RowDefinitions>
-
-    <VerticalStackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="StartAndExpand" Grid.Row="0">
-        <Label Text="Titolo" Style="{StaticResource ListMainText}" HorizontalOptions="CenterAndExpand"/>
-        <Entry x:Name="Titolo" Text="{Binding Title}" HorizontalOptions="CenterAndExpand"/>
-        <Label Text="Descrizione" Style="{StaticResource ListMainText}" HorizontalOptions="CenterAndExpand"/>
-        <Entry x:Name="Descrizione" Text="{Binding Description}" HorizontalOptions="CenterAndExpand" VerticalOptions="StartAndExpand"/>
-    </VerticalStackLayout>
-
-        <CollectionView IsVisible="{Binding NewCategory, Converter={StaticResource BoolReverse}}" Grid.Row="1" HorizontalOptions="CenterAndExpand" VerticalOptions="StartAndExpand" ItemsSource="{Binding IngredientList}">
-            <CollectionView.Header>
-                <HorizontalStackLayout HorizontalOptions="CenterAndExpand">
-                    <Label Text="Ingredienti" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
-                    <ImageButton x:Name="AddIngredient" Style="{StaticResource AddIcon}" Padding="5" VerticalOptions="CenterAndExpand" Clicked="AddIngredient_Clicked"/>
-                </HorizontalStackLayout>
-            </CollectionView.Header>
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="db:CategoryIngredientList">
-                    <Border StrokeThickness="2" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="10,5,10,0" StrokeShape="RoundRectangle 20">
-                        <toolkit:DockLayout Padding="10" HorizontalOptions="FillAndExpand">
+        <VerticalStackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="StartAndExpand" Grid.Row="0">
+            <Label Text="Titolo" Style="{StaticResource ListMainText}" HorizontalOptions="CenterAndExpand"/>
+            <Entry x:Name="Titolo" Text="{Binding Title}" HorizontalOptions="CenterAndExpand"/>
+            <Label Text="Descrizione" Style="{StaticResource ListMainText}" HorizontalOptions="CenterAndExpand"/>
+            <Entry x:Name="Descrizione" Text="{Binding Description}" HorizontalOptions="CenterAndExpand" VerticalOptions="StartAndExpand"/>
+        </VerticalStackLayout>
+        <RefreshView x:Name="Refresher" Grid.Row="1">
+            <CollectionView IsVisible="{Binding NewCategory, Converter={StaticResource BoolReverse}}" Margin="10" ItemsSource="{Binding IngredientList}" VerticalScrollBarVisibility="Always">
+                <CollectionView.Header>
+                    <HorizontalStackLayout HorizontalOptions="CenterAndExpand">
+                        <Label Text="Ingredienti" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                        <ImageButton x:Name="AddIngredient" Style="{StaticResource AddIcon}" Padding="5" VerticalOptions="CenterAndExpand" Clicked="AddIngredient_Clicked"/>
+                    </HorizontalStackLayout>
+                </CollectionView.Header>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="db:CategoryIngredientList">
+                        <Border StrokeThickness="2" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="10,5,10,0" StrokeShape="RoundRectangle 20">
+                            <toolkit:DockLayout Padding="10" HorizontalOptions="FillAndExpand">
                                 <HorizontalStackLayout toolkit:DockLayout.DockPosition="Left" VerticalOptions="Center">
                                     <Label Text="Ingrediente" Style="{StaticResource ListMainText}" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand"/>
                                     <Label Text="{Binding IngredientId, Converter={StaticResource IdToIngredient}}" Margin="10,0,0,0" VerticalOptions="CenterAndExpand"/>
                                 </HorizontalStackLayout>
                                 <ImageButton Style="{StaticResource DeleteIcon}" WidthRequest="30" HeightRequest="30" Clicked="ImageButton_Clicked" Margin="50,0,0,0" HorizontalOptions="EndAndExpand" VerticalOptions="CenterAndExpand"/>
                             </toolkit:DockLayout>
-                    </Border>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+        <HorizontalStackLayout Grid.Row="2" Spacing="40" HorizontalOptions="CenterAndExpand">
+            <Button x:Name="Save" Margin="5"  Text="Salva" IsVisible="{Binding NewCategory}" HorizontalOptions="Center"  WidthRequest="100" Clicked="Save_Clicked"/>
+            <Button x:Name="Delete" Margin="5"  Text="Elimina" HorizontalOptions="CenterAndExpand" IsVisible="{Binding NewCategory, Converter={StaticResource BoolReverse}}" VerticalOptions="Center" WidthRequest="100" Clicked="Delete_Clicked"/>
+        </HorizontalStackLayout>
     </Grid>
-        <Button x:Name="Save" Margin="5"  Text=" Salva " HorizontalOptions="CenterAndExpand" IsVisible="{Binding NewCategory}" VerticalOptions="Center" Grid.Row="2" WidthRequest="100" Clicked="Save_Clicked"/>
-        <Button x:Name="Delete" Margin="5"  Text="Elimina" HorizontalOptions="CenterAndExpand" IsVisible="{Binding NewCategory, Converter={StaticResource BoolReverse}}" VerticalOptions="Center" Grid.Row="2" WidthRequest="100" Clicked="Delete_Clicked"/>
-    </VerticalStackLayout>
 </ContentPage>

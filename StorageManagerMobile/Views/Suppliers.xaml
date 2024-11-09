@@ -40,14 +40,14 @@
                 <ImageButton x:Name="AddButton" Grid.Column="2" Grid.RowSpan="2" Style="{StaticResource AddIcon}" Margin="5" Padding="0" BorderColor="Transparent" BackgroundColor="Transparent" Clicked="AddSupplier_Clicked"/>
             </Grid>
         </Border>
-        
-        <CollectionView Grid.Row="2" ItemsSource="{Binding Suppliers}" VerticalScrollBarVisibility="Always">
+
+        <CollectionView Grid.Row="2" ItemsSource="{Binding Suppliers}" VerticalScrollBarVisibility="Never" Margin="10">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="db:Supplier">
                     <Border Grid.Row="2" StrokeThickness="3" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="10,0,10,0" Padding="5,0,0,5" StrokeShape="RoundRectangle 20">
                         <toolkit:Expander IsExpanded="False">
                             <toolkit:Expander.Header>
-                                <Grid Padding="0" HeightRequest="60"  Margin="5">
+                                <Grid HeightRequest="60">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="1*"/>
                                         <ColumnDefinition Width="3*"/>
@@ -62,24 +62,26 @@
                                     <ImageButton x:Name="EditSupplier" Grid.Column="2" Grid.RowSpan="2" Style="{StaticResource EditIcon}" Margin="5" Padding="0" BorderColor="Transparent" BackgroundColor="Transparent" Clicked="EditSupplier_Clicked" />
                                 </Grid>
                             </toolkit:Expander.Header>
-                            <VerticalStackLayout>
-                                <HorizontalStackLayout Margin="5">
-                                    <Label Text="Telefono" Style="{StaticResource ListMainText}" />
-                                    <Label Text="{Binding Phone}" Margin="10,0,0,0"/>
-                                </HorizontalStackLayout>
-                                <HorizontalStackLayout Margin="5">
-                                    <Label Text="Email" Style="{StaticResource ListMainText}" />
-                                    <Label Text="{Binding Email}" Margin="10,0,0,0"/>
-                                </HorizontalStackLayout>
-                                <HorizontalStackLayout Margin="5">
-                                    <Label Text="Partita Iva" Style="{StaticResource ListMainText}" />
-                                    <Label Text="{Binding PtIva}" Margin="10,0,0,0"/>
-                                </HorizontalStackLayout>
-                                <HorizontalStackLayout Margin="5">
-                                    <Label Text="Note" Style="{StaticResource ListMainText}" />
-                                    <Label Text="{Binding Notes}" Margin="10,0,0,0"/>
-                                </HorizontalStackLayout>
-                            </VerticalStackLayout>
+                            <toolkit:Expander.Content>
+                                <VerticalStackLayout HeightRequest="120" Padding="5" Margin="5" VerticalOptions="Start">
+                                    <HorizontalStackLayout Margin="2,0,0,0" Spacing="40">
+                                        <Label Text="Telefono" Style="{StaticResource ListMainText}" />
+                                        <Label Text="{Binding Phone}" FontSize="Small"/>
+                                    </HorizontalStackLayout>
+                                    <HorizontalStackLayout Margin="2,0,0,0" Spacing="40">
+                                        <Label Text="Email" Style="{StaticResource ListMainText}" />
+                                        <Label Text="{Binding Email}" FontSize="Small" Margin="10,0,0,0"/>
+                                    </HorizontalStackLayout>
+                                    <HorizontalStackLayout Margin="2,0,0,0" Spacing="40">
+                                        <Label Text="Partita Iva" Style="{StaticResource ListMainText}" />
+                                        <Label Text="{Binding PtIva}" FontSize="Small" Margin="10,0,0,0"/>
+                                    </HorizontalStackLayout>
+                                    <HorizontalStackLayout Margin="2,0,0,0" Spacing="40">
+                                        <Label Text="Note" Style="{StaticResource ListMainText}" />
+                                        <Label Text="{Binding Notes}" FontSize="Small" Margin="10,0,0,0"/>
+                                    </HorizontalStackLayout>
+                                </VerticalStackLayout>
+                            </toolkit:Expander.Content>
                         </toolkit:Expander>
                     </Border>
                 </DataTemplate>

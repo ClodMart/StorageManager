@@ -30,7 +30,7 @@ namespace DBManager.Interfacce
 
         public List<IngredientsFormat> GetFormatsFromIngredientId(long id)
         {
-            List<IngredientsFormat> Out = _dbContext.IngredientsFormats.Where(x=>x.IngredientId==id).ToList();
+            List<IngredientsFormat> Out = _dbContext.IngredientsFormats.Include(x => x.Ingredient).Where(x=>x.IngredientId==id).ToList();
             return Out;
         }
 

@@ -83,6 +83,17 @@
         </Setter>
     </Style>
 
+    <Style x:Key="CardMainText" TargetType="{x:Type Label}">
+        <Setter Property="FontSize" Value="Body"/>
+        <Setter Property="FontAttributes" Value="Bold"/>
+        <Setter Property="TextColor" Value="{AppThemeBinding Default=Black, Dark=White,Light=Black}"/>
+    </Style>
+
+    <Style x:Key="CardSubText" TargetType="{x:Type Label}">
+        <Setter Property="FontSize" Value="Body"/>
+        <Setter Property="FontAttributes" Value="Italic"/>
+        <Setter Property="TextColor" Value="{AppThemeBinding Default=Black, Dark=White,Light=Black}"/>
+    </Style>
     <!--<Style x:Key="ExpandListClosedIcon" TargetType="{x:Type Image}">
         <Setter Property="Source" Value="{AppThemeBinding Default=arrowdown_lightmode, Light=arrowdown_lightmode, Dark=arrowdown_darkmode}"/>
         <Setter Property="Background" Value="Transparent"/>

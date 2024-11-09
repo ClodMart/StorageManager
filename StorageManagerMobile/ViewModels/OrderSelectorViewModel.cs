@@ -51,6 +51,7 @@ namespace StorageManagerMobile.ViewModels
             List<OrderIngredient> SelectableList = new List<OrderIngredient>();
             foreach (CategoryIngredientList x in CategoryIngredients)
             {
+
                 AllIngredientsList.Add(x);
                 if (x.Selected)
                 {

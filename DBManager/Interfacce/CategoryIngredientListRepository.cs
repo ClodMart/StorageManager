@@ -88,7 +88,9 @@ namespace DBManager.Interfacce
 
         public List<CategoryIngredientList> GetFromCategory_Id(long CategoryId)
         {
-            return _dbContext.CategoryIngredientLists.Where(X=>X.CategoryId == CategoryId).ToList();
+            return _dbContext.CategoryIngredientLists
+                .Include(x=>x.Ingredient)
+                .Where(X=>X.CategoryId == CategoryId).ToList();
         }
 
         public List<long> GetIngredientIdFromCategory_Id(long CategoryId)

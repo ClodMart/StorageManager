@@ -36,7 +36,8 @@ namespace StorageManagerMobile.ViewModels
         private List<IngredientViewerViewModel> UsedIngredientLists = new List<IngredientViewerViewModel>();
         private List<IngredientViewerViewModel> NotUsedIngredientLists = new List<IngredientViewerViewModel>();
         //private List<IngredientViewerViewModel> FullIngredients { get; set; }
-        private List<IngredientViewerViewModel> FilteredIngredients { get; set; }
+        private List<IngredientViewerViewModel> FilteredIngredients = new List<IngredientViewerViewModel>();
+
 
         private List<string> usedValuesList = new List<string>() { "Tutti" };
         public List<string> UsedValuesList

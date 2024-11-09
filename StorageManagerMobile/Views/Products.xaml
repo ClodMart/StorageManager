@@ -58,11 +58,11 @@
                 <toolkit:Expander.Header>
                     <Grid Padding="5"  Margin="5">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="2*"/>
                             <ColumnDefinition Width="1*"/>
                             <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="auto"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition/>
@@ -99,20 +99,21 @@
         </Border>
         
         <RefreshView x:Name="Refresher" Grid.Row="3" Refreshing="Refresher_Refreshing" IsRefreshing="{Binding IsRefreshing}">
-            <CollectionView x:Name="List" ItemsSource="{Binding ProductList, Mode=TwoWay}" Grid.Row="3" VerticalScrollBarVisibility="Always">
+            <CollectionView x:Name="List" ItemsSource="{Binding ProductList, Mode=TwoWay}" Grid.Row="3" VerticalScrollBarVisibility="Never" Margin="10">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Border Grid.Row="2" StrokeThickness="2" Stroke="{AppThemeBinding Light=DarkGrey, Dark=LightGray, Default=DarkGrey}" Margin="10,5,10,0" StrokeShape="RoundRectangle 20">
                             <toolkit:Expander x:Name="GroupHeader" BindingContext="{Binding}" x:DataType="customvievmodels:ProductViewerViewModel" IsExpanded="{Binding IsExpanded, Mode=TwoWay}" ExpandedChanged="Expander_ExpandedChanged" Margin="0,0,0,5">
                                 <toolkit:Expander.Header>
-                                    <Grid Padding="0"  Margin="5" x:Name="ExpanderHeader" HeightRequest="55">
+                                    <Border ></Border>
+                                    <Grid Padding="0"  Margin="5" x:Name="ExpanderHeader">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="auto"/>
+                                            <ColumnDefinition Width="1*"/>
                                             <ColumnDefinition Width="3*"/>
+                                            <ColumnDefinition Width="2*"/>
+                                            <ColumnDefinition Width="2*"/>
+                                            <ColumnDefinition Width="2*"/>
                                             <ColumnDefinition Width="1*"/>
-                                            <ColumnDefinition Width="1*"/>
-                                            <ColumnDefinition Width="1*"/>
-                                            <ColumnDefinition Width="auto"/>
                                         </Grid.ColumnDefinitions>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="2*"/>
@@ -124,10 +125,10 @@
                                         <Label Text="{Binding GainPercent}" Style="{StaticResource ListMainText}" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="CenterAndExpand" HorizontalOptions="StartAndExpand"/>
                                         <Label Text="{Binding Title.ProductCost, Converter={StaticResource Rounder}}" Style="{StaticResource ListIsUsedText}" Grid.Column="4" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="Center"/>
                                         <Label Padding="7" Text="{Binding Title.ProductPrice}" Style="{StaticResource ButtonContentText}" Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="Center"/>
-                                        <Image Grid.Column="5" Grid.RowSpan="2" Source="{AppThemeBinding Default=arrowdown_lightmode.svg, Light=arrowdown_lightmode.svg, Dark=arrowdown_darkmode.svg}" BackgroundColor="Transparent" WidthRequest="50" HeightRequest="50">
+                                        <Image Grid.Column="5" Grid.RowSpan="2" Source="{AppThemeBinding Default=arrowdown_lightmode.png, Light=arrowdown_lightmode.png, Dark=arrowdown_darkmode.png}" BackgroundColor="Transparent" WidthRequest="50" HeightRequest="50">
                                             <Image.Triggers>
                                                 <DataTrigger TargetType="{x:Type Image}" Binding="{Binding Source={x:RelativeSource AncestorType={x:Type toolkit:Expander}}, Path=IsExpanded}" Value="true">
-                                                    <Setter Property="Source" Value="{AppThemeBinding Default=arrowup_lightmode.svg, Light=arrowup_lightmode.svg, Dark=arrowup_darkmode.svg}"/>
+                                                    <Setter Property="Source" Value="{AppThemeBinding Default=arrowup_lightmode.png, Light=arrowup_lightmode.png, Dark=arrowup_darkmode.png}"/>
                                                     <Setter Property="WidthRequest" Value="50"/>
                                                     <Setter Property="HeightRequest" Value="50"/>
                                                 </DataTrigger>
@@ -138,20 +139,21 @@
                                 <CollectionView x:Name="ExpanderContent" ItemsSource="{Binding Compositions}">
                                     <CollectionView.ItemTemplate>
                                         <DataTemplate  x:DataType="db:ProductComposition">
-                                            <Grid Padding="5" HeightRequest="100" WidthRequest="350" Margin="5">
+                                            <Grid>
                                                 <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="auto"/>
-                                                    <ColumnDefinition Width="3*"/>
+                                                    <ColumnDefinition Width="0.5*"/>
+                                                    <ColumnDefinition Width="4*"/>
+                                                    <ColumnDefinition Width="2*"/>
+                                                    <ColumnDefinition Width="2*"/>
                                                     <ColumnDefinition Width="1*"/>
-                                                    <ColumnDefinition Width="1*"/>
-                                                    <ColumnDefinition Width="auto"/>
+                                                    <ColumnDefinition Width="0.5*"/>
                                                 </Grid.ColumnDefinitions>
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition/>
                                                     <RowDefinition/>
                                                 </Grid.RowDefinitions>
                                                 <!--<RadioButton x:Name="SetDefault" IsChecked="{Binding IsDefault}" CheckedChanged="SetDefault_Clicked"/>-->
-                                                <Label x:Name="Id PlaceHolder" Text="{Binding Id}" IsVisible="false"/>
+                                                <!--<Label x:Name="Id PlaceHolder" Text="{Binding Id}" IsVisible="false"/>-->
                                                 <Label x:Name="SupplierName" Text="{Binding IngredientId, Converter={StaticResource IngedientConverter}}" Style="{StaticResource ListMainText}" Grid.Column="1" Grid.Row="0" VerticalOptions="EndAndExpand" HorizontalOptions="StartAndExpand" Padding="0"/>
                                                 <Label Text="{Binding Ingredient.Category}" Style="{StaticResource ListSubText}" Grid.Column="1" Grid.Row="1" VerticalOptions="StartAndExpand" HorizontalOptions="StartAndExpand" />
                                                 <Label Text="{Binding Quantity}" FontSize="Small" FontAttributes="Italic" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="CenterAndExpand"/>
