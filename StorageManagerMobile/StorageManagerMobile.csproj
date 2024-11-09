@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net8.0-maccatalyst;net8.0-ios;net8.0-android33.0</TargetFrameworks>
+		<TargetFrameworks>net8.0-maccatalyst</TargetFrameworks>
 		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net6.0-tizen</TargetFrameworks> -->
@@ -28,6 +28,7 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
+		<DefaultLanguage>en</DefaultLanguage>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-maccatalyst|AnyCPU'">
@@ -51,13 +52,20 @@
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
-		<MauiImage Update="Resources\Images\dotnet_bot.svg" BaseSize="168,208" />
 
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
 
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Remove="Platforms\Android\**" />
+	  <EmbeddedResource Remove="Platforms\Android\**" />
+	  <MauiCss Remove="Platforms\Android\**" />
+	  <MauiXaml Remove="Platforms\Android\**" />
+	  <None Remove="Platforms\Android\**" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -73,6 +81,7 @@
 	  <None Remove="Resources\Images\arrowup_lightmode.svg" />
 	  <None Remove="Resources\Images\cestino_darkmode.svg" />
 	  <None Remove="Resources\Images\cestino_lightmode.svg" />
+	  <None Remove="Resources\Images\dotnet_bot.svg" />
 	  <None Remove="Resources\Images\filters_button.svg" />
 	  <None Remove="Resources\Images\filtri_darkmode.svg" />
 	  <None Remove="Resources\Images\filtri_lightmode.svg" />
@@ -84,15 +93,6 @@
 	  <None Remove="Resources\Images\radiobuttonempty_lightmode.svg" />
 	  <None Remove="Resources\Images\radiobuttonfull_darkmode.svg" />
 	  <None Remove="Resources\Images\radiobuttonfull_lightmode.svg" />
-	  <None Remove="Resources\Raw\network_security_config.xml" />
-	  <None Remove="Resources\Raw\OpenSans-Regular.ttf" />
-	  <None Remove="Platforms\Android\Resources\Xml\network_security_config.xml" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Resource Include="Platforms\Android\Resources\Xml\network_security_config.xml">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Resource>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -116,6 +116,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Properties\Resources.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Resources.resx</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\IngredientsPage.xaml.cs">
 	    <DependentUpon>IngredientsPage.xaml</DependentUpon>
 	  </Compile>
@@ -126,6 +131,15 @@
 	    <DependentUpon>OrderCategoryDetails.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Update="Properties\Resources.resx">
+	    <Generator>ResXFileCodeGenerator</Generator>
+	    <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
+	</ItemGroup>
+
+	
 
 	<ItemGroup>
 	  <MauiXaml Update="Views\CustomControl\OrderIngredientGrouping.xaml">
@@ -203,6 +217,14 @@
 	  <MauiXaml Update="Views\Suppliers\SupplierDetail.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Update="Microsoft.Maui.Controls" Version="8.0.92" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Update="Microsoft.Maui.Controls.Compatibility" Version="8.0.92" />
 	</ItemGroup>
 
 </Project>
